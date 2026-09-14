@@ -1,7 +1,7 @@
-program: build
+p program: build
 	cmake --build build
 
-build:
+b build:
 	cmake -S . -B build
 
 .PHONY: git
@@ -11,7 +11,8 @@ g git:
 	git diff --cached --quiet || git commit -m "sync: $(shell date '+%Y-%m-%d %H:%M:%S')"
 	git push
 
-r:
+r run:
 	build/program
-c:
+
+c clean:
 	rm -rf build

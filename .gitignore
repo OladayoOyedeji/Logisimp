@@ -1,0 +1,34 @@
+# CMake build directories
+build/
+cmake-build-*/
+
+# C/C++ compiled files
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+
+# CMake-generated files in project root
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+
+# Debugging/profiling files
+core
+core.*
+*.gch
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+\#*\#
+.#*
+*~
