@@ -9,65 +9,94 @@ enum LogicValue {
     UNKNOWN = 2
 };
 
-const LogicValue AND_TABLE[3][3] = {
-    // b:               LOW      HIGH      UNKNOWN
-    /* a = LOW     */ { LOW,     LOW,     LOW     },
-    /* a = HIGH    */ { LOW,     HIGH,    UNKNOWN },
-    /* a = UNKNOWN */ { LOW,     UNKNOWN, UNKNOWN }
+// Shortens LogicValue to LV (only within this file though)
+#define LV LogicValue
+
+const LV AND_TABLE[3][3] = {
+    //                  b = LOW   b = HIGH   b = UNKNOWN
+    /* a = LOW     */ { LOW,      LOW,        LOW     },
+    /* a = HIGH    */ { LOW,      HIGH,       UNKNOWN },
+    /* a = UNKNOWN */ { LOW,      UNKNOWN,    UNKNOWN }
 };
 
-const LogicValue OR_TABLE[3][3] = {
-    // b:               LOW      HIGH      UNKNOWN
-    /* a = LOW     */ { LOW,     HIGH,    UNKNOWN },
-    /* a = HIGH    */ { HIGH,    HIGH,    HIGH    },
-    /* a = UNKNOWN */ { UNKNOWN, HIGH,    UNKNOWN }
+const LV OR_TABLE[3][3] = {
+    //                  b = LOW   b = HIGH   b = UNKNOWN
+    /* a = LOW     */ { LOW,      HIGH,       UNKNOWN },
+    /* a = HIGH    */ { HIGH,     HIGH,       HIGH    },
+    /* a = UNKNOWN */ { UNKNOWN,  HIGH,       UNKNOWN }
 };
 
-const LogicValue XOR_TABLE[3][3] = {
-    // b:               LOW      HIGH      UNKNOWN
-    /* a = LOW     */ { LOW,     HIGH,    UNKNOWN },
-    /* a = HIGH    */ { HIGH,    LOW,     UNKNOWN },
-    /* a = UNKNOWN */ { UNKNOWN, UNKNOWN, UNKNOWN }
+const LV NOT_TABLE[3] = {
+    //                 input
+    /* LOW     */      HIGH,
+    /* HIGH    */      LOW,
+    /* UNKNOWN */      UNKNOWN
 };
 
-const LogicValue NOT_TABLE[3] = {
-    // input: LOW   HIGH   UNKNOWN
-    HIGH, LOW,   UNKNOWN
+const LV XOR_TABLE[3][3] = {
+    //                  b = LOW   b = HIGH   b = UNKNOWN
+    /* a = LOW     */ { LOW,      HIGH,       UNKNOWN },
+    /* a = HIGH    */ { HIGH,     LOW,        UNKNOWN },
+    /* a = UNKNOWN */ { UNKNOWN,  UNKNOWN,    UNKNOWN }
 };
 
-inline LogicValue logicAnd(LogicValue a, LogicValue b)
+const LV NAND_TABLE[3][3] = {
+    //                  b = LOW   b = HIGH   b = UNKNOWN
+    /* a = LOW     */ { HIGH,     HIGH,       HIGH    },
+    /* a = HIGH    */ { HIGH,     LOW,        UNKNOWN },
+    /* a = UNKNOWN */ { HIGH,     UNKNOWN,    UNKNOWN }
+};
+
+const LV NOR_TABLE[3][3] = {
+    //                  b = LOW   b = HIGH   b = UNKNOWN
+    /* a = LOW     */ { HIGH,     LOW,        UNKNOWN },
+    /* a = HIGH    */ { LOW,      LOW,        LOW     },
+    /* a = UNKNOWN */ { UNKNOWN,  LOW,        UNKNOWN }
+};
+
+const LV XNOR_TABLE[3][3] = {
+    //                  b = LOW   b = HIGH   b = UNKNOWN
+    /* a = LOW     */ { HIGH,     LOW,        UNKNOWN },
+    /* a = HIGH    */ { LOW,      HIGH,       UNKNOWN },
+    /* a = UNKNOWN */ { UNKNOWN,  UNKNOWN,    UNKNOWN }
+};
+
+inline LV logicAnd(LV a, LV b)
 {
     return AND_TABLE[a][b];
 }
 
-inline LogicValue logicOr(LogicValue a, LogicValue b)
+inline LV logicOr(LV a, LV b)
 {
     return OR_TABLE[a][b];
 }
 
-inline LogicValue logicXor(LogicValue a, LogicValue b)
-{
-    return XOR_TABLE[a][b];
-}
-
-inline LogicValue logicNot(LogicValue value)
+inline LV logicNot(LV value)
 {
     return NOT_TABLE[value];
 }
 
-inline LogicValue logicNand(LogicValue a, LogicValue b)
+inline LV logicXor(LV a, LV b)
 {
-    return logicNot(logicAnd(a, b));
+    return XOR_TABLE[a][b];
 }
 
-inline LogicValue logicNor(LogicValue a, LogicValue b)
+inline LV logicNand(LV a, LV b)
 {
-    return logicNot(logicOr(a, b));
+    return NAND_TABLE[a][b];
 }
 
-inline LogicValue logicXnor(LogicValue a, LogicValue b)
+inline LV logicNor(LV a, LV b)
 {
-    return logicNot(logicXor(a, b));
+    return NOR_TABLE[a][b];
 }
 
-#endif // LogicValue.h
+inline LV logicXnor(LV a, LV b)
+{
+    return XNOR_TABLE[a][b];
+}
+
+// undo macro for LogicValue
+#undef LV
+
+#endif // LOGIC_VALUE_H
