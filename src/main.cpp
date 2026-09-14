@@ -1,4 +1,10 @@
 #include <iostream>
+#include "LogicValue.h"
+
+void test_logic_value()
+{
+    LogicValue result = logicAnd(HIGH, LOW);
+}
 
 int main()
 {
