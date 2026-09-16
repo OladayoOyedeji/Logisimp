@@ -46,6 +46,12 @@ public:
         {
             throw std::runtime_error("Cannot drive a wire with a value of a different width");
         }
+
+        // only enqueue if value changed
+        if (wire.value() == value)
+        {
+            return;
+        }
  
         wire.value() = value;
 
