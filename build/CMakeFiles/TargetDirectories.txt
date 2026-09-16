@@ -1,5 +1,0 @@
-/home/student/Desktop/Project/software_engineering_project/build/CMakeFiles/program.dir
-/home/student/Desktop/Project/software_engineering_project/build/CMakeFiles/r.dir
-/home/student/Desktop/Project/software_engineering_project/build/CMakeFiles/c.dir
-/home/student/Desktop/Project/software_engineering_project/build/CMakeFiles/edit_cache.dir
-/home/student/Desktop/Project/software_engineering_project/build/CMakeFiles/rebuild_cache.dir
