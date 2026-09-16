@@ -7,6 +7,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 
 class LogicVector
 {
@@ -21,12 +22,12 @@ class LogicVector
         bits_.resize(width, initial_value);
     }
 
-    std::vector<LogicValue> & bits() { return bits_; }
-    std::vector<LogicValue> bits() const { return bits_; }
+    std::vector< LogicValue > & bits() { return bits_; }
+    std::vector< LogicValue > bits() const { return bits_; }
 
     int width() const
     {
-        return (int)bits_.size();
+        return bits_.size();
     }
 
     LogicValue operator[](int index) const
@@ -40,9 +41,9 @@ class LogicVector
     }
 
     bool operator==(const LogicVector & other) const
-        {
-            return bits_ == other.bits_;
-        }
+    {
+        return bits_ == other.bits_;
+    }
 
     bool operator!=(const LogicVector & other) const
     {
@@ -63,7 +64,26 @@ class LogicVector
     }
 
   private:
-    std::vector<LogicValue> bits_;
+    std::vector< LogicValue > bits_;
 };
+
+inline std::ostream & operator<<(std::ostream & cout, const LogicVector & value)
+{
+    cout << '[';
+
+    for (int i = 0; i < value.width(); i++)
+    {
+        if (i != 0)
+        {
+            cout << ' ';
+        }
+
+        cout << value[i];
+    }
+
+    cout << ']';
+
+    return cout;
+}
 
 #endif // LogicVector.h

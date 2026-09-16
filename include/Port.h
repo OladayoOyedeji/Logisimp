@@ -4,9 +4,11 @@
 #define PORT_H
 
 #include <string>
+#include <stdexcept>
+#include <iostream>
 
 class Component;
-class Signal;
+class Wire;
 
 enum PortDirection
 {
@@ -22,7 +24,7 @@ public:
           width_(width),
           direction_(direction),
           owner_(nullptr),
-          signal_(nullptr),
+          wire_(nullptr),
           label_(label)
     {
         if (width <= 0)
@@ -46,15 +48,15 @@ public:
     Component * & owner() { return owner_; }
     Component * owner() const { return owner_; }
 
-    Signal * & signal() { return signal_; }
-    Signal * signal() const { return signal_; }
+    Wire * & wire() { return wire_; }
+    Wire * wire() const { return wire_; }
 
     std::string & label() { return label_; }
     std::string label() const { return label_; }
 
     bool connected() const
     {
-        return signal_ != nullptr;
+        return wire_ != nullptr;
     }
 
 private:
@@ -62,8 +64,41 @@ private:
     int width_;
     PortDirection direction_;
     Component * owner_;
-    Signal * signal_;
+    Wire * wire_;
     std::string label_;
 };
+
+inline std::ostream & operator<<(std::ostream & cout, const Port & port)
+{
+    cout << "Port("
+         << "id=" << port.id()
+         << ", width=" << port.width()
+         << ", direction=";
+
+    if (port.direction() == INPUT)
+    {
+        cout << "INPUT";
+    }
+    else
+    {
+        cout << "OUTPUT";
+    }
+
+    cout << ", label=\"" << port.label() << "\""
+         << ", connected=";
+
+    if (port.connected())
+    {
+        cout << "true";
+    }
+    else
+    {
+        cout << "false";
+    }
+
+    cout << ')';
+
+    return cout;
+}
 
 #endif // Port.h

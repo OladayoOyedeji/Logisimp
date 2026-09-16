@@ -3,6 +3,8 @@
 #ifndef LOGIC_VALUE_H
 #define LOGIC_VALUE_H
 
+#include <iostream>
+
 enum LogicValue {
     LOW = 0,
     HIGH = 1,
@@ -61,42 +63,60 @@ const LV XNOR_TABLE[3][3] = {
     /* a = UNKNOWN */ { UNKNOWN,  UNKNOWN,    UNKNOWN }
 };
 
-inline LV logicAnd(LV a, LV b)
+inline LV logic_and(LV a, LV b)
 {
     return AND_TABLE[a][b];
 }
 
-inline LV logicOr(LV a, LV b)
+inline LV logic_or(LV a, LV b)
 {
     return OR_TABLE[a][b];
 }
 
-inline LV logicNot(LV value)
+inline LV logic_not(LV value)
 {
     return NOT_TABLE[value];
 }
 
-inline LV logicXor(LV a, LV b)
+inline LV logic_xor(LV a, LV b)
 {
     return XOR_TABLE[a][b];
 }
 
-inline LV logicNand(LV a, LV b)
+inline LV logic_nand(LV a, LV b)
 {
     return NAND_TABLE[a][b];
 }
 
-inline LV logicNor(LV a, LV b)
+inline LV logic_nor(LV a, LV b)
 {
     return NOR_TABLE[a][b];
 }
 
-inline LV logicXnor(LV a, LV b)
+inline LV logic_xnor(LV a, LV b)
 {
     return XNOR_TABLE[a][b];
 }
 
 // undo macro for LogicValue
 #undef LV
+
+inline std::ostream & operator<<(std::ostream & cout, LogicValue value)
+{
+    if (value == LOW)
+    {
+        cout << "0";
+    }
+    else if (value == HIGH)
+    {
+        cout << "1";
+    }
+    else
+    {
+        cout << "X";
+    }
+
+    return cout;
+}
 
 #endif // LOGIC_VALUE_H

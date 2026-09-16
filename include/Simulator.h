@@ -5,34 +5,24 @@
 
 #include "Component.h"
 #include "LogicVector.h"
-#include "Signal.h"
+#include "Wire.h"
 
 #include <queue>
 #include <stdexcept>
-
-enum SimulationResult
-{
-    SETTLED,
-    EVALUATION_LIMIT_REACHED
-};
+#include <unordered_set>
+#include <iostream>
 
 class Simulator
 {
 public:
-    Simulator(int max_evaluations = 100000)
-        : max_evaluations_(max_evaluations)
-    {
-        if (max_evaluations <= 0)
-        {
-            throw std::invalid_argument("Maximum evaluations must be positive");
-        }
-    }
+    Simulator()
+    {}
 
-    std::queue<Component *> & work_queue() { return work_queue_; }
-    std::queue<Component *> work_queue() const { return work_queue_; }
+    std::queue< Component * > & work_queue() { return work_queue_; }
+    std::queue< Component * > work_queue() const { return work_queue_; }
 
-    int & max_evaluations() { return max_evaluations_; }
-    int max_evaluations() const { return max_evaluations_; }
+    std::unordered_set< Component * > & queued_components() { return queued_components_; }
+    std::unordered_set< Component * > queued_components() const { return queued_components_; }
 
     void enqueue(Component * component)
     {
@@ -41,75 +31,113 @@ public:
             return;
         }
 
-        if (component->queued())
+        if (queued_components_.find(component) != queued_components_.end())
         {
             return;
         }
 
-        component->queued() = true;
+        queued_components_.insert(component);
         work_queue_.push(component);
     }
 
-    void drive(Signal & signal, const LogicVector & value)
+    void drive(Wire & wire, const LogicVector & value)
     {
-        if (signal.width() != value.width())
+        if (wire.width() != value.width())
         {
-            throw std::runtime_error("Cannot drive signal with value of different width");
+            throw std::runtime_error("Cannot drive a wire with a value of a different width");
         }
+ 
+        wire.value() = value;
 
-        if (signal.value() == value)
-        {
-            return;
-        }
-
-        signal.value() = value;
-
-        for (Port * listener : signal.listeners())
+        for (Port * listener : wire.listeners())
         {
             enqueue(listener->owner());
         }
     }
 
-    SimulationResult run()
+    bool run()
     {
+        const int MAX_EVALS = 100000;
         int evaluation_count = 0;
 
         while (!work_queue_.empty())
         {
-            evaluation_count++;
-
-            if (evaluation_count > max_evaluations_)
+            // returns false if circuit oscillate
+            // (need a better way to indicate this.
+            // Currently the issue is evaluation count is global,
+            // but it should be localized to each component)
+            if (evaluation_count >= MAX_EVALS)
             {
-                clear_queue();
-                return EVALUATION_LIMIT_REACHED;
+                clear();
+                return false;
+                // the issue with this is it aborts the whole circuit
+                // if one part is oscillating, but you can have
+                // two disconnected "circuits" in one circuit project.
+                // if one fails, we don't want that to make the other fail.
+                // Need a better way to do this. Probably by having a
+                // hashtable that maps Component * to evaluation_counts,
+                // then marking the output of components that exceed MAX_EVALS
+                // as UNKNOWN
             }
 
             Component * component = work_queue_.front();
 
             work_queue_.pop();
+            queued_components_.erase(component);
 
-            component->queued() = false;
+            evaluation_count++;
+
             component->evaluate(*this);
         }
 
-        return SETTLED;
+        return true;
     }
 
-    void clear_queue()
+    void clear()
     {
         while (!work_queue_.empty())
         {
-            Component * component = work_queue_.front();
-
             work_queue_.pop();
-
-            component->queued() = false;
         }
+
+        queued_components_.clear();
     }
 
 private:
-    std::queue<Component *> work_queue_;
-    int max_evaluations_;
+    std::queue< Component * > work_queue_;
+    std::unordered_set< Component * > queued_components_;
 };
+
+inline std::ostream & operator<<(std::ostream & cout, const Simulator & simulator)
+{
+    std::queue< Component * > queue = simulator.work_queue();
+
+    cout << "Simulator("
+         << "queued=" << queue.size()
+         << ')';
+
+    if (!queue.empty())
+    {
+        cout << "\nQueue:";
+
+        while (!queue.empty())
+        {
+            cout << "\n  ";
+
+            if (queue.front() == nullptr)
+            {
+                cout << "nullptr";
+            }
+            else
+            {
+                cout << *queue.front();
+            }
+
+            queue.pop();
+        }
+    }
+
+    return cout;
+}
 
 #endif // Simulator.h
