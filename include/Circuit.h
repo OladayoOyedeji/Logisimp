@@ -34,7 +34,19 @@ public:
             delete wire;
         }
     }
+    int comp_size() const
+    {
+        return components_.size();
+    }
+    Component *& component_at(int i)
+    {
+        return components_[i];
+    }
 
+     Component * component_at(int i) const
+    {
+        return components_[i];
+    }
     Circuit(const Circuit & other) = delete;
     Circuit & operator=(const Circuit & other) = delete;
 
@@ -112,8 +124,11 @@ public:
     Pin & create_pin(PinType type, int width = 1)
     {
         Pin * component = new Pin(next_component_id_, type, width);
-
+        
         store_component(component);
+        // cout << "TYPE: " << type << endl;
+        // cout << "inie: " << component->input_count() << endl;
+        // cout << "outie: " << component->output_count() << endl;
 
         return *component;
     }
@@ -130,15 +145,17 @@ public:
 
     void connect(Port & port, Wire & wire)
     {
+        
         if (port.owner() == nullptr)
         {
             throw std::runtime_error("Port does not have an owner");
         }
-
+        
         if (!owns_component(*port.owner()))
         {
             throw std::runtime_error("Port owner does not belong to this circuit");
         }
+        
 
         if (!owns_wire(wire))
         {
@@ -154,7 +171,7 @@ public:
         {
             throw std::runtime_error("Port and wire widths do not match");
         }
-
+        
         if (port.direction() == OUTPUT)
         {
             if (wire.driver() != nullptr)
@@ -166,8 +183,10 @@ public:
         }
         else
         {
+            cout << "got you" << endl;
             wire.listeners().push_back(&port);
         }
+        
 
         port.wire() = &wire;
     }

@@ -4,6 +4,9 @@
 #define LOGIC_VALUE_H
 
 #include <iostream>
+#include <exception>
+
+using namespace std;
 
 enum LogicValue {
     LOW = 0,
@@ -117,6 +120,23 @@ inline std::ostream & operator<<(std::ostream & cout, LogicValue value)
     }
 
     return cout;
+}
+
+inline std::istream & operator>>(std::istream & cin, LogicValue & value)
+{
+    int v;
+    cin >> v;
+    
+    if (v == 0)
+        value = LOW;
+    else if (v == 1)
+        value = HIGH;
+    else if (v == 2)
+        value = UNKNOWN;
+    else
+        cout << "No value\n";
+
+    return cin;
 }
 
 #endif // LOGIC_VALUE_H
