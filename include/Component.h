@@ -57,7 +57,7 @@ public:
              << ')';
     }
 
-protected:
+// protected:
     Port * add_input(int width = 1, const std::string & label = "")
     {
         int port_id = inputs_.size() + outputs_.size();
