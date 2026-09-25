@@ -34,6 +34,7 @@ public:
             delete wire;
         }
     }
+    
     int comp_size() const
     {
         return components_.size();
@@ -43,7 +44,7 @@ public:
         return components_[i];
     }
 
-     Component * component_at(int i) const
+    Component * component_at(int i) const
     {
         return components_[i];
     }
@@ -55,6 +56,36 @@ public:
 
     std::vector< Wire * > & wires() { return wires_; }
     std::vector< Wire * > wires() const { return wires_; }
+
+    const std::vector< Pin * > & input_pins() const
+    {
+        return input_pins_;
+    }
+
+    const std::vector< Pin * > & output_pins() const
+    {
+        return output_pins_;
+    }
+
+    Pin & input_pin(int index)
+    {
+        return *input_pins_.at(index);
+    }
+
+    const Pin & input_pin(int index) const
+    {
+        return *input_pins_.at(index);
+    }
+
+    Pin & output_pin(int index)
+    {
+        return *output_pins_.at(index);
+    }
+
+    const Pin & output_pin(int index) const
+    {
+        return *output_pins_.at(index);
+    }
 
     // Creators
     //----------------------------------------------
@@ -123,14 +154,23 @@ public:
 
     Pin & create_pin(PinType type, int width = 1)
     {
-        Pin * component = new Pin(next_component_id_, type, width);
+        Pin * pin = new Pin(next_component_id_, type, width);
         
-        store_component(component);
+        store_component(pin);
         // cout << "TYPE: " << type << endl;
-        // cout << "inie: " << component->input_count() << endl;
-        // cout << "outie: " << component->output_count() << endl;
+        // cout << "inie: " << pin->input_count() << endl;
+        // cout << "outie: " << pin->output_count() << endl;
 
-        return *component;
+        if (type == INPUT_PIN)
+        {
+            input_pins_.push_back(pin);
+        }
+        else
+        {
+            output_pins_.push_back(pin);
+        }
+
+        return *pin;
     }
 
     Wire & create_wire(int width = 1, const std::string & label = "")
@@ -224,11 +264,39 @@ public:
 
     void remove_component(Component & component)
     {
-        std::vector< Component * >::iterator position = std::find(components_.begin(), components_.end(), &component);
+        std::vector< Component * >::iterator position =
+            std::find(components_.begin(), components_.end(), &component);
 
         if (position == components_.end())
         {
-            throw std::runtime_error("Component does not belong to this circuit");
+            throw std::runtime_error(
+                "Component does not belong to this circuit");
+        }
+
+        Pin * pin = dynamic_cast< Pin * >(&component);
+
+        if (pin != nullptr)
+        {
+            if (pin->type() == INPUT_PIN)
+            {
+                std::vector< Pin * >::iterator pin_position =
+                    std::find(input_pins_.begin(), input_pins_.end(), pin);
+
+                if (pin_position != input_pins_.end())
+                {
+                    input_pins_.erase(pin_position);
+                }
+            }
+            else
+            {
+                std::vector< Pin * >::iterator pin_position =
+                    std::find(output_pins_.begin(), output_pins_.end(), pin);
+
+                if (pin_position != output_pins_.end())
+                {
+                    output_pins_.erase(pin_position);
+                }
+            }
         }
 
         for (Port * port : component.inputs())
@@ -242,10 +310,9 @@ public:
         }
 
         components_.erase(position);
-
         delete &component;
     }
-
+    
     void remove_wire(Wire & wire)
     {
         std::vector< Wire * >::iterator position = std::find(wires_.begin(), wires_.end(), &wire);
@@ -319,6 +386,9 @@ private:
 
     std::vector< Component * > components_;
     std::vector< Wire * > wires_;
+
+    std::vector< Pin * > input_pins_;
+    std::vector< Pin * > output_pins_;
 
     int next_component_id_;
     int next_wire_id_;
