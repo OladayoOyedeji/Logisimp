@@ -1,0 +1,110 @@
+\doxysection{And\+Gate Class Reference}
+\hypertarget{classAndGate}{}\label{classAndGate}\index{AndGate@{AndGate}}
+Inheritance diagram for And\+Gate\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classAndGate}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classAndGate_a431172690d691a97dcb9e94d90dcc7ed}\label{classAndGate_a431172690d691a97dcb9e94d90dcc7ed} 
+{\bfseries And\+Gate} (int id, int input\+\_\+count=2)
+\item 
+void \mbox{\hyperlink{classAndGate_a7c3ae3f944438f0d1f3463ff000548be}{evaluate}} (\mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\item 
+void \mbox{\hyperlink{classAndGate_a318335b86df46756ac3cb735cab47321}{print}} (std\+::ostream \&cout) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Gate} (int id, int input\+\_\+count)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output} ()
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output} () const
+\item 
+void \mbox{\hyperlink{classGate_aa090a4eb82a828ab75237bc23694398b}{print}} (std\+::ostream \&cout) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classComponent}{Component}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Component} (int id, const std\+::string \&label="{}"{})
+\item 
+{\bfseries Component} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+{\bfseries Component} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+int {\bfseries id} () const
+\item 
+std\+::string \& {\bfseries label} ()
+\item 
+std\+::string {\bfseries label} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries inputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inputs} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries outputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries outputs} () const
+\item 
+virtual void {\bfseries reset} ()
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+input} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+output} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i) const
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i) const
+\item 
+int {\bfseries input\+\_\+count} () const
+\item 
+int {\bfseries output\+\_\+count} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+Logic\+Value {\bfseries input\+\_\+value} (int index) const
+\item 
+void {\bfseries drive\+\_\+output} (Logic\+Value value, \mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classAndGate_a7c3ae3f944438f0d1f3463ff000548be}\index{AndGate@{AndGate}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!AndGate@{AndGate}}
+\doxysubsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily \label{classAndGate_a7c3ae3f944438f0d1f3463ff000548be} 
+void And\+Gate\+::evaluate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSimulator}{Simulator}} \&}]{simulator}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classComponent}{Component}}.
+
+\Hypertarget{classAndGate_a318335b86df46756ac3cb735cab47321}\index{AndGate@{AndGate}!print@{print}}
+\index{print@{print}!AndGate@{AndGate}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily \label{classAndGate_a318335b86df46756ac3cb735cab47321} 
+void And\+Gate\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{cout}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classComponent}{Component}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/student/\+Desktop/\+Project/\+Logisimp/include/Gates.\+h\end{DoxyCompactItemize}

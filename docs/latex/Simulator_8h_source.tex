@@ -1,0 +1,155 @@
+\doxysection{Simulator.\+h}
+\hypertarget{Simulator_8h_source}{}\label{Simulator_8h_source}\index{/home/student/Desktop/Project/Logisimp/include/Simulator.h@{/home/student/Desktop/Project/Logisimp/include/Simulator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Simulator.h}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifndef\ SIMULATOR\_H}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ SIMULATOR\_H}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Component.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}LogicVector.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Wire.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <queue>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }Simulator}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ Simulator()}
+\DoxyCodeLine{00019\ \ \ \ \ \{\}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ std::queue<\ Component\ *\ >\ \&\ work\_queue()\ \{\ \textcolor{keywordflow}{return}\ work\_queue\_;\ \}}
+\DoxyCodeLine{00022\ \ \ \ \ std::queue<\ Component\ *\ >\ work\_queue()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ work\_queue\_;\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ std::unordered\_set<\ Component\ *\ >\ \&\ queued\_components()\ \{\ \textcolor{keywordflow}{return}\ queued\_components\_;\ \}}
+\DoxyCodeLine{00025\ \ \ \ \ std::unordered\_set<\ Component\ *\ >\ queued\_components()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ queued\_components\_;\ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ enqueue(\mbox{\hyperlink{classComponent}{Component}}\ *\ component)}
+\DoxyCodeLine{00028\ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (component\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (queued\_components\_.find(component)\ !=\ queued\_components\_.end())}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ queued\_components\_.insert(component);}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ work\_queue\_.push(component);}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ drive(\mbox{\hyperlink{classWire}{Wire}}\ \&\ wire,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classLogicVector}{LogicVector}}\ \&\ value)}
+\DoxyCodeLine{00044\ \ \ \ \ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire.width()\ !=\ value.width())}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Cannot\ drive\ a\ wire\ with\ a\ value\ of\ a\ different\ width"{}});}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ only\ enqueue\ if\ value\ changed}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire.value()\ ==\ value)}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ wire.value()\ =\ value;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classPort}{Port}}\ *\ listener\ :\ wire.listeners())}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ enqueue(listener-\/>owner());}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{bool}\ run()}
+\DoxyCodeLine{00065\ \ \ \ \ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ MAX\_EVALS\ =\ 100000;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ evaluation\_count\ =\ 0;}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!work\_queue\_.empty())}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ returns\ false\ if\ circuit\ oscillate}}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ (need\ a\ better\ way\ to\ indicate\ this.}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Currently\ the\ issue\ is\ evaluation\ count\ is\ global,}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ but\ it\ should\ be\ localized\ to\ each\ component)}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (evaluation\_count\ >=\ MAX\_EVALS)}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ clear();}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ issue\ with\ this\ is\ it\ aborts\ the\ whole\ circuit}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ one\ part\ is\ oscillating,\ but\ you\ can\ have}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ two\ disconnected\ "{}circuits"{}\ in\ one\ circuit\ project.}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ one\ fails,\ we\ don't\ want\ that\ to\ make\ the\ other\ fail.}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Need\ a\ better\ way\ to\ do\ this.\ Probably\ by\ having\ a}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ hashtable\ that\ maps\ Component\ *\ to\ evaluation\_counts,}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ then\ marking\ the\ output\ of\ components\ that\ exceed\ MAX\_EVALS}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ as\ UNKNOWN}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\ component\ =\ work\_queue\_.front();}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ work\_queue\_.pop();}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ queued\_components\_.erase(component);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ evaluation\_count++;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ component-\/>evaluate(*\textcolor{keyword}{this});}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00100\ \ \ \ \ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ clear()}
+\DoxyCodeLine{00103\ \ \ \ \ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!work\_queue\_.empty())}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ work\_queue\_.pop();}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ queued\_components\_.clear();}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00113\ \ \ \ \ std::queue<\ Component\ *\ >\ work\_queue\_;}
+\DoxyCodeLine{00114\ \ \ \ \ std::unordered\_set<\ Component\ *\ >\ queued\_components\_;}
+\DoxyCodeLine{00115\ \};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{keyword}{inline}\ std::ostream\ \&\ operator<<(std::ostream\ \&\ cout,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classSimulator}{Simulator}}\ \&\ simulator)}
+\DoxyCodeLine{00118\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ std::queue<\ Component\ *\ >\ queue\ =\ simulator.work\_queue();}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Simulator("{}}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}queued="{}}\ <<\ queue.size()}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ <<\ \textcolor{charliteral}{')'};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordflow}{if}\ (!queue.empty())}
+\DoxyCodeLine{00126\ \ \ \ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nQueue:"{}};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!queue.empty())}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\ \ "{}};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (queue.front()\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}nullptr"{}};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cout\ <<\ *queue.front();}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ queue.pop();}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordflow}{return}\ cout;}
+\DoxyCodeLine{00147\ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ Simulator.h}}
+
+\end{DoxyCode}

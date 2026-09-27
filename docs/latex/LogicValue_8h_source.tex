@@ -1,0 +1,148 @@
+\doxysection{Logic\+Value.\+h}
+\hypertarget{LogicValue_8h_source}{}\label{LogicValue_8h_source}\index{/home/student/Desktop/Project/Logisimp/include/LogicValue.h@{/home/student/Desktop/Project/Logisimp/include/LogicValue.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ LogicValue.h}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifndef\ LOGIC\_VALUE\_H}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ LOGIC\_VALUE\_H}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <exception>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{enum}\ LogicValue\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ LOW\ =\ 0,}
+\DoxyCodeLine{00013\ \ \ \ \ HIGH\ =\ 1,}
+\DoxyCodeLine{00014\ \ \ \ \ UNKNOWN\ =\ 2}
+\DoxyCodeLine{00015\ \};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ Shortens\ LogicValue\ to\ LV\ (only\ within\ this\ file\ though)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ LV\ LogicValue}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{const}\ LV\ AND\_TABLE[3][3]\ =\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b\ =\ LOW\ \ \ b\ =\ HIGH\ \ \ b\ =\ UNKNOWN}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ LOW\ \ \ \ \ */}\ \{\ LOW,\ \ \ \ \ \ LOW,\ \ \ \ \ \ \ \ LOW\ \ \ \ \ \},}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ HIGH\ \ \ \ */}\ \{\ LOW,\ \ \ \ \ \ HIGH,\ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ UNKNOWN\ */}\ \{\ LOW,\ \ \ \ \ \ UNKNOWN,\ \ \ \ UNKNOWN\ \}}
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{const}\ LV\ OR\_TABLE[3][3]\ =\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b\ =\ LOW\ \ \ b\ =\ HIGH\ \ \ b\ =\ UNKNOWN}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ LOW\ \ \ \ \ */}\ \{\ LOW,\ \ \ \ \ \ HIGH,\ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ HIGH\ \ \ \ */}\ \{\ HIGH,\ \ \ \ \ HIGH,\ \ \ \ \ \ \ HIGH\ \ \ \ \},}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ UNKNOWN\ */}\ \{\ UNKNOWN,\ \ HIGH,\ \ \ \ \ \ \ UNKNOWN\ \}}
+\DoxyCodeLine{00032\ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{const}\ LV\ NOT\_TABLE[3]\ =\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ input}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/*\ LOW\ \ \ \ \ */}\ \ \ \ \ \ HIGH,}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{/*\ HIGH\ \ \ \ */}\ \ \ \ \ \ LOW,}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{/*\ UNKNOWN\ */}\ \ \ \ \ \ UNKNOWN}
+\DoxyCodeLine{00039\ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{const}\ LV\ XOR\_TABLE[3][3]\ =\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b\ =\ LOW\ \ \ b\ =\ HIGH\ \ \ b\ =\ UNKNOWN}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ LOW\ \ \ \ \ */}\ \{\ LOW,\ \ \ \ \ \ HIGH,\ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ HIGH\ \ \ \ */}\ \{\ HIGH,\ \ \ \ \ LOW,\ \ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ UNKNOWN\ */}\ \{\ UNKNOWN,\ \ UNKNOWN,\ \ \ \ UNKNOWN\ \}}
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{const}\ LV\ NAND\_TABLE[3][3]\ =\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b\ =\ LOW\ \ \ b\ =\ HIGH\ \ \ b\ =\ UNKNOWN}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ LOW\ \ \ \ \ */}\ \{\ HIGH,\ \ \ \ \ HIGH,\ \ \ \ \ \ \ HIGH\ \ \ \ \},}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ HIGH\ \ \ \ */}\ \{\ HIGH,\ \ \ \ \ LOW,\ \ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ UNKNOWN\ */}\ \{\ HIGH,\ \ \ \ \ UNKNOWN,\ \ \ \ UNKNOWN\ \}}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{const}\ LV\ NOR\_TABLE[3][3]\ =\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b\ =\ LOW\ \ \ b\ =\ HIGH\ \ \ b\ =\ UNKNOWN}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ LOW\ \ \ \ \ */}\ \{\ HIGH,\ \ \ \ \ LOW,\ \ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ HIGH\ \ \ \ */}\ \{\ LOW,\ \ \ \ \ \ LOW,\ \ \ \ \ \ \ \ LOW\ \ \ \ \ \},}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ UNKNOWN\ */}\ \{\ UNKNOWN,\ \ LOW,\ \ \ \ \ \ \ \ UNKNOWN\ \}}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{const}\ LV\ XNOR\_TABLE[3][3]\ =\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b\ =\ LOW\ \ \ b\ =\ HIGH\ \ \ b\ =\ UNKNOWN}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ LOW\ \ \ \ \ */}\ \{\ HIGH,\ \ \ \ \ LOW,\ \ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ HIGH\ \ \ \ */}\ \{\ LOW,\ \ \ \ \ \ HIGH,\ \ \ \ \ \ \ UNKNOWN\ \},}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{/*\ a\ =\ UNKNOWN\ */}\ \{\ UNKNOWN,\ \ UNKNOWN,\ \ \ \ UNKNOWN\ \}}
+\DoxyCodeLine{00067\ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{inline}\ LV\ logic\_and(LV\ a,\ LV\ b)}
+\DoxyCodeLine{00070\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{return}\ AND\_TABLE[a][b];}
+\DoxyCodeLine{00072\ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{inline}\ LV\ logic\_or(LV\ a,\ LV\ b)}
+\DoxyCodeLine{00075\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordflow}{return}\ OR\_TABLE[a][b];}
+\DoxyCodeLine{00077\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{inline}\ LV\ logic\_not(LV\ value)}
+\DoxyCodeLine{00080\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{return}\ NOT\_TABLE[value];}
+\DoxyCodeLine{00082\ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{inline}\ LV\ logic\_xor(LV\ a,\ LV\ b)}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{return}\ XOR\_TABLE[a][b];}
+\DoxyCodeLine{00087\ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{keyword}{inline}\ LV\ logic\_nand(LV\ a,\ LV\ b)}
+\DoxyCodeLine{00090\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordflow}{return}\ NAND\_TABLE[a][b];}
+\DoxyCodeLine{00092\ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{inline}\ LV\ logic\_nor(LV\ a,\ LV\ b)}
+\DoxyCodeLine{00095\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{return}\ NOR\_TABLE[a][b];}
+\DoxyCodeLine{00097\ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{keyword}{inline}\ LV\ logic\_xnor(LV\ a,\ LV\ b)}
+\DoxyCodeLine{00100\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{return}\ XNOR\_TABLE[a][b];}
+\DoxyCodeLine{00102\ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{comment}{//\ undo\ macro\ for\ LogicValue}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#undef\ LV}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{keyword}{inline}\ std::ostream\ \&\ operator<<(std::ostream\ \&\ cout,\ LogicValue\ value)}
+\DoxyCodeLine{00108\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ LOW)}
+\DoxyCodeLine{00110\ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}0"{}};}
+\DoxyCodeLine{00112\ \ \ \ \ \}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (value\ ==\ HIGH)}
+\DoxyCodeLine{00114\ \ \ \ \ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}1"{}};}
+\DoxyCodeLine{00116\ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00118\ \ \ \ \ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}X"{}};}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordflow}{return}\ cout;}
+\DoxyCodeLine{00123\ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{keyword}{inline}\ std::istream\ \&\ operator>>(std::istream\ \&\ cin,\ LogicValue\ \&\ value)}
+\DoxyCodeLine{00126\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{int}\ v;}
+\DoxyCodeLine{00128\ \ \ \ \ cin\ >>\ v;}
+\DoxyCodeLine{00129\ \ \ \ \ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordflow}{if}\ (v\ ==\ 0)}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ value\ =\ LOW;}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (v\ ==\ 1)}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ value\ =\ HIGH;}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (v\ ==\ 2)}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ value\ =\ UNKNOWN;}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}No\ value\(\backslash\)n"{}};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordflow}{return}\ cin;}
+\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LOGIC\_VALUE\_H}}
+
+\end{DoxyCode}

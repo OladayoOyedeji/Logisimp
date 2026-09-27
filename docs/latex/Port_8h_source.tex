@@ -1,0 +1,110 @@
+\doxysection{Port.\+h}
+\hypertarget{Port_8h_source}{}\label{Port_8h_source}\index{/home/student/Desktop/Project/Logisimp/include/Port.h@{/home/student/Desktop/Project/Logisimp/include/Port.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Port.h}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifndef\ PORT\_H}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ PORT\_H}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classComponent}{Component}};}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classWire}{Wire}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{enum}\ PortDirection}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ INPUT,}
+\DoxyCodeLine{00016\ \ \ \ \ OUTPUT}
+\DoxyCodeLine{00017\ \};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }Port}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ Port(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{int}\ width,\ PortDirection\ direction,\ \textcolor{keyword}{const}\ std::string\ \&\ label\ =\ \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ :\ id\_(\textcolor{keywordtype}{id}),}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ width\_(width),}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ direction\_(direction),}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ owner\_(\textcolor{keyword}{nullptr}),}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ wire\_(\textcolor{keyword}{nullptr}),}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ label\_(label)}
+\DoxyCodeLine{00029\ \ \ \ \ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ <=\ 0)}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Port\ width\ must\ be\ positive"{}});}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ Port(\textcolor{keyword}{const}\ Port\ \&\ other)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00037\ \ \ \ \ Port\ \&\ operator=(\textcolor{keyword}{const}\ Port\ \&\ other)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \&\ id()\ \{\ \textcolor{keywordflow}{return}\ id\_;\ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ id()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ id\_;\ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{int}\ \&\ width()\ \{\ \textcolor{keywordflow}{return}\ width\_;\ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{int}\ width()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ width\_;\ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ PortDirection\ \&\ direction()\ \{\ \textcolor{keywordflow}{return}\ direction\_;\ \}}
+\DoxyCodeLine{00046\ \ \ \ \ PortDirection\ direction()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ direction\_;\ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\ \&\ owner()\ \{\ \textcolor{keywordflow}{return}\ owner\_;\ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\ owner()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ owner\_;\ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ \&\ wire()\ \{\ \textcolor{keywordflow}{return}\ wire\_;\ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ wire\_;\ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ std::string\ \&\ label()\ \{\ \textcolor{keywordflow}{return}\ label\_;\ \}}
+\DoxyCodeLine{00055\ \ \ \ \ std::string\ label()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ label\_;\ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ connected()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00058\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ wire\_\ !=\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{int}\ id\_;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{int}\ width\_;}
+\DoxyCodeLine{00065\ \ \ \ \ PortDirection\ direction\_;}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\ owner\_;}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire\_;}
+\DoxyCodeLine{00068\ \ \ \ \ std::string\ label\_;}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{keyword}{inline}\ std::ostream\ \&\ operator<<(std::ostream\ \&\ cout,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classPort}{Port}}\ \&\ port)}
+\DoxyCodeLine{00072\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Port("{}}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}id="{}}\ <<\ port.id()}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\ width="{}}\ <<\ port.width()}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\ direction="{}};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordflow}{if}\ (port.direction()\ ==\ INPUT)}
+\DoxyCodeLine{00079\ \ \ \ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}INPUT"{}};}
+\DoxyCodeLine{00081\ \ \ \ \ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00083\ \ \ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}OUTPUT"{}};}
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{},\ label=\(\backslash\)"{}"{}}\ <<\ port.label()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\ connected="{}};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{if}\ (port.connected())}
+\DoxyCodeLine{00091\ \ \ \ \ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}true"{}};}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00095\ \ \ \ \ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}false"{}};}
+\DoxyCodeLine{00097\ \ \ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ cout\ <<\ \textcolor{charliteral}{')'};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{return}\ cout;}
+\DoxyCodeLine{00102\ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ Port.h}}
+
+\end{DoxyCode}

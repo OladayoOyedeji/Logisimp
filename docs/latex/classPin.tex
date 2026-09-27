@@ -1,0 +1,128 @@
+\doxysection{Pin Class Reference}
+\hypertarget{classPin}{}\label{classPin}\index{Pin@{Pin}}
+Inheritance diagram for Pin\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPin}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPin_a656e0b9058c53c50075ccdcbdb2484c1}\label{classPin_a656e0b9058c53c50075ccdcbdb2484c1} 
+{\bfseries Pin} (int id, Pin\+Type type, int width=1)
+\item 
+\Hypertarget{classPin_ac8a6844ace7768d39d63e4528bf356a4}\label{classPin_ac8a6844ace7768d39d63e4528bf356a4} 
+Pin\+Type \& {\bfseries type} ()
+\item 
+\Hypertarget{classPin_a788397e41a9a4fa196b36f8076eb6d6c}\label{classPin_a788397e41a9a4fa196b36f8076eb6d6c} 
+Pin\+Type {\bfseries type} () const
+\item 
+\Hypertarget{classPin_a864214f73d91e3cc36e4e87cea26e8ca}\label{classPin_a864214f73d91e3cc36e4e87cea26e8ca} 
+\mbox{\hyperlink{classLogicVector}{Logic\+Vector}} \& {\bfseries value} ()
+\item 
+\Hypertarget{classPin_a1242e0a78881238b0888116f5267f704}\label{classPin_a1242e0a78881238b0888116f5267f704} 
+\mbox{\hyperlink{classLogicVector}{Logic\+Vector}} {\bfseries value} () const
+\item 
+\Hypertarget{classPin_aeac8096e2c651bdf8cbce20dd7e23289}\label{classPin_aeac8096e2c651bdf8cbce20dd7e23289} 
+void {\bfseries set} (const \mbox{\hyperlink{classLogicVector}{Logic\+Vector}} \&value, \mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\item 
+\Hypertarget{classPin_aa974fe6e74dd736d0dc703426b465845}\label{classPin_aa974fe6e74dd736d0dc703426b465845} 
+void {\bfseries toggle} (\mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\item 
+void \mbox{\hyperlink{classPin_a96686739dcb2b55e87efb0689583313f}{evaluate}} (\mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\item 
+void \mbox{\hyperlink{classPin_ab644d16866bde94df051e0ba6a2e3ee0}{reset}} ()
+\item 
+void \mbox{\hyperlink{classPin_a789745f10ad123279d7685fcbbf77789}{print}} (std\+::ostream \&cout) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classComponent}{Component}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Component} (int id, const std\+::string \&label="{}"{})
+\item 
+{\bfseries Component} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+{\bfseries Component} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+int {\bfseries id} () const
+\item 
+std\+::string \& {\bfseries label} ()
+\item 
+std\+::string {\bfseries label} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries inputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inputs} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries outputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries outputs} () const
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+input} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+output} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i) const
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i) const
+\item 
+int {\bfseries input\+\_\+count} () const
+\item 
+int {\bfseries output\+\_\+count} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPin_a3a7816e77442f6547f2b9af62a18c1d7}\label{classPin_a3a7816e77442f6547f2b9af62a18c1d7} 
+Pin\+Type {\bfseries type\+\_\+}
+\item 
+\Hypertarget{classPin_a4c209951be7315dc62b0c8e074ccc92a}\label{classPin_a4c209951be7315dc62b0c8e074ccc92a} 
+\mbox{\hyperlink{classLogicVector}{Logic\+Vector}} {\bfseries value\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classPin_a96686739dcb2b55e87efb0689583313f}\index{Pin@{Pin}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Pin@{Pin}}
+\doxysubsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily \label{classPin_a96686739dcb2b55e87efb0689583313f} 
+void Pin\+::evaluate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSimulator}{Simulator}} \&}]{simulator}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classComponent}{Component}}.
+
+\Hypertarget{classPin_a789745f10ad123279d7685fcbbf77789}\index{Pin@{Pin}!print@{print}}
+\index{print@{print}!Pin@{Pin}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily \label{classPin_a789745f10ad123279d7685fcbbf77789} 
+void Pin\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{cout}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classComponent}{Component}}.
+
+\Hypertarget{classPin_ab644d16866bde94df051e0ba6a2e3ee0}\index{Pin@{Pin}!reset@{reset}}
+\index{reset@{reset}!Pin@{Pin}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily \label{classPin_ab644d16866bde94df051e0ba6a2e3ee0} 
+void Pin\+::reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classComponent}{Component}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/student/\+Desktop/\+Project/\+Logisimp/include/Pin.\+h\end{DoxyCompactItemize}
