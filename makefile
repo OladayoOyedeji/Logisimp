@@ -15,6 +15,9 @@ g git:
 	git diff --cached --quiet || git commit -m "sync: $(shell date '+%Y-%m-%d %H:%M:%S')"
 	git push
 
+d doc:
+	doxygen docs/Doxyfile
+
 r run: p
 	./build/logisimp
 
