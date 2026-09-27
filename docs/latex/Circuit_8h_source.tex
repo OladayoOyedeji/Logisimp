@@ -42,303 +42,292 @@
 \DoxyCodeLine{00038\ \textcolor{keyword}{\ \ \ \ }\{}
 \DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ components\_.size();}
 \DoxyCodeLine{00040\ \ \ \ \ \}}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ wire\_size()\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00042\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ wires\_.size();}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\&\ component\_at(\textcolor{keywordtype}{int}\ i)}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ components\_[i];}
 \DoxyCodeLine{00044\ \ \ \ \ \}}
-\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\&\ component\_at(\textcolor{keywordtype}{int}\ i)}
-\DoxyCodeLine{00046\ \ \ \ \ \{}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ components\_[i];}
-\DoxyCodeLine{00048\ \ \ \ \ \}}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\ component\_at(\textcolor{keywordtype}{int}\ i)\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00051\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ components\_[i];}
-\DoxyCodeLine{00053\ \ \ \ \ \}}
-\DoxyCodeLine{00054\ \ \ \ \ Circuit(\textcolor{keyword}{const}\ Circuit\ \&\ other)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00055\ \ \ \ \ Circuit\ \&\ operator=(\textcolor{keyword}{const}\ Circuit\ \&\ other)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ std::vector<\ Component\ *\ >\ \&\ components()\ \{\ \textcolor{keywordflow}{return}\ components\_;\ \}}
-\DoxyCodeLine{00058\ \ \ \ \ std::vector<\ Component\ *\ >\ components()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ components\_;\ \}}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ std::vector<\ Wire\ *\ >\ \&\ wires()\ \{\ \textcolor{keywordflow}{return}\ wires\_;\ \}}
-\DoxyCodeLine{00061\ \ \ \ \ std::vector<\ Wire\ *\ >\ wires()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ wires\_;\ \}}
-\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire\_at(\textcolor{keywordtype}{int}\ i)\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00063\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ wires\_[i];}
-\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \mbox{\hyperlink{classComponent}{Component}}\ *\ component\_at(\textcolor{keywordtype}{int}\ i)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ components\_[i];}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ Circuit(\textcolor{keyword}{const}\ Circuit\ \&\ other)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00051\ \ \ \ \ Circuit\ \&\ operator=(\textcolor{keyword}{const}\ Circuit\ \&\ other)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ std::vector<\ Component\ *\ >\ \&\ components()\ \{\ \textcolor{keywordflow}{return}\ components\_;\ \}}
+\DoxyCodeLine{00054\ \ \ \ \ std::vector<\ Component\ *\ >\ components()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ components\_;\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ std::vector<\ Wire\ *\ >\ \&\ wires()\ \{\ \textcolor{keywordflow}{return}\ wires\_;\ \}}
+\DoxyCodeLine{00057\ \ \ \ \ std::vector<\ Wire\ *\ >\ wires()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ wires\_;\ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Creators}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classAndGate}{AndGate}}\ \&\ create\_and\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
+\DoxyCodeLine{00062\ \ \ \ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classAndGate}{AndGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classAndGate}{AndGate}}(next\_component\_id\_,\ input\_count);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ store\_component(component);}
 \DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\&\ wire\_at(\textcolor{keywordtype}{int}\ i)}
-\DoxyCodeLine{00068\ \ \ \ \ \{}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ wires\_[i];}
-\DoxyCodeLine{00070\ \ \ \ \ \}}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//\ Creators}}
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classAndGate}{AndGate}}\ \&\ create\_and\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
-\DoxyCodeLine{00074\ \ \ \ \ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classAndGate}{AndGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classAndGate}{AndGate}}(next\_component\_id\_,\ input\_count);}
-\DoxyCodeLine{00076\ }
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classOrGate}{OrGate}}\ \&\ create\_or\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
+\DoxyCodeLine{00071\ \ \ \ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classOrGate}{OrGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classOrGate}{OrGate}}(next\_component\_id\_,\ input\_count);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
 \DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00080\ \ \ \ \ \}}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classOrGate}{OrGate}}\ \&\ create\_or\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
-\DoxyCodeLine{00083\ \ \ \ \ \{}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classOrGate}{OrGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classOrGate}{OrGate}}(next\_component\_id\_,\ input\_count);}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classNotGate}{NotGate}}\ \&\ create\_not\_gate()}
+\DoxyCodeLine{00080\ \ \ \ \ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNotGate}{NotGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classNotGate}{NotGate}}(next\_component\_id\_);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
 \DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00089\ \ \ \ \ \}}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classNotGate}{NotGate}}\ \&\ create\_not\_gate()}
-\DoxyCodeLine{00092\ \ \ \ \ \{}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNotGate}{NotGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classNotGate}{NotGate}}(next\_component\_id\_);}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{classNandGate}{NandGate}}\ \&\ create\_nand\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
+\DoxyCodeLine{00089\ \ \ \ \ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNandGate}{NandGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classNandGate}{NandGate}}(next\_component\_id\_,\ input\_count);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00095\ \ \ \ \ \}}
 \DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00098\ \ \ \ \ \}}
-\DoxyCodeLine{00099\ }
-\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{classNandGate}{NandGate}}\ \&\ create\_nand\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
-\DoxyCodeLine{00101\ \ \ \ \ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNandGate}{NandGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classNandGate}{NandGate}}(next\_component\_id\_,\ input\_count);}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classNorGate}{NorGate}}\ \&\ create\_nor\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
+\DoxyCodeLine{00098\ \ \ \ \ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNorGate}{NorGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classNorGate}{NorGate}}(next\_component\_id\_,\ input\_count);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
 \DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00107\ \ \ \ \ \}}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{classNorGate}{NorGate}}\ \&\ create\_nor\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
-\DoxyCodeLine{00110\ \ \ \ \ \{}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNorGate}{NorGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classNorGate}{NorGate}}(next\_component\_id\_,\ input\_count);}
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{classXorGate}{XorGate}}\ \&\ create\_xor\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
+\DoxyCodeLine{00107\ \ \ \ \ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classXorGate}{XorGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classXorGate}{XorGate}}(next\_component\_id\_,\ input\_count);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
 \DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00116\ \ \ \ \ \}}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{classXorGate}{XorGate}}\ \&\ create\_xor\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
-\DoxyCodeLine{00119\ \ \ \ \ \{}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classXorGate}{XorGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classXorGate}{XorGate}}(next\_component\_id\_,\ input\_count);}
-\DoxyCodeLine{00121\ }
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{classXnorGate}{XnorGate}}\ \&\ create\_xnor\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
+\DoxyCodeLine{00116\ \ \ \ \ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classXnorGate}{XnorGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classXnorGate}{XnorGate}}(next\_component\_id\_,\ input\_count);}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
 \DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00125\ \ \ \ \ \}}
-\DoxyCodeLine{00126\ }
-\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{classXnorGate}{XnorGate}}\ \&\ create\_xnor\_gate(\textcolor{keywordtype}{int}\ input\_count\ =\ 2)}
-\DoxyCodeLine{00128\ \ \ \ \ \{}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classXnorGate}{XnorGate}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classXnorGate}{XnorGate}}(next\_component\_id\_,\ input\_count);}
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ \&\ create\_pin(PinType\ type,\ \textcolor{keywordtype}{int}\ width\ =\ 1)}
+\DoxyCodeLine{00125\ \ \ \ \ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classPin}{Pin}}(next\_component\_id\_,\ type,\ width);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ store\_component(component);}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}TYPE:\ "{}\ <<\ type\ <<\ endl;}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}inie:\ "{}\ <<\ component-\/>input\_count()\ <<\ endl;}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}outie:\ "{}\ <<\ component-\/>output\_count()\ <<\ endl;}}
 \DoxyCodeLine{00132\ }
 \DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
 \DoxyCodeLine{00134\ \ \ \ \ \}}
 \DoxyCodeLine{00135\ }
-\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ \&\ create\_pin(PinType\ type,\ \textcolor{keywordtype}{int}\ width\ =\ 1)}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ \&\ create\_wire(\textcolor{keywordtype}{int}\ width\ =\ 1,\ \textcolor{keyword}{const}\ std::string\ \&\ label\ =\ \textcolor{stringliteral}{"{}"{}})}
 \DoxyCodeLine{00137\ \ \ \ \ \{}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ *\ component\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classPin}{Pin}}(next\_component\_id\_,\ type,\ width);}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ store\_component(component);}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}TYPE:\ "{}\ <<\ type\ <<\ endl;}}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}inie:\ "{}\ <<\ component-\/>input\_count()\ <<\ endl;}}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}outie:\ "{}\ <<\ component-\/>output\_count()\ <<\ endl;}}
-\DoxyCodeLine{00144\ }
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *component;}
-\DoxyCodeLine{00146\ \ \ \ \ \}}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ \&\ create\_wire(\textcolor{keywordtype}{int}\ width\ =\ 1,\ \textcolor{keyword}{const}\ std::string\ \&\ label\ =\ \textcolor{stringliteral}{"{}"{}})}
-\DoxyCodeLine{00149\ \ \ \ \ \{}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classWire}{Wire}}(next\_wire\_id\_,\ width,\ label);}
-\DoxyCodeLine{00151\ }
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ wires\_.push\_back(wire);}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ next\_wire\_id\_++;}
-\DoxyCodeLine{00154\ }
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *wire;}
-\DoxyCodeLine{00156\ \ \ \ \ \}}
-\DoxyCodeLine{00157\ }
-\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordtype}{void}\ connect(\mbox{\hyperlink{classPort}{Port}}\ \&\ port,\ \mbox{\hyperlink{classWire}{Wire}}\ \&\ wire)}
-\DoxyCodeLine{00159\ \ \ \ \ \{}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.owner()\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ does\ not\ have\ an\ owner"{}});}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!owns\_component(*port.owner()))}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ owner\ does\ not\ belong\ to\ this\ circuit"{}});}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!owns\_wire(wire))}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Wire\ does\ not\ belong\ to\ this\ circuit"{}});}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00176\ }
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.wire()\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ is\ already\ connected"{}});}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classWire}{Wire}}(next\_wire\_id\_,\ width,\ label);}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ wires\_.push\_back(wire);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ next\_wire\_id\_++;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *wire;}
+\DoxyCodeLine{00144\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{void}\ connect(\mbox{\hyperlink{classPort}{Port}}\ \&\ port,\ \mbox{\hyperlink{classWire}{Wire}}\ \&\ wire)}
+\DoxyCodeLine{00147\ \ \ \ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.owner()\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ does\ not\ have\ an\ owner"{}});}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!owns\_component(*port.owner()))}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ owner\ does\ not\ belong\ to\ this\ circuit"{}});}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!owns\_wire(wire))}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Wire\ does\ not\ belong\ to\ this\ circuit"{}});}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.wire()\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ is\ already\ connected"{}});}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.width()\ !=\ wire.width())}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ and\ wire\ widths\ do\ not\ match"{}});}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.direction()\ ==\ OUTPUT)}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire.driver()\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Wire\ already\ has\ a\ driver"{}});}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00181\ }
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.width()\ !=\ wire.width())}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Port\ and\ wire\ widths\ do\ not\ match"{}});}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.direction()\ ==\ OUTPUT)}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire.driver()\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Wire\ already\ has\ a\ driver"{}});}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ wire.driver()\ =\ \&port;}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}got\ you"{}}\ <<\ endl;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ wire.listeners().push\_back(\&port);}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ port.wire()\ =\ \&wire;}
+\DoxyCodeLine{00192\ \ \ \ \ \}}
 \DoxyCodeLine{00193\ }
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ wire.driver()\ =\ \&port;}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ wire.listeners().push\_back(\&port);}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ port.wire()\ =\ \&wire;}
-\DoxyCodeLine{00203\ \ \ \ \ \}}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{//\ removes\ references\ to\ the\ port}}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{//\ (used\ before\ the\ port\ is\ deleted\ when\ deleting\ a\ component)}}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{void}\ disconnect(\mbox{\hyperlink{classPort}{Port}}\ \&\ port)}
+\DoxyCodeLine{00197\ \ \ \ \ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.wire()\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire\ =\ port.wire();}
 \DoxyCodeLine{00204\ }
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{//\ removes\ references\ to\ the\ port}}
-\DoxyCodeLine{00206\ \ \ \ \ \textcolor{comment}{//\ (used\ before\ the\ port\ is\ deleted\ when\ deleting\ a\ component)}}
-\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordtype}{void}\ disconnect(\mbox{\hyperlink{classPort}{Port}}\ \&\ port)}
-\DoxyCodeLine{00208\ \ \ \ \ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.wire()\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00213\ }
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classWire}{Wire}}\ *\ wire\ =\ port.wire();}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.direction()\ ==\ OUTPUT)}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire-\/>driver()\ ==\ \&port)}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wire-\/>driver()\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\ Port\ *\ >::iterator\ position\ =\ std::find(wire-\/>listeners().begin(),\ wire-\/>listeners().end(),\ \&port);}
 \DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (port.direction()\ ==\ OUTPUT)}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire-\/>driver()\ ==\ \&port)}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wire-\/>driver()\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<\ Port\ *\ >::iterator\ position\ =\ std::find(wire-\/>listeners().begin(),\ wire-\/>listeners().end(),\ \&port);}
-\DoxyCodeLine{00226\ }
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (position\ !=\ wire-\/>listeners().end())}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wire-\/>listeners().erase(position);}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00232\ }
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ port.wire()\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00234\ \ \ \ \ \}}
-\DoxyCodeLine{00235\ }
-\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keywordtype}{void}\ remove\_component(\mbox{\hyperlink{classComponent}{Component}}\ \&\ component)}
-\DoxyCodeLine{00237\ \ \ \ \ \{}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ std::vector<\ Component\ *\ >::iterator\ position\ =\ std::find(components\_.begin(),\ components\_.end(),\ \&component);}
-\DoxyCodeLine{00239\ }
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (position\ ==\ components\_.end())}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Component\ does\ not\ belong\ to\ this\ circuit"{}});}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00244\ }
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classPort}{Port}}\ *\ port\ :\ component.inputs())}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*port);}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00249\ }
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classPort}{Port}}\ *\ port\ :\ component.outputs())}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*port);}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00254\ }
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ components\_.erase(position);}
-\DoxyCodeLine{00256\ }
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ \&component;}
-\DoxyCodeLine{00258\ \ \ \ \ \}}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{void}\ remove\_wire(\mbox{\hyperlink{classWire}{Wire}}\ \&\ wire)}
-\DoxyCodeLine{00261\ \ \ \ \ \{}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ std::vector<\ Wire\ *\ >::iterator\ position\ =\ std::find(wires\_.begin(),\ wires\_.end(),\ \&wire);}
-\DoxyCodeLine{00263\ }
-\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (position\ ==\ wires\_.end())}
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Wire\ does\ not\ belong\ to\ this\ circuit"{}});}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00268\ }
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire.driver()\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*wire.driver());}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00273\ }
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!wire.listeners().empty())}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*wire.listeners().back());}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00278\ }
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ wires\_.erase(position);}
-\DoxyCodeLine{00280\ }
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ \&wire;}
-\DoxyCodeLine{00282\ \ \ \ \ \}}
-\DoxyCodeLine{00283\ }
-\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordtype}{bool}\ initialize(\mbox{\hyperlink{classSimulator}{Simulator}}\ \&\ simulator)}
-\DoxyCodeLine{00285\ \ \ \ \ \{}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ simulator.clear();}
-\DoxyCodeLine{00287\ }
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classComponent}{Component}}\ *\ component\ :\ components\_)}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ simulator.enqueue(component);}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00292\ }
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ simulator.run();}
-\DoxyCodeLine{00294\ \ \ \ \ \}}
-\DoxyCodeLine{00295\ }
-\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{bool}\ reset(\mbox{\hyperlink{classSimulator}{Simulator}}\ \&\ simulator)}
-\DoxyCodeLine{00297\ \ \ \ \ \{}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ simulator.clear();}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (position\ !=\ wire-\/>listeners().end())}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ wire-\/>listeners().erase(position);}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ port.wire()\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ remove\_component(\mbox{\hyperlink{classComponent}{Component}}\ \&\ component)}
+\DoxyCodeLine{00226\ \ \ \ \ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ std::vector<\ Component\ *\ >::iterator\ position\ =\ std::find(components\_.begin(),\ components\_.end(),\ \&component);}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (position\ ==\ components\_.end())}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Component\ does\ not\ belong\ to\ this\ circuit"{}});}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classPort}{Port}}\ *\ port\ :\ component.inputs())}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*port);}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classPort}{Port}}\ *\ port\ :\ component.outputs())}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*port);}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ components\_.erase(position);}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ \&component;}
+\DoxyCodeLine{00247\ \ \ \ \ \}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{void}\ remove\_wire(\mbox{\hyperlink{classWire}{Wire}}\ \&\ wire)}
+\DoxyCodeLine{00250\ \ \ \ \ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ std::vector<\ Wire\ *\ >::iterator\ position\ =\ std::find(wires\_.begin(),\ wires\_.end(),\ \&wire);}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (position\ ==\ wires\_.end())}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Wire\ does\ not\ belong\ to\ this\ circuit"{}});}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (wire.driver()\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*wire.driver());}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!wire.listeners().empty())}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(*wire.listeners().back());}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ wires\_.erase(position);}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ \&wire;}
+\DoxyCodeLine{00271\ \ \ \ \ \}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordtype}{bool}\ initialize(\mbox{\hyperlink{classSimulator}{Simulator}}\ \&\ simulator)}
+\DoxyCodeLine{00274\ \ \ \ \ \{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ simulator.clear();}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classComponent}{Component}}\ *\ component\ :\ components\_)}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ simulator.enqueue(component);}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ simulator.run();}
+\DoxyCodeLine{00283\ \ \ \ \ \}}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordtype}{bool}\ reset(\mbox{\hyperlink{classSimulator}{Simulator}}\ \&\ simulator)}
+\DoxyCodeLine{00286\ \ \ \ \ \{}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ simulator.clear();}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classWire}{Wire}}\ *\ wire\ :\ wires\_)}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ wire-\/>value()\ =\ \mbox{\hyperlink{classLogicVector}{LogicVector}}(wire-\/>width(),\ UNKNOWN);}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classComponent}{Component}}\ *\ component\ :\ components\_)}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ component-\/>reset();}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ simulator.enqueue(component);}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00299\ }
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classWire}{Wire}}\ *\ wire\ :\ wires\_)}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ wire-\/>value()\ =\ \mbox{\hyperlink{classLogicVector}{LogicVector}}(wire-\/>width(),\ UNKNOWN);}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00304\ }
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classComponent}{Component}}\ *\ component\ :\ components\_)}
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ component-\/>reset();}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ simulator.enqueue(component);}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00310\ }
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ simulator.run();}
-\DoxyCodeLine{00312\ \ \ \ \ \}}
-\DoxyCodeLine{00313\ }
-\DoxyCodeLine{00314\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{void}\ store\_component(\mbox{\hyperlink{classComponent}{Component}}\ *\ component)}
-\DoxyCodeLine{00316\ \ \ \ \ \{}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ components\_.push\_back(component);}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ next\_component\_id\_++;}
-\DoxyCodeLine{00319\ \ \ \ \ \}}
-\DoxyCodeLine{00320\ }
-\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordtype}{bool}\ owns\_component(\textcolor{keyword}{const}\ \mbox{\hyperlink{classComponent}{Component}}\ \&\ component)\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00322\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::find(components\_.begin(),\ components\_.end(),\ \&component)\ !=\ components\_.end();}
-\DoxyCodeLine{00324\ \ \ \ \ \}}
-\DoxyCodeLine{00325\ }
-\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordtype}{bool}\ owns\_wire(\textcolor{keyword}{const}\ \mbox{\hyperlink{classWire}{Wire}}\ \&\ wire)\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00327\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::find(wires\_.begin(),\ wires\_.end(),\ \&wire)\ !=\ wires\_.end();}
-\DoxyCodeLine{00329\ \ \ \ \ \}}
-\DoxyCodeLine{00330\ }
-\DoxyCodeLine{00331\ \ \ \ \ std::vector<\ Component\ *\ >\ components\_;}
-\DoxyCodeLine{00332\ \ \ \ \ std::vector<\ Wire\ *\ >\ wires\_;}
-\DoxyCodeLine{00333\ }
-\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keywordtype}{int}\ next\_component\_id\_;}
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordtype}{int}\ next\_wire\_id\_;}
-\DoxyCodeLine{00336\ \};}
-\DoxyCodeLine{00337\ }
-\DoxyCodeLine{00338\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CIRCUIT\_H}}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ simulator.run();}
+\DoxyCodeLine{00301\ \ \ \ \ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordtype}{void}\ store\_component(\mbox{\hyperlink{classComponent}{Component}}\ *\ component)}
+\DoxyCodeLine{00305\ \ \ \ \ \{}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ components\_.push\_back(component);}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ next\_component\_id\_++;}
+\DoxyCodeLine{00308\ \ \ \ \ \}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordtype}{bool}\ owns\_component(\textcolor{keyword}{const}\ \mbox{\hyperlink{classComponent}{Component}}\ \&\ component)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00311\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::find(components\_.begin(),\ components\_.end(),\ \&component)\ !=\ components\_.end();}
+\DoxyCodeLine{00313\ \ \ \ \ \}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{bool}\ owns\_wire(\textcolor{keyword}{const}\ \mbox{\hyperlink{classWire}{Wire}}\ \&\ wire)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00316\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::find(wires\_.begin(),\ wires\_.end(),\ \&wire)\ !=\ wires\_.end();}
+\DoxyCodeLine{00318\ \ \ \ \ \}}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \ \ \ \ std::vector<\ Component\ *\ >\ components\_;}
+\DoxyCodeLine{00321\ \ \ \ \ std::vector<\ Wire\ *\ >\ wires\_;}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{keywordtype}{int}\ next\_component\_id\_;}
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordtype}{int}\ next\_wire\_id\_;}
+\DoxyCodeLine{00325\ \};}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CIRCUIT\_H}}
 
 \end{DoxyCode}

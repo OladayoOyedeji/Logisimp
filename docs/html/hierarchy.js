@@ -3,9 +3,6 @@ var hierarchy =
     [ "Circuit", "classCircuit.html", [
       [ "Project", "classProject.html", null ]
     ] ],
-    [ "Compoment", null, [
-      [ "Project", "classProject.html", null ]
-    ] ],
     [ "Component", "classComponent.html", [
       [ "Gate", "classGate.html", [
         [ "AndGate", "classAndGate.html", null ],
