@@ -1,0 +1,106 @@
+\doxysection{Component Class Reference}
+\hypertarget{classComponent}{}\label{classComponent}\index{Component@{Component}}
+Inheritance diagram for Component\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.891566cm]{classComponent}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classComponent_a554d63a57c3d960f2c40b3bf327e02a9}\label{classComponent_a554d63a57c3d960f2c40b3bf327e02a9} 
+{\bfseries Component} (int id, const std\+::string \&label="{}"{})
+\item 
+\Hypertarget{classComponent_ad6a7cd011fa91982c623e5c7586cb458}\label{classComponent_ad6a7cd011fa91982c623e5c7586cb458} 
+{\bfseries Component} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+\Hypertarget{classComponent_aa16ef6ca6472eab3b27c6f19ca674c7c}\label{classComponent_aa16ef6ca6472eab3b27c6f19ca674c7c} 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+\Hypertarget{classComponent_a1d13c542d19c6129be8f0e7cf7182cf6}\label{classComponent_a1d13c542d19c6129be8f0e7cf7182cf6} 
+{\bfseries Component} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+\Hypertarget{classComponent_aea4d43d8e75f3683180d304e252d8341}\label{classComponent_aea4d43d8e75f3683180d304e252d8341} 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+\Hypertarget{classComponent_aa83353d3aa5d48e7b80c40f230db8dee}\label{classComponent_aa83353d3aa5d48e7b80c40f230db8dee} 
+int {\bfseries id} () const
+\item 
+\Hypertarget{classComponent_a8ceaa0a528dd6052dbd6666a504cc41a}\label{classComponent_a8ceaa0a528dd6052dbd6666a504cc41a} 
+std\+::string \& {\bfseries label} ()
+\item 
+\Hypertarget{classComponent_a17d6c2bef7066156cd3e418f78ba0982}\label{classComponent_a17d6c2bef7066156cd3e418f78ba0982} 
+std\+::string {\bfseries label} () const
+\item 
+\Hypertarget{classComponent_a3b11e2e1a2eb719e5d0749a00c577444}\label{classComponent_a3b11e2e1a2eb719e5d0749a00c577444} 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries inputs} ()
+\item 
+\Hypertarget{classComponent_af8ebca6d7e5cd423e91a52b1649a3a9c}\label{classComponent_af8ebca6d7e5cd423e91a52b1649a3a9c} 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inputs} () const
+\item 
+\Hypertarget{classComponent_a3c089e6fd61123c3610bb1d3dea0c703}\label{classComponent_a3c089e6fd61123c3610bb1d3dea0c703} 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries outputs} ()
+\item 
+\Hypertarget{classComponent_ab2fb6537bfc2b8426716f1e669fad46b}\label{classComponent_ab2fb6537bfc2b8426716f1e669fad46b} 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries outputs} () const
+\item 
+\Hypertarget{classComponent_aedb289b1d289d6e0bfbbaecc9e6f9d0b}\label{classComponent_aedb289b1d289d6e0bfbbaecc9e6f9d0b} 
+virtual void {\bfseries evaluate} (\mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)=0
+\item 
+\Hypertarget{classComponent_a63b8225c52f9a8d4575192d987ba829e}\label{classComponent_a63b8225c52f9a8d4575192d987ba829e} 
+virtual void {\bfseries reset} ()
+\item 
+\Hypertarget{classComponent_aee70c70e3b7b62c2583200dccd50a672}\label{classComponent_aee70c70e3b7b62c2583200dccd50a672} 
+virtual void {\bfseries print} (std\+::ostream \&cout) const
+\item 
+\Hypertarget{classComponent_a8989016780a0092f9494d05730c41a32}\label{classComponent_a8989016780a0092f9494d05730c41a32} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+input} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\Hypertarget{classComponent_a5e2acf12902ade0d727ae95602b248cf}\label{classComponent_a5e2acf12902ade0d727ae95602b248cf} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+output} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\Hypertarget{classComponent_af995327eecac0ed9d0f6d640cb20d855}\label{classComponent_af995327eecac0ed9d0f6d640cb20d855} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i)
+\item 
+\Hypertarget{classComponent_a5d742aef52b5bac9fb64fc7a72527ae0}\label{classComponent_a5d742aef52b5bac9fb64fc7a72527ae0} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i) const
+\item 
+\Hypertarget{classComponent_ad4d8befc53867d9dc56a38cf7e2a3b20}\label{classComponent_ad4d8befc53867d9dc56a38cf7e2a3b20} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i)
+\item 
+\Hypertarget{classComponent_a8e9ca4a385f28392a753ceb4e8b5f662}\label{classComponent_a8e9ca4a385f28392a753ceb4e8b5f662} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i) const
+\item 
+\Hypertarget{classComponent_ab436f4c24c8fe74b6f5f2611a2c06e5a}\label{classComponent_ab436f4c24c8fe74b6f5f2611a2c06e5a} 
+int {\bfseries input\+\_\+count} () const
+\item 
+\Hypertarget{classComponent_af4cf7c75ea2e708d06affaac60177bd3}\label{classComponent_af4cf7c75ea2e708d06affaac60177bd3} 
+int {\bfseries output\+\_\+count} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classComponent_a906ec01f01542479622eab829d7786d8}\label{classComponent_a906ec01f01542479622eab829d7786d8} 
+void {\bfseries clear\+\_\+ports} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classComponent_a28ef630d4765fe4860ed7a38344fd8d0}\label{classComponent_a28ef630d4765fe4860ed7a38344fd8d0} 
+int {\bfseries id\+\_\+}
+\item 
+\Hypertarget{classComponent_a8ec56db85db56fc9caef208e4536f68f}\label{classComponent_a8ec56db85db56fc9caef208e4536f68f} 
+std\+::string {\bfseries label\+\_\+}
+\item 
+\Hypertarget{classComponent_adfaae04fc5b4fc94de4248cfb57c4cca}\label{classComponent_adfaae04fc5b4fc94de4248cfb57c4cca} 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inputs\+\_\+}
+\item 
+\Hypertarget{classComponent_a342224b7429f64631d1ec68398bf4846}\label{classComponent_a342224b7429f64631d1ec68398bf4846} 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries outputs\+\_\+}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/student/\+Desktop/\+Project/\+Logisimp/include/Component.\+h\end{DoxyCompactItemize}

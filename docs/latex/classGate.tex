@@ -1,0 +1,96 @@
+\doxysection{Gate Class Reference}
+\hypertarget{classGate}{}\label{classGate}\index{Gate@{Gate}}
+Inheritance diagram for Gate\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.891566cm]{classGate}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classGate_ae07c2c772e227bb9911501907aae8a50}\label{classGate_ae07c2c772e227bb9911501907aae8a50} 
+{\bfseries Gate} (int id, int input\+\_\+count)
+\item 
+\Hypertarget{classGate_affec7b35a693d4c224bc4d8db891644c}\label{classGate_affec7b35a693d4c224bc4d8db891644c} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output} ()
+\item 
+\Hypertarget{classGate_af4e5632660f97ce7d1e7bc936ac45290}\label{classGate_af4e5632660f97ce7d1e7bc936ac45290} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output} () const
+\item 
+void \mbox{\hyperlink{classGate_aa090a4eb82a828ab75237bc23694398b}{print}} (std\+::ostream \&cout) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classComponent}{Component}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Component} (int id, const std\+::string \&label="{}"{})
+\item 
+{\bfseries Component} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+{\bfseries Component} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+int {\bfseries id} () const
+\item 
+std\+::string \& {\bfseries label} ()
+\item 
+std\+::string {\bfseries label} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries inputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inputs} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries outputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries outputs} () const
+\item 
+virtual void {\bfseries evaluate} (\mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)=0
+\item 
+virtual void {\bfseries reset} ()
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+input} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+output} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i) const
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i) const
+\item 
+int {\bfseries input\+\_\+count} () const
+\item 
+int {\bfseries output\+\_\+count} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classGate_a8d3a3b070bdbac15064b54e8a944d504}\label{classGate_a8d3a3b070bdbac15064b54e8a944d504} 
+Logic\+Value {\bfseries input\+\_\+value} (int index) const
+\item 
+\Hypertarget{classGate_abfd23a22ee842f29c9dadb964eb28dcb}\label{classGate_abfd23a22ee842f29c9dadb964eb28dcb} 
+void {\bfseries drive\+\_\+output} (Logic\+Value value, \mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classGate_aa090a4eb82a828ab75237bc23694398b}\index{Gate@{Gate}!print@{print}}
+\index{print@{print}!Gate@{Gate}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily \label{classGate_aa090a4eb82a828ab75237bc23694398b} 
+void Gate\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{cout}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classComponent}{Component}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/student/\+Desktop/\+Project/\+Logisimp/include/Gate.\+h\end{DoxyCompactItemize}

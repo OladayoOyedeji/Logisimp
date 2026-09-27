@@ -1,0 +1,108 @@
+\doxysection{Nand\+Gate Class Reference}
+\hypertarget{classNandGate}{}\label{classNandGate}\index{NandGate@{NandGate}}
+Inheritance diagram for Nand\+Gate\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classNandGate}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNandGate_acd578b99888620fc30d56d2739642e10}\label{classNandGate_acd578b99888620fc30d56d2739642e10} 
+{\bfseries Nand\+Gate} (int id, int input\+\_\+count=2)
+\item 
+void \mbox{\hyperlink{classNandGate_a337cf8b2ec06a203b3ef1eee7e1cee9d}{evaluate}} (\mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\item 
+void \mbox{\hyperlink{classNandGate_a5cd5807f41234ba2c5f59069d177ce50}{print}} (std\+::ostream \&cout) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Gate} (int id, int input\+\_\+count)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output} ()
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classComponent}{Component}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Component} (int id, const std\+::string \&label="{}"{})
+\item 
+{\bfseries Component} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (const \mbox{\hyperlink{classComponent}{Component}} \&other)=delete
+\item 
+{\bfseries Component} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+\mbox{\hyperlink{classComponent}{Component}} \& {\bfseries operator=} (\mbox{\hyperlink{classComponent}{Component}} \&\&other)=delete
+\item 
+int {\bfseries id} () const
+\item 
+std\+::string \& {\bfseries label} ()
+\item 
+std\+::string {\bfseries label} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries inputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inputs} () const
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries outputs} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries outputs} () const
+\item 
+virtual void {\bfseries reset} ()
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+input} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+output} (int width=1, const std\+::string \&label="{}"{})
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries input\+\_\+port} (int i) const
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i)
+\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries output\+\_\+port} (int i) const
+\item 
+int {\bfseries input\+\_\+count} () const
+\item 
+int {\bfseries output\+\_\+count} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+Logic\+Value {\bfseries input\+\_\+value} (int index) const
+\item 
+void {\bfseries drive\+\_\+output} (Logic\+Value value, \mbox{\hyperlink{classSimulator}{Simulator}} \&simulator)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNandGate_a337cf8b2ec06a203b3ef1eee7e1cee9d}\index{NandGate@{NandGate}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!NandGate@{NandGate}}
+\doxysubsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily \label{classNandGate_a337cf8b2ec06a203b3ef1eee7e1cee9d} 
+void Nand\+Gate\+::evaluate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSimulator}{Simulator}} \&}]{simulator}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classComponent}{Component}}.
+
+\Hypertarget{classNandGate_a5cd5807f41234ba2c5f59069d177ce50}\index{NandGate@{NandGate}!print@{print}}
+\index{print@{print}!NandGate@{NandGate}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily \label{classNandGate_a5cd5807f41234ba2c5f59069d177ce50} 
+void Nand\+Gate\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{cout}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classGate}{Gate}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/student/\+Desktop/\+Project/\+Logisimp/include/Gates.\+h\end{DoxyCompactItemize}

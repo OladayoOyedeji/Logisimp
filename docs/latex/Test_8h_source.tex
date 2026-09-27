@@ -1,0 +1,192 @@
+\doxysection{Test.\+h}
+\hypertarget{Test_8h_source}{}\label{Test_8h_source}\index{/home/student/Desktop/Project/Logisimp/include/Test.h@{/home/student/Desktop/Project/Logisimp/include/Test.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ Simulator:}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}LogicValue.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}LogicVector.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Port.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Component.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}Wire.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}Simulator.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}Circuit.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}Gate.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}Gates.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}Pin.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#include\ "{}Clock.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#include\ "{}Mux.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#include\ "{}Adder.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#include\ "{}Register.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#include\ "{}RAM.h"{}}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#include\ "{}ROM.h"{}}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{enum}\ PrimitiveComponents\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ GATES}}
+\DoxyCodeLine{00025\ \ \ \ \ xAND,\ xOR,\ xNOT,\ xNAND,\ xNOR,\ xXOR,\ xXNOR,}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ PINS}}
+\DoxyCodeLine{00027\ \ \ \ \ xINPUT,\ xOUTPUT}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{class\ }Project:\ \textcolor{keyword}{public}\ Circuit,\ \textcolor{keyword}{public}\ Compoment}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00033\ \ \ \ \ Project()}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ :\ simulator(\textcolor{keyword}{new}\ \mbox{\hyperlink{classSimulator}{Simulator}})}
+\DoxyCodeLine{00035\ \ \ \ \ \{\}}
+\DoxyCodeLine{00036\ \ \ \ \ \string~Project()}
+\DoxyCodeLine{00037\ \ \ \ \ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ simulator;}
+\DoxyCodeLine{00039\ \ \ \ \ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ print\_truth\_table();\ \textcolor{comment}{//\ TODO}}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ \&\ add\_pin(PinType\ type,\ \textcolor{keywordtype}{int}\ width\ =\ 1)}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ \&\ p\ =\ create\_pin(type,\ width);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (type\ ==\ INPUT\_PIN)}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ inputs\_.push\_back(\&p);}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ outputs\_.push\_back(\&p);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ p;}
+\DoxyCodeLine{00051\ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{int}\ input\_size()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00053\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ inputs\_.size();}
+\DoxyCodeLine{00055\ \ \ \ \ \}}
+\DoxyCodeLine{00056\ \ \ \ \ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{int}\ output\_size()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00058\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ outputs\_.size();}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{int}\ input\_width(\textcolor{keywordtype}{int}\ i)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00063\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ i\ <<\ '\ '\ <<\ inputs\_[i]\ <<\ endl;}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Component\ *\ c\ =\ component\_at(inputs\_[i]);}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}get\ component:\ "{}\ <<\ c\ <<\ endl;}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}size:\ "{}\ <<\ c-\/>input\_count()\ <<\ endl;}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}input\ port\ at\ "{}\ <<\ c-\/>input\_port(0)\ <<\ endl;}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (outputs\_[i]-\/>input\_port(0))-\/>width();}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{int}\ output\_width(\textcolor{keywordtype}{int}\ i)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00073\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (inputs\_[i]-\/>output\_port(0))-\/>width();}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ initialize()}
+\DoxyCodeLine{00078\ \ \ \ \ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Circuit::initialize(*simulator);}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_at(\textcolor{keywordtype}{int}\ i,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classLogicVector}{LogicVector}}\ \&\ value)}
+\DoxyCodeLine{00083\ \ \ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPin}{Pin}}\ \&\ p\ =\ *(inputs\_[i]);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ p.set(value,\ *simulator);}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ sim\_run()}
+\DoxyCodeLine{00089\ \ \ \ \ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ simulator-\/>run();}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ }
+\DoxyCodeLine{00093\ \ \ \ \ std::vector<Pin\ *>\ inputs\_;}
+\DoxyCodeLine{00094\ \ \ \ \ std::vector<Pin\ *>\ outputs\_;\ }
+\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{classSimulator}{Simulator}}\ *\ simulator;}
+\DoxyCodeLine{00096\ \};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{class\ }TestProject}
+\DoxyCodeLine{00099\ \{}
+\DoxyCodeLine{00100\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00101\ \ \ \ \ TestProject()\ \ \textcolor{comment}{//(const\ string\ \&\ s)\ for\ directory}}
+\DoxyCodeLine{00102\ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ sim[\textcolor{stringliteral}{"{}main"{}}]\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classProject}{Project}};}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ test\_input\_output();}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ test\_NOT();}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ test\_AND();}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ test\_OR();}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ test\_NAND();}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_NOR();}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_XOR();}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_XNOR();}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_BUFFER();}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_TRI\_STATE\_BUFFER();}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_HALF\_ADDER();}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_FULL\_ADDER();}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_4BIT\_ADDER();}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_MULTIPLEXER();}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_4\_1\_MUX();}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_8\_1\_MUX();}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_16\_1\_MUX();}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_DEMULTIPLEXER();}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_DECODER();}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ test\_ENCODER();}}
+\DoxyCodeLine{00128\ \ \ \ \ \}}
+\DoxyCodeLine{00129\ \ \ \ \ \string~TestProject()}
+\DoxyCodeLine{00130\ \ \ \ \ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ p\ :\ sim)}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ p.second;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00136\ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{//\ run\ made\ circuits}}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ simi\_run();}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{int}\ available\_circuits();}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{int}\ project\_options(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\ name)}
+\DoxyCodeLine{00142\ \ \ \ \ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProject}{Project}}\ \&\ pr\ =\ *sim[name];}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ outputs;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ cin\ >>\ outputs;}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ outputs;}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{void}\ availiable\_projects();}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{int}\ toggle\_inputs(\textcolor{keywordtype}{string}\ \&);}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{int}\ show\_outputs(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{//\ user\ makes\ circuits}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordtype}{void}\ make\_circuit();}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordtype}{void}\ view\_circuit\_status(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\ name);}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{int}\ make\_circuit\_options();}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ choose\_component(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\ name);}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordtype}{void}\ connect\_components(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&\ name);}
+\DoxyCodeLine{00159\ \ \ \ \ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_input\_output();}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_NOT();}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_AND();}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_OR();}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_NAND();}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_NOR();}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_XOR();}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_XNOR();}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_BUFFER();}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_TRI\_STATE\_BUFFER();}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_HALF\_ADDER();}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_FULL\_ADDER();}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_4BIT\_ADDER();}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_MULTIPLEXER();}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_4\_1\_MUX();}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_8\_1\_MUX();}
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_16\_1\_MUX();}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_DEMULTIPLEXER();}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_DECODER();}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordtype}{void}\ test\_ENCODER();}
+\DoxyCodeLine{00183\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00184\ \ \ \ \ unordered\_map<string,\ Project\ *>\ sim;}
+\DoxyCodeLine{00185\ \};}
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
