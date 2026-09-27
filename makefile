@@ -16,9 +16,11 @@ g git:
 	git push
 
 d doc:
-	doxygen docs/Doxyfile
-	$(MAKE) -C docs/latex
-	cp docs/latex/refman.pdf docs/documentation.pdf
+	cd docs && \
+	doxygen Doxyfile && \
+	$(MAKE) -C latex && \
+	cp latex/refman.pdf documentation.pdf && \
+	cd ..
 
 r run: p
 	./build/logisimp
