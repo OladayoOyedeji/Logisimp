@@ -18,6 +18,6 @@ protected:
 
     double width = 50.0;
     double height = 50.0;
-};
+}; 
 
 #endif // GATE_H
