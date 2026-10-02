@@ -1,11 +1,16 @@
 // Port.h
+/**
+ * Connection point between a component and a wire.
+ * Ports are like nodes and wires are like (hyper)edges.
+ * (you can also think of components as nodes and ports as "border checkpoints"
+ * on the "roads" (arcs) to other countries (components))
+ */
 
 #ifndef PORT_H
 #define PORT_H
 
+#include <ostream>
 #include <string>
-#include <stdexcept>
-#include <iostream>
 
 class Component;
 class Wire;
@@ -19,19 +24,7 @@ enum PortDirection
 class Port
 {
 public:
-    Port(int id, int width, PortDirection direction, const std::string & label = "")
-        : id_(id),
-          width_(width),
-          direction_(direction),
-          owner_(nullptr),
-          wire_(nullptr),
-          label_(label)
-    {
-        if (width <= 0)
-        {
-            throw std::invalid_argument("Port width must be positive");
-        }
-    }
+    Port(int id, int width, PortDirection direction, const std::string & label = "");
 
     Port(const Port & other) = delete;
     Port & operator=(const Port & other) = delete;
@@ -54,10 +47,9 @@ public:
     std::string & label() { return label_; }
     std::string label() const { return label_; }
 
-    bool connected() const
-    {
-        return wire_ != nullptr;
-    }
+    bool connected() const { return wire_ != nullptr; }
+
+    std::string to_string() const;
 
 private:
     int id_;
@@ -70,35 +62,8 @@ private:
 
 inline std::ostream & operator<<(std::ostream & cout, const Port & port)
 {
-    cout << "Port("
-         << "id=" << port.id()
-         << ", width=" << port.width()
-         << ", direction=";
-
-    if (port.direction() == INPUT)
-    {
-        cout << "INPUT";
-    }
-    else
-    {
-        cout << "OUTPUT";
-    }
-
-    cout << ", label=\"" << port.label() << "\""
-         << ", connected=";
-
-    if (port.connected())
-    {
-        cout << "true";
-    }
-    else
-    {
-        cout << "false";
-    }
-
-    cout << ')';
-
+    cout << port.to_string();
     return cout;
 }
 
-#endif // Port.h
+#endif // PORT_H

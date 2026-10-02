@@ -5,9 +5,8 @@ project(logisimp VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES
-    src/main.cpp
-    src/Test.cpp
+file(GLOB SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
 
 add_executable(logisimp ${SOURCES})
@@ -17,12 +16,13 @@ target_include_directories(logisimp PRIVATE
 )
 
 target_compile_options(${PROJECT_NAME}
-  PRIVATE 
-  $<$<CONFIG:debug>:-g -fsanitize=address>
+    PRIVATE
+    $<$<CONFIG:Debug>:-g -fsanitize=address>
 )
 
 target_link_options(${PROJECT_NAME}
-  PRIVATE $<$<CONFIG:debug>:-fsanitize=address>
+    PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address>
 )
 
 add_custom_target(r

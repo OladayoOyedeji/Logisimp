@@ -1,89 +1,45 @@
 // LogicVector.h
+/**
+ * Fixed-width collection of three-state logic values.
+ */
 
 #ifndef LOGIC_VECTOR_H
 #define LOGIC_VECTOR_H
 
 #include "LogicValue.h"
 
-#include <stdexcept>
+#include <ostream>
+#include <string>
 #include <vector>
-#include <iostream>
 
 class LogicVector
 {
-  public:
-    LogicVector(int width = 1, LogicValue initial_value = UNKNOWN)
-    {
-        if (width <= 0)
-        {
-            throw std::invalid_argument("LogicVector width must be positive");
-        }
-
-        bits_.resize(width, initial_value);
-    }
+public:
+    LogicVector(int width = 1, LogicValue initial_value = UNKNOWN);
 
     std::vector< LogicValue > & bits() { return bits_; }
     std::vector< LogicValue > bits() const { return bits_; }
 
-    int width() const
-    {
-        return bits_.size();
-    }
+    int width() const { return int(bits_.size()); }
 
-    LogicValue operator[](int index) const
-    {
-        return bits_.at(index);
-    }
+    LogicValue & operator[](int index);
+    LogicValue operator[](int index) const;
 
-    LogicValue & operator[](int index)
-    {
-        return bits_.at(index);
-    }
+    bool operator==(const LogicVector & other) const;
+    bool operator!=(const LogicVector & other) const;
 
-    bool operator==(const LogicVector & other) const
-    {
-        return bits_ == other.bits_;
-    }
+    bool fully_known() const;
 
-    bool operator!=(const LogicVector & other) const
-    {
-        return bits_ != other.bits_;
-    }
+    std::string to_string() const;
 
-    bool fully_known() const
-    {
-        for (LogicValue bit : bits_)
-        {
-            if (bit == UNKNOWN)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-  private:
+private:
     std::vector< LogicValue > bits_;
 };
 
 inline std::ostream & operator<<(std::ostream & cout, const LogicVector & value)
 {
-    cout << '[';
-
-    for (int i = 0; i < value.width(); i++)
-    {
-        if (i != 0)
-        {
-            cout << ' ';
-        }
-
-        cout << value[i];
-    }
-
-    cout << ']';
-
+    cout << value.to_string();
     return cout;
 }
 
-#endif // LogicVector.h
+#endif // LOGIC_VECTOR_H
