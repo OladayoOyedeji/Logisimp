@@ -1,6 +1,6 @@
 // Gate.h
 /**
- * Base class for primtive single-output logic gates,
+ * Base class for primitive single-output logic gates,
  * like NOT, AND, OR, etc.
  */
 
@@ -21,8 +21,8 @@ public:
     std::string to_string() const override;
 
 protected:
-    LogicValue input_value(int index) const;
-    void drive_output(LogicValue value, Simulator & simulator);
+    LogicValue input_value(int index, CircuitState & state) const;
+    void drive_output(LogicValue value, Simulator & simulator, CircuitState & state);
 };
 
 #endif // GATE_H

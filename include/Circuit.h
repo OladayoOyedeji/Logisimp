@@ -23,6 +23,9 @@ class Simulator;
 class XnorGate;
 class XorGate;
 
+// The current design is like one main circuit then the others,
+// but instead should just have project be a collection of circuits.
+// how do i manage evaluation then though? should research what making a circuit a main circuit in logisim does
 class Circuit
 {
 public:

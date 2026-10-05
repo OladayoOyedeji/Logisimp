@@ -13,6 +13,7 @@
 #include "Port.h"
 
 #include <ostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -22,9 +23,14 @@ class Wire
 {
 public:
     Wire(int id, int width = 1, const std::string & label = "")
-        : id_(id), label_(label), value_(width, UNKNOWN), driver_(nullptr)
-    {}
-
+        : id_(id), label_(label), width_(width), driver_(nullptr)
+    {
+        if (width <= 0)
+        {
+            throw std::invalid_argument("wire width must be positive");
+        }
+    }
+    
     // prevent lvalue copy
     // ex:
     // Wire a(0);
@@ -63,7 +69,8 @@ public:
 private:
     int id_;
     std::string label_;
-    LogicVector value_;
+    int width_;
+    
     Port * driver_;
     std::vector< Port * > listeners_;
 };
@@ -75,4 +82,4 @@ std::ostream & operator<<(std::ostream & cout, const Wire & wire)
     return cout;
 }
 
-#endif // Wire.h
+#endif // WIRE_H

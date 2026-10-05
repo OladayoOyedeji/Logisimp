@@ -1,6 +1,7 @@
 // Wire.cpp
 
 #include "Wire.h"
+#include "Port.h"
 
 std::string Wire::to_string() const
 {
@@ -9,9 +10,7 @@ std::string Wire::to_string() const
     ret += "Wire(id=";
     ret += std::to_string(id_);
     ret += ", width=";
-    ret += std::to_string(width());
-    ret += ", value=";
-    ret += value_.to_string();
+    ret += std::to_string(width_);
     ret += ", label=\"";
     ret += label_;
     ret += "\", driver=";

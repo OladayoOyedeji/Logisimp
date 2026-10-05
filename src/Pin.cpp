@@ -1,65 +1,80 @@
 // Pin.cpp
+/**
+ * Implements pin evaluation and interaction with
+ * runtime values stored in PinState.
+ */
 
 #include "Pin.h"
+
+#include "CircuitState.h"
+#include "PinState.h"
 #include "Port.h"
 #include "Simulator.h"
 #include "Wire.h"
 
 #include <stdexcept>
 
-Pin::Pin(int id, PinType type, int width)
-    : Component(id), type_(type), value_(width, type == INPUT_PIN ? LOW : UNKNOWN)
+ComponentState * Pin::create_state(CircuitState & state) const
 {
-    if (type == INPUT_PIN)
-    {
-        add_output(width, "Y");
-    }
-    else
-    {
-        add_input(width, "A");
-    }
+    return new PinState(width_, type_ == INPUT_PIN ? LOW : UNKNOWN);
 }
 
-void Pin::set(const LogicVector & value, Simulator & simulator)
+LogicVector & Pin::value(CircuitState & state)
+{
+    PinState & pin_state = dynamic_cast< PinState & >(state.component_state(*this));
+
+    return pin_state.value();
+}
+
+LogicVector Pin::value(const CircuitState & state) const
+{
+    const PinState & pin_state = dynamic_cast< const PinState & >(state.component_state(*this));
+
+    return pin_state.value();
+}
+
+void Pin::set(const LogicVector & bits, Simulator & simulator, CircuitState & state)
 {
     if (type_ != INPUT_PIN)
     {
         throw std::logic_error("Cannot set an output pin");
     }
 
-    if (value.width() != value_.width())
+    if (bits.width() != width_)
     {
         throw std::invalid_argument("Pin value width does not match pin width");
     }
 
-    value_ = value;
+    value(state) = bits;
 
-    evaluate(simulator);
+    evaluate(simulator, state);
 }
 
-void Pin::toggle(Simulator & simulator)
+void Pin::toggle(Simulator & simulator, CircuitState & state)
 {
+    static const LogicValue TOGGLE_TABLE[3] =
+    {
+        HIGH,
+        LOW,
+        UNKNOWN
+    };
+
     if (type_ != INPUT_PIN)
     {
         throw std::logic_error("Cannot toggle an output pin");
     }
 
-    for (int i = 0; i < value_.width(); i++)
+    LogicVector & bits = value(state);
+
+    for (int i = 0; i < bits.width(); ++i)
     {
-        if (value_[i] == LOW)
-        {
-            value_[i] = HIGH;
-        }
-        else if (value_[i] == HIGH)
-        {
-            value_[i] = LOW;
-        }
+        bits[i] = TOGGLE_TABLE[bits[i]];
     }
 
-    evaluate(simulator);
+    evaluate(simulator, state);
 }
 
-void Pin::evaluate(Simulator & simulator)
+void Pin::evaluate(Simulator & simulator, CircuitState & state)
 {
     if (type_ == INPUT_PIN)
     {
@@ -67,7 +82,7 @@ void Pin::evaluate(Simulator & simulator)
 
         if (port->wire() != nullptr)
         {
-            simulator.drive(*port->wire(), value_);
+            simulator.drive(state, *port->wire(), value(state));
         }
 
         return;
@@ -75,24 +90,18 @@ void Pin::evaluate(Simulator & simulator)
 
     Port * port = input_port(0);
 
-    if (port->wire() == nullptr)
+    LogicVector bits(width_, UNKNOWN);
+
+    if (port->wire() != nullptr)
     {
-        value_ = LogicVector(value_.width(), UNKNOWN);
-        return;
+        bits = state.value(*port->wire());
     }
 
-    value_ = port->wire()->value();
-}
+    if (value(state) != bits)
+    {
+        value(state) = bits;
 
-void Pin::reset()
-{
-    if (type_ == INPUT_PIN)
-    {
-        value_ = LogicVector(value_.width(), LOW);
-    }
-    else
-    {
-        value_ = LogicVector(value_.width(), UNKNOWN);
+        simulator.notify_parent(state);
     }
 }
 
@@ -114,9 +123,7 @@ std::string Pin::to_string() const
     }
 
     ret += ", width=";
-    ret += std::to_string(value_.width());
-    ret += ", value=";
-    ret += value_.to_string();
+    ret += std::to_string(width_);
     ret += ')';
 
     return ret;

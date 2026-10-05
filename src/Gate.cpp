@@ -1,6 +1,8 @@
 // Gate.cpp
 
 #include "Gate.h"
+
+#include "CircuitState.h"
 #include "LogicVector.h"
 #include "Port.h"
 #include "Simulator.h"
@@ -47,7 +49,7 @@ std::string Gate::to_string() const
     return ret;
 }
 
-LogicValue Gate::input_value(int index) const
+LogicValue Gate::input_value(int index, CircuitState & state) const
 {
     Port * port = input_port(index);
 
@@ -56,10 +58,10 @@ LogicValue Gate::input_value(int index) const
         return UNKNOWN;
     }
 
-    return port->wire()->value()[0];
+    return state.value(*port->wire())[0];
 }
 
-void Gate::drive_output(LogicValue value, Simulator & simulator)
+void Gate::drive_output(LogicValue value, Simulator & simulator, CircuitState & state)
 {
     Port * port = output_port(0);
 
@@ -71,5 +73,5 @@ void Gate::drive_output(LogicValue value, Simulator & simulator)
     LogicVector output_value(1);
     output_value[0] = value;
 
-    simulator.drive(*port->wire(), output_value);
+    simulator.drive(state, *port->wire(), output_value);
 }

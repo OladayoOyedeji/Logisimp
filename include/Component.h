@@ -1,17 +1,20 @@
 // Component.h
 /**
- * Base class for all circuit components.
+ * Abstract class for all circuit components.
+ * Defines a component's structure/blueprint.
  */
 
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <iosfwd>
+#include <ostream>
 #include <string>
 #include <vector>
 
 class Port;
 class Simulator;
+class CircuitState;
+class ComponentState;
 
 class Component
 {
@@ -53,17 +56,25 @@ public:
     std::vector< Port * > & outputs() { return outputs_; }
     std::vector< Port * > outputs() const { return outputs_; }
 
+    int input_count() const;
+    int output_count() const;
+    
+    Port * input_port(int i);
+    Port * input_port(int i) const;
+    Port * output_port(int i);
+    Port * output_port(int i) const;
+
+    virtual ComponentState * create_state(CircuitState & state) const
+    {
+        return nullptr;
+    }
+
     virtual void evaluate(Simulator & simulator) = 0;
 
     virtual void reset()
     {}
 
     virtual std::string to_string() const;
-
-    Port * input_port(int i);
-    Port * input_port(int i) const;
-    Port * output_port(int i);
-    Port * output_port(int i) const;
 
 protected:
     Port * add_input(int width = 1, const std::string & label= "");
@@ -78,10 +89,11 @@ private:
     std::vector< Port * > outputs_;
 };
 
-inline std::ostream & operator<<(std::ostream & cout, const Component & component)
+inline
+std::ostream & operator<<(std::ostream & cout, const Component & component)
 {
     cout << component.to_string();
     return cout;
 }
 
-#endif // Component.h
+#endif // COMPONENT_H
