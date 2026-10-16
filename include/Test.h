@@ -1,3 +1,10 @@
+/**
+ * @file Test.h
+ * @brief Archived test harness from the earlier simulator API.
+ * @author Cole Schwandt
+ */
+
+/*
 #ifndef TEST_H
 #define TEST_H
 
@@ -91,7 +98,7 @@ public:
 class TestProject
 {
 public:
-    TestProject()  //(const string & s) for directory
+    TestProject()  //(const std::string & s) for directory
     {
         sim["main"] = new Project;
         test_input_output();
@@ -129,7 +136,7 @@ public:
     }
     void simi_run();
     int available_circuits();
-    int project_options(const string & name)
+    int project_options(const std::string & name)
     {
         Project & pr = *sim[name];
         int outputs;
@@ -138,8 +145,8 @@ public:
         return outputs;
     }
     void availiable_projects();
-    int toggle_inputs(string &);
-    int show_outputs(const string &);
+    int toggle_inputs(std::string &);
+    int show_outputs(const std::string &);
     
     void test_input_output();
     void test_NOT();
@@ -165,6 +172,7 @@ public:
     void test_DECODER();
     void test_ENCODER();
 private:
-    unordered_map<string, Project *> sim;
+    unordered_map<std::string, Project *> sim;
 };
 #endif
+*/
