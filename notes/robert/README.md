@@ -11,7 +11,7 @@
 - - Socket programming
 - - Management of memory
 - - Concurrency
-- - paralellism
+- - paralellism 
 
 ## Books
 - Roger Pressman
