@@ -1,0 +1,86 @@
+\doxysection{And\+Gate Class Reference}
+\hypertarget{classAndGate}{}\label{classAndGate}\index{AndGate@{AndGate}}
+Inheritance diagram for And\+Gate\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classAndGate}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classAndGate_a369f5607306f8534de8aa9e3b2b8a9ce}{draw}} (QPainter \&painter, \mbox{\hyperlink{classSpritesheet}{Spritesheet}} \&sprites, double screenX, double screenY, double zoom) override
+\item 
+bool \mbox{\hyperlink{classAndGate_ad49b86bee6720c381f90a1501624efde}{contains}} (double worldX, double worldY) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries getX} ()
+\item 
+double {\bfseries getY} ()
+\item 
+const std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+Input\+Ports} () const
+\item 
+const std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+Output\+Ports} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classCircuit}{Circuit}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries getX} () const
+\item 
+double {\bfseries getY} () const
+\item 
+void {\bfseries set\+Position} (double newX, double newY)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+int {\bfseries num\+Inputs} = 0
+\item 
+int {\bfseries num\+Outputs} = 1
+\item 
+double {\bfseries width} = 50.\+0
+\item 
+double {\bfseries height} = 50.\+0
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries input\+Ports}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries output\+Ports}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classCircuit}{Circuit}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries x} = 0
+\item 
+double {\bfseries y} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classAndGate_ad49b86bee6720c381f90a1501624efde}\label{classAndGate_ad49b86bee6720c381f90a1501624efde} 
+\index{AndGate@{AndGate}!contains@{contains}}
+\index{contains@{contains}!AndGate@{AndGate}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily bool And\+Gate\+::contains (\begin{DoxyParamCaption}\item[{double}]{worldX,  }\item[{double}]{worldY }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classCircuit}{Circuit}}.
+
+\Hypertarget{classAndGate_a369f5607306f8534de8aa9e3b2b8a9ce}\label{classAndGate_a369f5607306f8534de8aa9e3b2b8a9ce} 
+\index{AndGate@{AndGate}!draw@{draw}}
+\index{draw@{draw}!AndGate@{AndGate}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void And\+Gate\+::draw (\begin{DoxyParamCaption}\item[{QPainter \&}]{painter,  }\item[{\mbox{\hyperlink{classSpritesheet}{Spritesheet}} \&}]{sprites,  }\item[{double}]{screenX,  }\item[{double}]{screenY,  }\item[{double}]{zoom }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classCircuit}{Circuit}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+gates.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,142 @@
+\doxysection{Canvas Class Reference}
+\hypertarget{classCanvas}{}\label{classCanvas}\index{Canvas@{Canvas}}
+
+
+This class provides an interactive graphical workspace for circuit components.  
+
+
+
+
+{\ttfamily \#include $<$canvas.\+h$>$}
+
+Inheritance diagram for Canvas\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classCanvas}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCanvas_a98436c7d9b5ee877c057f190b5db0b24}{Canvas}} (QWidget \texorpdfstring{$\ast$}{*}parent=NULL)
+\begin{DoxyCompactList}\small\item\em \doxylink{classCanvas}{Canvas} constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classCanvas_a0d1de5de538102d6070c1e7066306e40}\label{classCanvas_a0d1de5de538102d6070c1e7066306e40} 
+void {\bfseries draw\+Grid} (QPainter \&)
+\item 
+\Hypertarget{classCanvas_a83d320042c7433c05b46a23feb6e1bd3}\label{classCanvas_a83d320042c7433c05b46a23feb6e1bd3} 
+double {\bfseries screen\+To\+WorldX} (double) const
+\item 
+\Hypertarget{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194}\label{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194} 
+double {\bfseries screen\+To\+WorldY} (double) const
+\item 
+\Hypertarget{classCanvas_ac62e0e56957fbb6605763c106cde097d}\label{classCanvas_ac62e0e56957fbb6605763c106cde097d} 
+double {\bfseries world\+To\+ScreenX} (double) const
+\item 
+\Hypertarget{classCanvas_a67877d478065d50bdf1110f0d8c0b657}\label{classCanvas_a67877d478065d50bdf1110f0d8c0b657} 
+double {\bfseries world\+To\+ScreenY} (double) const
+\item 
+\Hypertarget{classCanvas_a04b996fbd8a53d49c8be70800c5f69f7}\label{classCanvas_a04b996fbd8a53d49c8be70800c5f69f7} 
+double {\bfseries snap\+To\+Grid} (double)
+\item 
+\Hypertarget{classCanvas_a6832027b637a12859be573e9af25df7e}\label{classCanvas_a6832027b637a12859be573e9af25df7e} 
+void {\bfseries update\+Camera} ()
+\item 
+\Hypertarget{classCanvas_ad01e1a922d7752fd3cb2360706119df2}\label{classCanvas_ad01e1a922d7752fd3cb2360706119df2} 
+void {\bfseries place\+Gate} (\mbox{\hyperlink{classGate}{Gate}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classCanvas_ae6a2017a90c0b827a49b077126460259}\label{classCanvas_ae6a2017a90c0b827a49b077126460259} 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} {\bfseries findport} (double, double)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCanvas_aa1a27b40202cef6e68b59297cf8d7b6a}\label{classCanvas_aa1a27b40202cef6e68b59297cf8d7b6a} 
+void {\bfseries initialize\+GL} () override
+\item 
+\Hypertarget{classCanvas_ab58d5dfef9774e4382dd333c0fb156b4}\label{classCanvas_ab58d5dfef9774e4382dd333c0fb156b4} 
+void {\bfseries paint\+GL} () override
+\item 
+\Hypertarget{classCanvas_a98baffb3ddc8590af99903b7ebe2840a}\label{classCanvas_a98baffb3ddc8590af99903b7ebe2840a} 
+void {\bfseries resize\+GL} (int width, int height) override
+\item 
+\Hypertarget{classCanvas_ae04733553c1729298a8b2154ea995e35}\label{classCanvas_ae04733553c1729298a8b2154ea995e35} 
+void {\bfseries draw\+Port} (QPainter \&, \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classCanvas_a859627a455bcf7c47536b9adb60583df}\label{classCanvas_a859627a455bcf7c47536b9adb60583df} 
+void {\bfseries draw\+Wire} (QPainter \&, \mbox{\hyperlink{classWire}{Wire}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classCanvas_ac354f7e8bd5dd0d0ae027a912fb58daf}\label{classCanvas_ac354f7e8bd5dd0d0ae027a912fb58daf} 
+void {\bfseries draw\+Temp\+Wire} (QPainter \&)
+\item 
+\Hypertarget{classCanvas_ac766a4e369f781943df021b80e5922c4}\label{classCanvas_ac766a4e369f781943df021b80e5922c4} 
+void {\bfseries mouse\+Press\+Event} (QMouse\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+\Hypertarget{classCanvas_ae9f5a1c5981b802814aa5b189faba710}\label{classCanvas_ae9f5a1c5981b802814aa5b189faba710} 
+void {\bfseries mouse\+Move\+Event} (QMouse\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+\Hypertarget{classCanvas_a0fa87c1ae8fcab07ae22d6c0e63b7148}\label{classCanvas_a0fa87c1ae8fcab07ae22d6c0e63b7148} 
+void {\bfseries mouse\+Release\+Event} (QMouse\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+\Hypertarget{classCanvas_a803e71255d31871cdb8cf12e9f3a1336}\label{classCanvas_a803e71255d31871cdb8cf12e9f3a1336} 
+void {\bfseries wheel\+Event} (QWheel\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+\Hypertarget{classCanvas_a24e4ed4c1c5c97eb4c1c15666858bc51}\label{classCanvas_a24e4ed4c1c5c97eb4c1c15666858bc51} 
+void {\bfseries key\+Press\+Event} (QKey\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+\Hypertarget{classCanvas_ae2ddf7876b8f657a848cb90aa3797a02}\label{classCanvas_ae2ddf7876b8f657a848cb90aa3797a02} 
+void {\bfseries key\+Release\+Event} (QKey\+Event \texorpdfstring{$\ast$}{*}event) override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class provides an interactive graphical workspace for circuit components. 
+
+\doxylink{classCanvas}{Canvas} is responsible for displaying and managing the GUI for the workspace of the logic simulator
+
+The program uses QOpen\+GLWidget Open\+Gl rendering and QPainter for drawing the grid and circuit elements
+
+Current Features include\+:
+\begin{DoxyItemize}
+\item Rendering a grid-\/based workspace
+\item Displaying AND, OR, and NOT gates
+\item Dragging a gate using the leftmouse button
+\item Panning the grid using either the middle mouse button or using the WASD keys
+\item Zooming in and out toward the mouse cursor
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Note}
+\doxylink{classCircuit}{Circuit} simulation logic is not yet integrated into the graphical user interface
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classCircuit}{Circuit} 
+
+\doxylink{classGate}{Gate} 
+
+Gates 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classCanvas_a98436c7d9b5ee877c057f190b5db0b24}\label{classCanvas_a98436c7d9b5ee877c057f190b5db0b24} 
+\index{Canvas@{Canvas}!Canvas@{Canvas}}
+\index{Canvas@{Canvas}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{Canvas()}{Canvas()}}
+{\footnotesize\ttfamily Canvas\+::\+Canvas (\begin{DoxyParamCaption}\item[{QWidget \texorpdfstring{$\ast$}{*}}]{parent = {\ttfamily NULL} }\end{DoxyParamCaption})}
+
+
+
+\doxylink{classCanvas}{Canvas} constructor. 
+
+Initializes the canvas and for now initializes an AND, OR, and NOT gate
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & Parent QWidget \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{canvas_8h}{canvas.\+h}}\item 
+canvas.\+cpp\end{DoxyCompactItemize}
