@@ -1,4 +1,3 @@
-
 .PHONY: p program e exe b build a asan g git r run c clean
 .PHONY: d docs do docs-open dc docs-clean
 
