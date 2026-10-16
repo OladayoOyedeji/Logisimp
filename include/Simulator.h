@@ -1,149 +1,81 @@
-// Simulator.h
+/**
+ * @file Simulator.h
+ * @brief Evaluates components whose input values have changed.
+ * @author Cole Schwandt
+ */
 
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include "Component.h"
-#include "LogicVector.h"
-#include "Wire.h"
-
+#include <cstddef>
+#include <functional>
+#include <ostream>
 #include <queue>
-#include <stdexcept>
+#include <string>
 #include <unordered_set>
-#include <iostream>
+
+class Component;
+class CircuitState;
+class LogicVector;
+class Net;
 
 class Simulator
 {
 public:
+    struct Event
+    {
+        Event(CircuitState & state, Component & component)
+            : state(&state), component(&component)
+        {}
+
+        bool operator==(const Event & other) const
+        {
+            return state == other.state && component == other.component;
+        }
+
+        CircuitState * state;
+        Component * component;
+    };
+
+    struct EventHash
+    {
+        std::size_t operator()(const Event & event) const
+        {
+            std::size_t state_hash = std::hash< CircuitState * >()(event.state);
+            std::size_t component_hash = std::hash< Component * >()(event.component);
+            return state_hash ^ (component_hash + (state_hash << 6) + (state_hash >> 2));
+        }
+    };
+
     Simulator()
     {}
 
-    std::queue< Component * > & work_queue() { return work_queue_; }
-    std::queue< Component * > work_queue() const { return work_queue_; }
+    Simulator(const Simulator & other) = delete;
+    Simulator & operator=(const Simulator & other) = delete;
+    Simulator(Simulator && other) = delete;
+    Simulator & operator=(Simulator && other) = delete;
 
-    std::unordered_set< Component * > & queued_components() { return queued_components_; }
-    std::unordered_set< Component * > queued_components() const { return queued_components_; }
+    const std::queue< Event > & work_queue() const { return work_queue_; }
+    const std::unordered_set< Event, EventHash > & queued_components() const { return queued_components_; }
 
-    void enqueue(Component * component)
-    {
-        if (component == nullptr)
-        {
-            return;
-        }
+    void enqueue(CircuitState & state, Component * component);
+    void schedule(CircuitState & state);
+    void notify_parent(CircuitState & state);
+    void drive(CircuitState & state, Net & net, const LogicVector & value);
+    bool run();
+    void clear();
 
-        if (queued_components_.find(component) != queued_components_.end())
-        {
-            return;
-        }
-
-        queued_components_.insert(component);
-        work_queue_.push(component);
-    }
-
-    void drive(Wire & wire, const LogicVector & value)
-    {
-        if (wire.width() != value.width())
-        {
-            throw std::runtime_error("Cannot drive a wire with a value of a different width");
-        }
-
-        // only enqueue if value changed
-        if (wire.value() == value)
-        {
-            return;
-        }
- 
-        wire.value() = value;
-
-        for (Port * listener : wire.listeners())
-        {
-            enqueue(listener->owner());
-        }
-    }
-
-    bool run()
-    {
-        const int MAX_EVALS = 100000;
-        int evaluation_count = 0;
-
-        while (!work_queue_.empty())
-        {
-            // returns false if circuit oscillate
-            // (need a better way to indicate this.
-            // Currently the issue is evaluation count is global,
-            // but it should be localized to each component)
-            if (evaluation_count >= MAX_EVALS)
-            {
-                clear();
-                return false;
-                // the issue with this is it aborts the whole circuit
-                // if one part is oscillating, but you can have
-                // two disconnected "circuits" in one circuit project.
-                // if one fails, we don't want that to make the other fail.
-                // Need a better way to do this. Probably by having a
-                // hashtable that maps Component * to evaluation_counts,
-                // then marking the output of components that exceed MAX_EVALS
-                // as UNKNOWN
-            }
-
-            Component * component = work_queue_.front();
-
-            work_queue_.pop();
-            queued_components_.erase(component);
-
-            evaluation_count++;
-
-            component->evaluate(*this);
-        }
-
-        return true;
-    }
-
-    void clear()
-    {
-        while (!work_queue_.empty())
-        {
-            work_queue_.pop();
-        }
-
-        queued_components_.clear();
-    }
+    std::string to_string() const;
 
 private:
-    std::queue< Component * > work_queue_;
-    std::unordered_set< Component * > queued_components_;
+    std::queue< Event > work_queue_;
+    std::unordered_set< Event, EventHash > queued_components_;
 };
 
 inline std::ostream & operator<<(std::ostream & cout, const Simulator & simulator)
 {
-    std::queue< Component * > queue = simulator.work_queue();
-
-    cout << "Simulator("
-         << "queued=" << queue.size()
-         << ')';
-
-    if (!queue.empty())
-    {
-        cout << "\nQueue:";
-
-        while (!queue.empty())
-        {
-            cout << "\n  ";
-
-            if (queue.front() == nullptr)
-            {
-                cout << "nullptr";
-            }
-            else
-            {
-                cout << *queue.front();
-            }
-
-            queue.pop();
-        }
-    }
-
+    cout << simulator.to_string();
     return cout;
 }
 
-#endif // Simulator.h
+#endif // SIMULATOR_H
