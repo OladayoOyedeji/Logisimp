@@ -1,4 +1,8 @@
-// LogicVector.cpp
+/**
+ * @file LogicVector.cpp
+ * @brief Implements a fixed-width collection of three-state logic values.
+ * @author Cole Schwandt
+ */
 
 #include "LogicVector.h"
 

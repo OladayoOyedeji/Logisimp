@@ -1,6 +1,7 @@
-// LogicVector.h
 /**
- * Fixed-width collection of three-state logic values.
+ * @file LogicVector.h
+ * @brief Fixed-width collection of three-state logic values.
+ * @author Cole Schwandt
  */
 
 #ifndef LOGIC_VECTOR_H

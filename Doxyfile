@@ -1,0 +1,83 @@
+# Theme: Doxygen Awesome v2.5.0, vendored in docs/theme.
+
+PROJECT_NAME           = Logisimp
+PROJECT_BRIEF          = "TODO"
+OUTPUT_DIRECTORY       = build/docs
+OUTPUT_LANGUAGE        = English
+
+# Document the core (include, src) and guides (docs). 
+INPUT                  = include src docs
+FILE_PATTERNS          = *.h *.cpp *.md
+RECURSIVE              = YES
+EXCLUDE                = docs/theme
+USE_MDFILE_AS_MAINPAGE  = docs/index.md
+MARKDOWN_SUPPORT       = YES
+EXTRACT_ALL            = NO
+
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+JAVADOC_AUTOBRIEF      = YES
+SOURCE_BROWSER         = YES
+SOURCE_TOOLTIPS        = YES
+VERBATIM_HEADERS       = YES
+
+# Show each function's implementation alongside its detailed documentation.
+INLINE_SOURCES         = YES
+STRIP_CODE_COMMENTS    = NO
+REFERENCES_RELATION    = YES
+REFERENCED_BY_RELATION = YES
+STRIP_FROM_PATH        = .
+
+# HTML
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_XML           = NO
+GENERATE_DOCBOOK       = NO
+SEARCHENGINE           = YES
+SERVER_BASED_SEARCH    = NO
+GENERATE_TREEVIEW      = YES
+
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+
+# Initial sidebar width
+TREEVIEW_WIDTH         = 335
+
+# Awesome light/dark styling
+HTML_COLORSTYLE        = LIGHT
+HTML_HEADER            = docs/header.html
+HTML_EXTRA_STYLESHEET  = docs/theme/doxygen-awesome.css \
+                         docs/theme/doxygen-awesome-sidebar-only.css \
+                         docs/theme/doxygen-awesome-sidebar-only-darkmode-toggle.css \
+                         docs/theme/logisimp-layout.css
+HTML_EXTRA_FILES       = docs/theme/LICENSE \
+                         docs/theme/doxygen-awesome-darkmode-toggle.js \
+                         docs/theme/doxygen-awesome-fragment-copy-button.js \
+                         docs/theme/doxygen-awesome-paragraph-link.js \
+                         docs/theme/doxygen-awesome-interactive-toc.js \
+                         docs/theme/logisimp-docs.js \
+                         docs/theme/logisimp-function-preview.js
+
+# Graphviz inheritance and collaboration diagrams.
+HAVE_DOT               = YES
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+
+# @callgraph support.
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+
+# Warnings for documentation errors.
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = NO
+WARN_IF_INCOMPLETE_DOC = YES
+WARN_NO_PARAMDOC       = YES

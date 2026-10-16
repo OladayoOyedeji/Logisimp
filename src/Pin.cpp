@@ -1,7 +1,7 @@
-// Pin.cpp
 /**
- * Implements pin evaluation and interaction with
- * runtime values stored in PinState.
+ * @file Pin.cpp
+ * @brief Implements circuit pin evaluation and interaction with runtime values.
+ * @author Cole Schwandt
  */
 
 #include "Pin.h"
@@ -10,11 +10,29 @@
 #include "PinState.h"
 #include "Port.h"
 #include "Simulator.h"
-#include "Wire.h"
+#include "Net.h"
 
 #include <stdexcept>
 
-ComponentState * Pin::create_state(CircuitState & state) const
+Pin::Pin(int id, PinType type, int width)
+    : Component(id), type_(type), width_(width)
+{
+    if (type_ != INPUT_PIN && type_ != OUTPUT_PIN)
+    {
+        throw std::invalid_argument("Invalid pin type");
+    }
+
+    if (type_ == INPUT_PIN)
+    {
+        add_output(width_, "Y");
+    }
+    else
+    {
+        add_input(width_, "A");
+    }
+}
+
+ComponentState * Pin::create_state(CircuitState &) const
 {
     return new PinState(width_, type_ == INPUT_PIN ? LOW : UNKNOWN);
 }
@@ -52,7 +70,8 @@ void Pin::set(const LogicVector & bits, Simulator & simulator, CircuitState & st
 
 void Pin::toggle(Simulator & simulator, CircuitState & state)
 {
-    static const LogicValue TOGGLE_TABLE[3] =
+    // UNKNOWN carries no known binary value, so inversion must preserve it.
+    static const LogicValue toggle_table[3] =
     {
         HIGH,
         LOW,
@@ -68,7 +87,7 @@ void Pin::toggle(Simulator & simulator, CircuitState & state)
 
     for (int i = 0; i < bits.width(); ++i)
     {
-        bits[i] = TOGGLE_TABLE[bits[i]];
+        bits[i] = toggle_table[bits[i]];
     }
 
     evaluate(simulator, state);
@@ -78,29 +97,33 @@ void Pin::evaluate(Simulator & simulator, CircuitState & state)
 {
     if (type_ == INPUT_PIN)
     {
-        Port * port = output_port(0);
+        // Interface inputs drive the circuit internally, hence their OUTPUT port.
+        Port * pin_output_port = output_port(0);
 
-        if (port->wire() != nullptr)
+        if (pin_output_port->net() != nullptr)
         {
-            simulator.drive(state, *port->wire(), value(state));
+            simulator.drive(state, *pin_output_port->net(), value(state));
         }
 
         return;
     }
 
-    Port * port = input_port(0);
+    Port * pin_input_port = input_port(0);
 
+    // An undriven interface output must not retain an earlier sampled value.
     LogicVector bits(width_, UNKNOWN);
 
-    if (port->wire() != nullptr)
+    if (pin_input_port->net() != nullptr)
     {
-        bits = state.value(*port->wire());
+        bits = state.value(*pin_input_port->net());
     }
 
     if (value(state) != bits)
     {
         value(state) = bits;
 
+        // Only changed child outputs can require a parent placement to republish.
+        // For a root circuit, notify_parent has no containing placement to queue.
         simulator.notify_parent(state);
     }
 }

@@ -1,7 +1,10 @@
-// SubcircuitState.h
 /**
- * Stores the runtime state of a subcircuit instance.
+ * @file SubcircuitState.h
+ * @brief Stores the runtime state of a subcircuit instance.
+ * @author Cole Schwandt
  */
+
+// SubcircuitState.h
 
 #ifndef SUBCIRCUITSTATE_H
 #define SUBCIRCUITSTATE_H
@@ -13,7 +16,7 @@
 class SubcircuitState : public ComponentState
 {
 public:
-    SubCircuitState(const Subcircuit & subcircuit, CircuitState & parent)
+    SubcircuitState(const Subcircuit & subcircuit, CircuitState & parent)
         : child_state_(*subcircuit.circuit(), &parent, &subcircuit)
     {}
 

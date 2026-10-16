@@ -1,7 +1,7 @@
-// Gate.h
 /**
- * Base class for primitive single-output logic gates,
- * like NOT, AND, OR, etc.
+ * @file Gate.h
+ * @brief Base class for primitive single-output logic gates.
+ * @author Cole Schwandt
  */
 
 #ifndef GATE_H
@@ -15,8 +15,8 @@ class Gate : public Component
 public:
     Gate(int id, int input_count);
 
-    Port * output();
-    Port * output() const;
+    Port * output_port(int index = 0);
+    Port * output_port(int index = 0) const;
 
     std::string to_string() const override;
 

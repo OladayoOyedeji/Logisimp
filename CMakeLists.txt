@@ -9,24 +9,29 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
     "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
 
+# Exclude Emacs lock files.
+list(FILTER SOURCES EXCLUDE REGEX "/[.]#")
+
+# Archived examples use a retired API.
+list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/src/Test.cpp")
+
 add_executable(logisimp ${SOURCES})
 
 target_include_directories(logisimp PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
+    "${CMAKE_SOURCE_DIR}/include"
 )
 
-target_compile_options(${PROJECT_NAME}
-    PRIVATE
-    $<$<CONFIG:Debug>:-g -fsanitize=address>
+target_compile_options(logisimp PRIVATE
+    $<$<CONFIG:Debug>:-g>
+    $<$<CONFIG:Debug>:-fsanitize=address>
 )
 
-target_link_options(${PROJECT_NAME}
-    PRIVATE
+target_link_options(logisimp PRIVATE
     $<$<CONFIG:Debug>:-fsanitize=address>
 )
 
 add_custom_target(r
-    COMMAND ./logisimp
+    COMMAND "$<TARGET_FILE:logisimp>"
     DEPENDS logisimp
 )
 

@@ -1,7 +1,7 @@
-// Pin.h
 /**
- * Circuit interface component used as an input or output pin.
- * Runtime values are stored separately in PinState.
+ * @file Pin.h
+ * @brief Circuit interface component used as an input or output pin.
+ * @author Cole Schwandt
  */
 
 #ifndef PIN_H
@@ -19,18 +19,7 @@ enum PinType
 class Pin : public Component
 {
 public:
-    Pin(int id, PinType type, int width = 1)
-        : Component(id), type_(type), width_(width)
-    {
-        if (type_ == INPUT_PIN)
-        {
-            add_output(width_, "Y");
-        }
-        else
-        {
-            add_input(width_, "A");
-        }
-    }
+    Pin(int id, PinType type, int width = 1);
 
     PinType type() const { return type_; }
     int width() const { return width_; }
@@ -48,6 +37,8 @@ public:
     std::string to_string() const override;
 
 private:
+    friend class Circuit;
+
     PinType type_;
     int width_;
 };

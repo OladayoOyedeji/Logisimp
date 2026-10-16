@@ -1,7 +1,13 @@
-// LogicValue.cpp
+/**
+ * @file LogicValue.cpp
+ * @brief Implements basic operations on three-state logic values.
+ * @author Cole Schwandt
+ */
 
 #include "LogicValue.h"
 
+// UNKNOWN does not always propagate: LOW fixes AND and HIGH fixes OR even
+// when the other bit is undetermined. Table indices use the enum's 0/1/2 order.
 static const LogicValue AND_TABLE[3][3] =
 {
     //                  b = LOW   b = HIGH   b = UNKNOWN

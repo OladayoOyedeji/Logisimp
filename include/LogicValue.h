@@ -1,7 +1,7 @@
-// LogicValue.h
 /**
- * Three-state logic values (0, 1, X) (LOW, HIGH, UNKNOWN)
- * and their basic logical operations.
+ * @file LogicValue.h
+ * @brief Three-state logic values (LOW, HIGH, UNKNOWN) and their basic operations.
+ * @author Cole Schwandt
  */
 
 #ifndef LOGIC_VALUE_H

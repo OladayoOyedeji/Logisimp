@@ -1,3 +1,9 @@
+/**
+ * @file mainwindow.h
+ * @brief Main window for the Qt drawing prototype.
+ * @author Cole Schwandt
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -14,11 +20,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
 
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow * ui;
 };
 #endif // MAINWINDOW_H

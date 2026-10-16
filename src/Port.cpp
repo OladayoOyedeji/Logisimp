@@ -1,4 +1,8 @@
-// Port.cpp
+/**
+ * @file Port.cpp
+ * @brief Implements component connection points.
+ * @author Cole Schwandt
+ */
 
 #include "Port.h"
 
@@ -9,12 +13,18 @@ Port::Port(int id, int width, PortDirection direction, const std::string & label
       width_(width),
       direction_(direction),
       owner_(nullptr),
-      wire_(nullptr),
+      node_(nullptr),
+      net_(nullptr),
       label_(label)
 {
     if (width <= 0)
     {
         throw std::invalid_argument("Port width must be positive");
+    }
+
+    if (direction != INPUT && direction != OUTPUT)
+    {
+        throw std::invalid_argument("Invalid port direction");
     }
 }
 

@@ -1,6 +1,7 @@
-// PinState.h
 /**
- * Stores the runtime value of a circuit pin.
+ * @file PinState.h
+ * @brief Stores the runtime value of a circuit pin.
+ * @author Cole Schwandt
  */
 
 #ifndef PINSTATE_H
@@ -12,7 +13,7 @@
 class PinState : public ComponentState
 {
 public:
-    PinState(int width, LogicValue initial_value)
+    PinState(int width, LogicValue initial_value = UNKNOWN)
         : value_(width, initial_value)
     {}
 
@@ -23,4 +24,4 @@ private:
     LogicVector value_;
 };
 
-#endif // PINSTATE.h
+#endif // PINSTATE_H

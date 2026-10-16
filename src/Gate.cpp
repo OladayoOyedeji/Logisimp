@@ -1,4 +1,8 @@
-// Gate.cpp
+/**
+ * @file Gate.cpp
+ * @brief Implements the base class for primitive logic gates.
+ * @author Cole Schwandt
+ */
 
 #include "Gate.h"
 
@@ -6,7 +10,7 @@
 #include "LogicVector.h"
 #include "Port.h"
 #include "Simulator.h"
-#include "Wire.h"
+#include "Net.h"
 
 #include <stdexcept>
 
@@ -26,14 +30,14 @@ Gate::Gate(int id, int input_count)
     add_output(1, "Y");
 }
 
-Port * Gate::output()
+Port * Gate::output_port(int index)
 {
-    return output_port(0);
+    return Component::output_port(index);
 }
 
-Port * Gate::output() const
+Port * Gate::output_port(int index) const
 {
-    return output_port(0);
+    return Component::output_port(index);
 }
 
 std::string Gate::to_string() const
@@ -51,27 +55,31 @@ std::string Gate::to_string() const
 
 LogicValue Gate::input_value(int index, CircuitState & state) const
 {
-    Port * port = input_port(index);
+    Port * gate_input_port = input_port(index);
 
-    if (port->wire() == nullptr)
+    if (gate_input_port->net() == nullptr)
     {
+        // A missing connection supplies no evidence of either known logic level.
         return UNKNOWN;
     }
 
-    return state.value(*port->wire())[0];
+    return state.value(*gate_input_port->net())[0];
 }
 
 void Gate::drive_output(LogicValue value, Simulator & simulator, CircuitState & state)
 {
-    Port * port = output_port(0);
+    Port * gate_output_port = output_port();
 
-    if (port->wire() == nullptr)
+    if (gate_output_port->net() == nullptr)
     {
+        // A disconnected output has no net value or listeners to update.
         return;
     }
 
-    LogicVector output_value(1);
-    output_value[0] = value;
+    LogicVector gate_output_value(1);
+    gate_output_value[0] = value;
 
-    simulator.drive(state, *port->wire(), output_value);
+    // drive() suppresses unchanged values and queues listeners in this instance;
+    // gate evaluation itself carries no delay or timestamp.
+    simulator.drive(state, *gate_output_port->net(), gate_output_value);
 }

@@ -1,20 +1,68 @@
-// CircuitState.cpp
+/**
+ * @file CircuitState.cpp
+ * @brief Implements the runtime state of a circuit instance.
+ * @author Cole Schwandt
+ */
 
 #include "CircuitState.h"
 
 #include "Circuit.h"
 #include "Component.h"
 #include "ComponentState.h"
-#include "Wire.h"
+#include "Simulator.h"
+#include "Subcircuit.h"
+#include "Net.h"
 
-LogicVector & CircuitState::value(const Wire & wire)
+#include <algorithm>
+#include <stdexcept>
+
+CircuitState::CircuitState(const Circuit & circuit, CircuitState * parent, const Subcircuit * parent_subcircuit)
+    : circuit_(&circuit), parent_(parent), parent_subcircuit_(parent_subcircuit)
 {
-    return wire_values_.at(&wire);
+    if ((parent_ == nullptr) != (parent_subcircuit_ == nullptr))
+    {
+        // Output notifications need both links to find the containing placement;
+        // root instances have neither link.
+        throw std::invalid_argument("Nested state requires both a parent and a placement");
+    }
+
+    if (parent_ != nullptr)
+    {
+        const std::vector< Component * > & components = parent_->circuit().components();
+        if (parent_subcircuit_->circuit() != circuit_ || std::find(components.begin(), components.end(), parent_subcircuit_) == components.end())
+        {
+            throw std::invalid_argument("Placement does not belong to the supplied parent or blueprint");
+        }
+    }
+
+    // Derived nets are borrowed by the value map. Register before constructing
+    // child states so connectivity edits cannot invalidate any live hierarchy.
+    ++circuit_->active_states_;
+    try
+    {
+        reset();
+    }
+    catch (...)
+    {
+        --circuit_->active_states_;
+        throw;
+    }
 }
 
-LogicVector CircuitState::value(const Wire & wire) const
+CircuitState::~CircuitState()
 {
-    return wire_values_.at(&wire);
+    clear_component_states();
+    --circuit_->active_states_;
+}
+
+LogicVector & CircuitState::value(const Net & net)
+{
+    return net_values_.at(&net);
+}
+
+LogicVector CircuitState::value(const Net & net) const
+{
+    return net_values_.at(&net);
 }
 
 ComponentState & CircuitState::component_state(const Component & component)
@@ -29,7 +77,9 @@ const ComponentState & CircuitState::component_state(const Component & component
 
 void CircuitState::clear_component_states()
 {
-    for (auto & entry : component_states_)
+    // Virtual destruction also releases child CircuitStates held by placements.
+    // Pending simulator events borrow these objects and must already be cleared.
+    for (const std::pair< const Component * const, ComponentState * > & entry : component_states_)
     {
         delete entry.second;
     }
@@ -40,34 +90,40 @@ void CircuitState::clear_component_states()
 void CircuitState::reset()
 {
     clear_component_states();
-    wire_values_.clear();
+    net_values_.clear();
 
     try
     {
-        // init every wire to UNKNOWN
-        for (const Wire * wire : circuit_->wires())
+        // init every net to UNKNOWN
+        // No driver has been evaluated yet; UNKNOWN keeps an undriven net from
+        // looking like a known LOW signal merely because storage was recreated.
+        for (const Net * net : circuit_->nets())
         {
-            // wire_values_[wire] = LogicVector(wire->width(), UNKNOWN)
-            wire_values_.emplace(wire, LogicVector(wire->width(), UNKNOWN));
+            // net_values_[net] = LogicVector(net->width(), UNKNOWN)
+            net_values_.emplace(net, LogicVector(net->width(), UNKNOWN));
             // emplace is [] but doesn't overwrite existing values.
             // it's more explicit C++ to use emplace because it's clear
             // new values are being inserted
         }
 
         // create runtime states for components that need a state
+        // Stateless gates share only their blueprint; pins and subcircuits need
+        // fresh storage so repeated placements have independent runtime values.
         for (Component * component : circuit_->components())
         {
-            ComponentState * state = component->create_state(*this);
+            ComponentState * component_state = component->create_state(*this);
 
-            if (state != nullptr)
+            if (component_state != nullptr)
             {
                 try
                 {
-                    component_states_.emplace(component, state);
+                    component_states_.emplace(component, component_state);
                 }
                 catch (...) // std::bad_alloc prob the only possible exception that could happen here
                 {
-                    delete state;
+                    // The factory returned an owned allocation, but the map has
+                    // not adopted it if inserting the entry fails.
+                    delete component_state;
                     throw;
                 }
             }
@@ -75,8 +131,35 @@ void CircuitState::reset()
     }
     catch (...)
     {
+        // Reset discarded the previous storage; release any partially rebuilt
+        // hierarchy rather than expose a mixture of initialized and absent state.
         clear_component_states();
-        wire_values.clear();
+        net_values_.clear();
+        throw;
+    }
+}
+
+bool CircuitState::reset(Simulator & simulator)
+{
+    // Queued events can point at children that reset() is about to destroy.
+    simulator.clear();
+    reset();
+    return initialize(simulator);
+}
+
+bool CircuitState::initialize(Simulator & simulator)
+{
+    // Initialization replaces all pending work in the shared simulator, even
+    // for other roots; the current signal values themselves are preserved.
+    simulator.clear();
+    try
+    {
+        simulator.schedule(*this);
+        return simulator.run();
+    }
+    catch (...)
+    {
+        simulator.clear();
         throw;
     }
 }
@@ -84,19 +167,19 @@ void CircuitState::reset()
 std::string CircuitState::to_string() const
 {
     std::string ret = "CircuitState(";
-    const std::vector< Wire * > & wires = circuit_->wires();
-    for (int i = 0; i < wires.size(); ++i)
+    const std::vector< Net * > & nets = circuit_->nets();
+    for (int i = 0; i < int(nets.size()); ++i)
     {
         if (i > 0)
         {
             ret += ", ";
         }
 
-        const Wire * wire = wires[i];
-        ret += "wire ";
-        ret += std::to_string(wire->id());
+        const Net * net = nets[i];
+        ret += "net ";
+        ret += std::to_string(net->id());
         ret += "=";
-        ret += value(*wire).to_string();
+        ret += value(*net).to_string();
     }
     ret += ")";
 

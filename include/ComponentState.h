@@ -1,9 +1,7 @@
-// ComponentState.h
 /**
- * Abstract class for component-specific runtime state.
- * Components that require memory during simulation, 
- * such as custom user circuits, store that information
- * in derived state classes.
+ * @file ComponentState.h
+ * @brief Abstract class for component-specific runtime state.
+ * @author Cole Schwandt
  */
 
 #ifndef COMPONENTSTATE_H

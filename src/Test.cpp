@@ -1,3 +1,11 @@
+/**
+ * @file Test.cpp
+ * @brief Archived console examples from the earlier simulator API.
+ * @author Cole Schwandt
+ */
+
+/*
+
 #include "Test.h"
 
 int TestProject::available_circuits()
@@ -259,3 +267,4 @@ void test_half_adder()
         }
     }
 }
+*/

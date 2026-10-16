@@ -1,3 +1,10 @@
+/**
+ * @file Test.h
+ * @brief Archived test harness from the earlier simulator API.
+ * @author Cole Schwandt
+ */
+
+/*
 #ifndef TEST_H
 #define TEST_H
 
@@ -168,3 +175,4 @@ private:
     unordered_map<std::string, Project *> sim;
 };
 #endif
+*/

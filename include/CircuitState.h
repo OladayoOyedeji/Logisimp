@@ -1,8 +1,7 @@
-// CircuitState.h
 /**
- * Stores the runtime state of a circuit instance.
- * Multiple CircuitState objects can reference the same
- * circuit blueprint while having independent values.
+ * @file CircuitState.h
+ * @brief Stores the runtime state of a circuit instance.
+ * @author Cole Schwandt
  */
 
 #ifndef CIRCUITSTATE_H
@@ -18,39 +17,36 @@ class Circuit;
 class Component;
 class ComponentState;
 class Subcircuit;
-class Wire;
+class Simulator;
+class Net;
 
 class CircuitState
 {
 public:
-    CircuitState(const Circuit & circuit)
-        : circuit_(&circuit)
-    {
-        reset();
-    }
+    CircuitState(const Circuit & circuit, CircuitState * parent = nullptr, const Subcircuit * parent_subcircuit = nullptr);
 
     CircuitState(const CircuitState & other) = delete;
     CircuitState & operator=(const CircuitState & other) = delete;
     CircuitState(CircuitState && other) = delete;
     CircuitState & operator=(CircuitState && other) = delete;
 
-    ~CircuitState()
-    {
-        clear_component_states();
-    }
+    ~CircuitState();
 
     const Circuit & circuit() const { return *circuit_; }
 
     CircuitState * parent() const { return parent_; }
     const Subcircuit * placement() const { return parent_subcircuit_; }
 
-    LogicVector & value(const Wire & wire);
-    LogicVector value(const Wire & wire) const;
+    LogicVector & value(const Net & net);
+    LogicVector value(const Net & net) const;
 
     ComponentState & component_state(const Component & component);
-    const ComponentState & component_state(const Component & component)
+    const ComponentState & component_state(const Component & component) const;
 
+    // Clear the simulator queue before resetting or destroying a hierarchy.
     void reset();
+    bool reset(Simulator & simulator);
+    bool initialize(Simulator & simulator);
 
     std::string to_string() const;
 
@@ -59,18 +55,16 @@ private:
 
     const Circuit * circuit_;
 
-    // detecting circular definitions of circuits?
-    // custom circuits that depend on each other?
     // these two below are only relevant when a circuit is
     // nested inside another circuit:
     // will be nullptr otherwise
     CircuitState * parent_; // state of the circuit containing this instance
     const Subcircuit * parent_subcircuit_; // the component that represents this instance
-    std::unordered_map<const Wire *, LogicVector > wire_values_;
+    std::unordered_map< const Net *, LogicVector > net_values_;
+    std::unordered_map< const Component *, ComponentState * > component_states_;
 };
 
-inline
-std::ostream & operator<<(std::ostream & cout, const CircuitState & state)
+inline std::ostream & operator<<(std::ostream & cout, const CircuitState & state)
 {
     cout << state.to_string();
     return cout;
