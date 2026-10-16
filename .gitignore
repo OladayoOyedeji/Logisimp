@@ -18,11 +18,11 @@ docs/latex/
 docs/xml/
 
 # CMake-generated files in project root
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-CTestTestfile.cmake
-Makefile
+*CMakeCache.txt
+*CMakeFiles/
+*cmake_install.cmake
+*CTestTestfile.cmake
+*Makefile
 
 # Debugging/profiling files
 core
