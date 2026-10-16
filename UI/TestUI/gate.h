@@ -1,3 +1,9 @@
+/**
+ * @file gate.h
+ * @brief Gate drawing dimensions and port counts for the Qt prototype.
+ * @author Cole Schwandt
+ */
+
 #ifndef GATE_H
 #define GATE_H
 

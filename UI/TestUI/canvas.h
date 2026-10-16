@@ -1,3 +1,9 @@
+/**
+ * @file canvas.h
+ * @brief Interactive drawing canvas for the Qt prototype.
+ * @author Cole Schwandt
+ */
+
 #ifndef CANVAS_H
 #define CANVAS_H
 
@@ -19,7 +25,7 @@ class Canvas : public QOpenGLWidget,
 public:
     Canvas(QWidget * parent = NULL);
 
-    void drawGrid(QPainter&);
+    void drawGrid(QPainter & painter);
 
     double screenToWorldX(double) const;
     double screenToWorldY(double) const;
@@ -35,10 +41,10 @@ protected:
     void resizeGL(int width, int height) override;
 
     // Control Events
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
+    void mousePressEvent(QMouseEvent * event) override;
+    void mouseMoveEvent(QMouseEvent * event) override;
+    void mouseReleaseEvent(QMouseEvent * event) override;
+    void wheelEvent(QWheelEvent * event) override;
 
 private:
     double zoom = 1.0;

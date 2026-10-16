@@ -1,14 +1,19 @@
-// Port.h
+/**
+ * @file Port.h
+ * @brief Connection point between a component and a wire node.
+ * @author Cole Schwandt
+ */
 
 #ifndef PORT_H
 #define PORT_H
 
+#include <ostream>
 #include <string>
-#include <stdexcept>
-#include <iostream>
 
+class Circuit;
 class Component;
-class Wire;
+class WireNode;
+class Net;
 
 enum PortDirection
 {
@@ -19,86 +24,50 @@ enum PortDirection
 class Port
 {
 public:
-    Port(int id, int width, PortDirection direction, const std::string & label = "")
-        : id_(id),
-          width_(width),
-          direction_(direction),
-          owner_(nullptr),
-          wire_(nullptr),
-          label_(label)
-    {
-        if (width <= 0)
-        {
-            throw std::invalid_argument("Port width must be positive");
-        }
-    }
+    Port(int id, int width, PortDirection direction, const std::string & label = "");
 
     Port(const Port & other) = delete;
     Port & operator=(const Port & other) = delete;
 
-    int & id() { return id_; }
+    Port(Port && other) = delete;
+    Port & operator=(Port && other) = delete;
+
     int id() const { return id_; }
 
-    int & width() { return width_; }
     int width() const { return width_; }
 
-    PortDirection & direction() { return direction_; }
     PortDirection direction() const { return direction_; }
 
-    Component * & owner() { return owner_; }
     Component * owner() const { return owner_; }
 
-    Wire * & wire() { return wire_; }
-    Wire * wire() const { return wire_; }
+    WireNode * node() const { return node_; }
+
+    Net * net() const { return net_; }
 
     std::string & label() { return label_; }
     std::string label() const { return label_; }
 
-    bool connected() const
-    {
-        return wire_ != nullptr;
-    }
+    bool connected() const { return node_ != nullptr; }
+
+    std::string to_string() const;
 
 private:
+    friend class Circuit;
+    friend class Component;
+    
     int id_;
     int width_;
     PortDirection direction_;
     Component * owner_;
-    Wire * wire_;
+    WireNode * node_;
+    Net * net_;
     std::string label_;
 };
 
 inline std::ostream & operator<<(std::ostream & cout, const Port & port)
 {
-    cout << "Port("
-         << "id=" << port.id()
-         << ", width=" << port.width()
-         << ", direction=";
-
-    if (port.direction() == INPUT)
-    {
-        cout << "INPUT";
-    }
-    else
-    {
-        cout << "OUTPUT";
-    }
-
-    cout << ", label=\"" << port.label() << "\""
-         << ", connected=";
-
-    if (port.connected())
-    {
-        cout << "true";
-    }
-    else
-    {
-        cout << "false";
-    }
-
-    cout << ')';
-
+    cout << port.to_string();
     return cout;
 }
 
-#endif // Port.h
+#endif // PORT_H

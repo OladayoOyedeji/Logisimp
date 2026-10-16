@@ -1,6 +1,12 @@
+/**
+ * @file canvas.cpp
+ * @brief Camera transforms and mouse interactions for the Qt canvas.
+ * @author Cole Schwandt
+ */
+
 #include "canvas.h"
 
-Canvas::Canvas(QWidget *parent)
+Canvas::Canvas(QWidget * parent)
     : QOpenGLWidget(parent)
 {
     andGate.setPosition(300, 500);
@@ -26,15 +32,17 @@ double Canvas::worldToScreenY(double worldY) const
 
 double Canvas::snapToGrid(double value)
 {
+    // Flooring includes the grid line just before the viewport, even left of zero.
     return std::floor(value/gridsize) * gridsize;
 }
 
-void Canvas::drawGrid(QPainter &painter)
+void Canvas::drawGrid(QPainter & painter)
 {
     QPen gridPen(QColor(60, 60, 60));
 
     painter.setPen(gridPen);
 
+    // Starting at the preceding grid lines covers the whole viewport after panning.
     double startX = snapToGrid(cameraX);
     double startY = snapToGrid(cameraY);
 
@@ -86,7 +94,7 @@ void Canvas::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void Canvas::mousePressEvent(QMouseEvent *event)
+void Canvas::mousePressEvent(QMouseEvent * event)
 {
     if(event->button() == Qt::LeftButton)
     {
@@ -97,6 +105,8 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         {
             draggingGate = true;
 
+            // Keep the grabbed point under the pointer rather than jumping the center.
+            // QPoint stores an integer offset, so fractional world units are truncated.
             dragOffset.setX(worldX - andGate.getX());
             dragOffset.setY(worldY - andGate.getY());
 
@@ -134,7 +144,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
 
 }
 
-void Canvas::mouseMoveEvent(QMouseEvent *event)
+void Canvas::mouseMoveEvent(QMouseEvent * event)
 {
     if(draggingGate)
     {
@@ -145,6 +155,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event)
         worldY -= dragOffset.y();
 
         // Snap to fit grid
+        // Round the gate center to the nearest grid point, unlike grid-line flooring.
         double snapX = std::round(worldX / gridsize) * gridsize;
         double snapY = std::round(worldY / gridsize) * gridsize;
 
@@ -160,6 +171,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event)
         int dx = currentPos.x() - lastMousePosition.x();
         int dy = currentPos.y() - lastMousePosition.y();
 
+        // Convert pixel motion to world units so panning tracks the pointer at any zoom.
         cameraX -= dx / zoom;
         cameraY -= dy / zoom;
 
@@ -169,7 +181,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void Canvas::mouseReleaseEvent(QMouseEvent *event)
+void Canvas::mouseReleaseEvent(QMouseEvent * event)
 {
     if(event->button() == Qt::LeftButton)
         draggingGate = false;
@@ -177,10 +189,11 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
         panning = false;
 }
 
-void Canvas::wheelEvent(QWheelEvent *event)
+void Canvas::wheelEvent(QWheelEvent * event)
 {
     QPointF mousePosition = event->position();
 
+    // Save the point under the pointer before changing the coordinate scale.
     double worldX = screenToWorldX(mousePosition.x());
     double worldY = screenToWorldY(mousePosition.y());
 
@@ -193,6 +206,7 @@ void Canvas::wheelEvent(QWheelEvent *event)
     zoom = std::clamp(zoom, 0.5, 10.0);
 
     // Adjust camera relative to mouse
+    // Solve the new transform for the camera so the saved world point stays fixed.
     cameraX = worldX - mousePosition.x() / zoom;
     cameraY = worldY - mousePosition.y() / zoom;
 

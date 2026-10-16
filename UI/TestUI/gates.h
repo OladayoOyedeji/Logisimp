@@ -1,3 +1,9 @@
+/**
+ * @file gates.h
+ * @brief Concrete gate drawings for the Qt prototype.
+ * @author Cole Schwandt
+ */
+
 #ifndef GATES_H
 #define GATES_H
 
@@ -11,7 +17,7 @@ public:
         numInputs = 2;
     }
 
-    void draw(QPainter &painter, double screenX, double screenY, double zoom) override
+    void draw(QPainter & painter, double screenX, double screenY, double zoom) override
     {
         QPen gridPen(QColor(250, 250, 250));
 
@@ -42,7 +48,7 @@ public:
         numInputs = 2;
     }
 
-    void draw(QPainter &painter, double screenX, double screenY, double zoom) override;
+    void draw(QPainter & painter, double screenX, double screenY, double zoom) override;
 };
 
 class NotGate : public Gate
@@ -53,7 +59,7 @@ public:
         numInputs = 1;
     }
 
-    void draw(QPainter &painter, double screenX, double screenY, double zoom) override;
+    void draw(QPainter & painter, double screenX, double screenY, double zoom) override;
 };
 
 #endif // GATES_H

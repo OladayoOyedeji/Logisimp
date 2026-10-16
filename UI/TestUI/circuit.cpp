@@ -1,3 +1,9 @@
+/**
+ * @file circuit.cpp
+ * @brief Position accessors for the Qt prototype drawables.
+ * @author Cole Schwandt
+ */
+
 #include "circuit.h"
 
 

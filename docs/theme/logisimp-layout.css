@@ -1,0 +1,180 @@
+html {
+    /* Leave room for the two-line project brief and the search controls. */
+    --top-height: 140px;
+}
+
+/* Navigation stays in the left tree on both classic and newer Doxygen output. */
+#page-nav,
+.contents > .toc {
+    display: none !important;
+}
+
+/* Newer navtree.js assigns a right-hand grid column inline; reclaim that space. */
+#container {
+    grid-template-columns: minmax(0, 1fr) !important;
+}
+
+@media screen and (min-width: 768px) {
+    /* Restore Doxygen's native drag handle without changing upstream assets. */
+    #side-nav {
+        min-width: 240px;
+        max-width: 50vw;
+        padding-right: 6px;
+    }
+
+    #side-nav .ui-resizable-e {
+        display: block;
+        width: 6px;
+        background: var(--side-nav-background);
+        border-left: 1px solid var(--separator-color);
+        box-sizing: border-box;
+        cursor: ew-resize;
+    }
+
+    #side-nav .ui-resizable-e::after {
+        content: "";
+        position: absolute;
+        top: calc(50% - 16px);
+        left: 1px;
+        width: 2px;
+        height: 32px;
+        border-radius: 2px;
+        background: var(--page-secondary-foreground-color);
+    }
+
+    #side-nav .ui-resizable-e:hover {
+        background: var(--separator-color);
+    }
+
+    #nav-path {
+        left: var(--side-nav-fixed-width);
+    }
+
+    #nav-sync {
+        left: calc(var(--side-nav-fixed-width) - 35px);
+    }
+}
+
+/* Function previews use the loaded page's documentation and theme colors. */
+.logisimp-function-preview {
+    position: fixed;
+    z-index: 10020;
+    display: block;
+    box-sizing: border-box;
+    width: min(40rem, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+    max-height: min(32rem, calc(100vh - 24px));
+    margin: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    color: var(--page-foreground-color);
+    background: var(--page-background-color);
+    border: 1px solid var(--separator-color);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--box-shadow), 0 8px 24px rgba(0, 0, 0, 0.18);
+    font-family: var(--font-family);
+    font-size: var(--page-font-size);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.logisimp-function-preview[hidden] {
+    display: none;
+}
+
+.logisimp-function-preview__signature,
+.logisimp-function-preview__body {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background-image: none;
+    overflow: visible;
+}
+
+.logisimp-function-preview__signature {
+    padding: var(--spacing-medium) var(--spacing-large);
+    color: var(--page-foreground-color);
+    background: var(--fragment-background);
+    border-bottom: 1px solid var(--separator-color);
+    font-family: var(--font-family-monospace);
+    font-weight: 500;
+    text-shadow: none;
+}
+
+.logisimp-function-preview__signature table.memname,
+.logisimp-function-preview__signature table.memname > tbody {
+    display: block;
+    width: 100%;
+    margin: 0;
+}
+
+.logisimp-function-preview__signature table.memname tr {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.logisimp-function-preview__signature table.memname td {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0 0.3em 0.15em 0;
+}
+
+.logisimp-function-preview__body {
+    padding: var(--spacing-small) var(--spacing-large);
+    background: var(--page-background-color);
+}
+
+.logisimp-function-preview table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.logisimp-function-preview td,
+.logisimp-function-preview th,
+.logisimp-function-preview .paramtype,
+.logisimp-function-preview .paramname,
+.logisimp-function-preview .paramkey,
+.logisimp-function-preview .memname {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.logisimp-function-preview table.params .paramdir {
+    width: 3em;
+}
+
+.logisimp-function-preview table.params .paramname {
+    width: 30%;
+}
+
+.logisimp-function-preview code {
+    color: var(--code-foreground);
+    background: var(--code-background);
+    font-family: var(--font-family-monospace);
+    font-size: 0.9em;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.logisimp-function-preview img,
+.logisimp-function-preview svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.logisimp-function-preview__hint {
+    margin: 0;
+    padding: var(--spacing-small) var(--spacing-large);
+    color: var(--page-secondary-foreground-color);
+    background: var(--side-nav-background);
+    border-top: 1px solid var(--separator-color);
+    font-size: 0.85em;
+}

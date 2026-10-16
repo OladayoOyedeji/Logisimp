@@ -1,3 +1,11 @@
+/**
+ * @file Test.cpp
+ * @brief Archived console examples from the earlier simulator API.
+ * @author Cole Schwandt
+ */
+
+/*
+
 #include "Test.h"
 
 int TestProject::available_circuits()
@@ -16,7 +24,7 @@ int TestProject::available_circuits()
     return 1;
 }
 
-int TestProject::toggle_inputs(string & ProjectName)
+int TestProject::toggle_inputs(std::string & ProjectName)
 {
     cout << "Project Name: ";
     cin >> ProjectName;
@@ -44,7 +52,7 @@ int TestProject::toggle_inputs(string & ProjectName)
     return 2;
 }
 
-int TestProject::show_outputs(const string & ProjectName)
+int TestProject::show_outputs(const std::string & ProjectName)
 {
     cout << "values for outputs\n";
     Project & p = *sim[ProjectName];
@@ -65,7 +73,7 @@ int TestProject::show_outputs(const string & ProjectName)
 
 void TestProject::simi_run()
 {
-    string ProjectName(1024, ' ');
+    std::string ProjectName(1024, ' ');
     int i = 0;
     
     while (1)
@@ -259,3 +267,4 @@ void test_half_adder()
         }
     }
 }
+*/

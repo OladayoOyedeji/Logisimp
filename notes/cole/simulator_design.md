@@ -1,3 +1,50 @@
+# Simulator design
+
+## Current graph architecture
+
+The maintained implementation uses an undirected graph for electrical
+connectivity and derived logical nets for simulation. See the
+[current architecture and construction guide](../../docs/index.md) and
+[local documentation instructions](../../docs/README.md) for the current API.
+
+```mermaid
+flowchart TD
+    Project -->|owns and edits| Circuit
+    Circuit -->|owns| Components
+    Components -->|own| Ports
+    Circuit -->|owns| WireNodes
+    Circuit -->|owns| WireEdges
+    WireEdges -->|join two endpoints| WireNodes
+    Ports -->|node: authoritative attachment| WireNodes
+    Circuit -->|derives from connected graph components| Nets
+    Ports -->|net: derived membership| Nets
+    CircuitState -->|owns independent Net values| NetValues[LogicVector values keyed by Net]
+    CircuitState -->|owns component and child-instance state| RuntimeState
+    Simulator -->|FIFO events| Events["(CircuitState, Component) pairs"]
+    Events -->|evaluate components and propagate changed Net values| CircuitState
+```
+
+`WireNode` and `WireEdge` contain connectivity, not runtime values. `Net`
+contains one network's driver, listeners, and compatible width; `CircuitState`
+stores each runtime instance's values independently. The simulator schedules
+components listening to a changed net; it does not schedule individual edges.
+Complete structural edits before creating runtime states. Clear simulator
+queues and destroy affected runtime hierarchies before editing again; derived
+Net references become invalid after successful connectivity edits.
+
+## Historical design
+
+The original sketch below is preserved verbatim as design history. It predates
+both graph-based wiring and the separation of runtime values into
+`CircuitState`; its `Wire`, stored pin values, component-only queue, and older
+function signatures do not describe the current API. Some sketched components
+also remain unimplemented.
+
+The original [SVG export](<LogicVector Input-2026-09-14-145819.svg>) is likewise
+an old reference drawing, preserved unchanged rather than published as current
+Doxygen architecture documentation.
+
+```mermaid
 classDiagram
 
 class LogicValue {
@@ -167,3 +214,4 @@ Simulator --> Component : queued_components_
 
 Component ..> Simulator : evaluate()
 Pin ..> Simulator : set() / toggle()
+```

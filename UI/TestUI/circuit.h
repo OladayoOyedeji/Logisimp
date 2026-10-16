@@ -1,3 +1,9 @@
+/**
+ * @file circuit.h
+ * @brief Drawable positions and painting interface for the Qt prototype.
+ * @author Cole Schwandt
+ */
+
 #ifndef CIRCUIT_H
 #define CIRCUIT_H
 
@@ -9,7 +15,7 @@ public:
     //Circuit();
     virtual ~Circuit() = default;
 
-    virtual void draw(QPainter &painter, double screenX, double screenY, double zoom) = 0;
+    virtual void draw(QPainter & painter, double screenX, double screenY, double zoom) = 0;
 
     double getX() const;
     double getY() const;

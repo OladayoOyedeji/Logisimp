@@ -5,28 +5,33 @@ project(logisimp VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES
-    src/main.cpp
-    src/Test.cpp
+file(GLOB SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
+
+# Exclude Emacs lock files.
+list(FILTER SOURCES EXCLUDE REGEX "/[.]#")
+
+# Archived examples use a retired API.
+list(REMOVE_ITEM SOURCES "${CMAKE_SOURCE_DIR}/src/Test.cpp")
 
 add_executable(logisimp ${SOURCES})
 
 target_include_directories(logisimp PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
+    "${CMAKE_SOURCE_DIR}/include"
 )
 
-target_compile_options(${PROJECT_NAME}
-  PRIVATE 
-  $<$<CONFIG:debug>:-g -fsanitize=address>
+target_compile_options(logisimp PRIVATE
+    $<$<CONFIG:Debug>:-g>
+    $<$<CONFIG:Debug>:-fsanitize=address>
 )
 
-target_link_options(${PROJECT_NAME}
-  PRIVATE $<$<CONFIG:debug>:-fsanitize=address>
+target_link_options(logisimp PRIVATE
+    $<$<CONFIG:Debug>:-fsanitize=address>
 )
 
 add_custom_target(r
-    COMMAND ./logisimp
+    COMMAND "$<TARGET_FILE:logisimp>"
     DEPENDS logisimp
 )
 
