@@ -1,6 +1,6 @@
 # CMake build directories
-build/
-cmake-build-*/
+*build/
+*cmake-build-*/
 
 # C/C++ compiled files
 *.o
@@ -22,7 +22,6 @@ docs/xml/
 *CMakeFiles/
 *cmake_install.cmake
 *CTestTestfile.cmake
-*Makefile
 
 # Debugging/profiling files
 core
