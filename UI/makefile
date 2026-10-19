@@ -18,14 +18,14 @@ endif
 # Change config based off PLATFORM
 ifeq ($(PLATFORM),windows)
     CMAKE_GENERATOR := -G "MinGW Makefiles"
-    EXECUTABLE := ./build/logisimp.exe
+    EXECUTABLE := ./build/Logisimp.exe
     REMOVE_BUILD := powershell -NoProfile -Command "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue build"
     OPEN_FILE = cmd /c start "" "$(subst /,\,$(abspath $(1)))"
     DOCS_INPUTS := Doxyfile $(shell git ls-files include src docs)
     DATE_COMMAND := powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"
 else
     CMAKE_GENERATOR :=
-    EXECUTABLE := ./build/logisimp
+    EXECUTABLE := ./build/Logisimp
     REMOVE_BUILD := rm -rf build
     DOCS_INPUTS := Doxyfile include/. src/. docs/. $(shell find include src docs -mindepth 1)
     DATE_COMMAND := date '+%Y-%m-%d %H:%M:%S'

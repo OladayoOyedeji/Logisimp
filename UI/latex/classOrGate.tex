@@ -1,0 +1,115 @@
+\doxysection{Or\+Gate Class Reference}
+\hypertarget{classOrGate}{}\label{classOrGate}\index{OrGate@{OrGate}}
+
+
+Inheritance diagram for Or\+Gate\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=131pt]{classOrGate__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Or\+Gate\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=131pt]{classOrGate__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classOrGate_a24cf50d2af94489df5e7683e3af0596e}{draw}} (QPainter \&painter, \mbox{\hyperlink{classSpritesheet}{Spritesheet}} \&sprites, double screenX, double screenY, double zoom) override
+\begin{DoxyCompactList}\small\item\em Renders the circuit element. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOrGate_aae3da5a6719ab0a230ed9a37244bd098}{contains}} (double worldX, double worldY) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries getX} ()
+\item 
+double {\bfseries getY} ()
+\item 
+const std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+Input\+Ports} () const
+\item 
+const std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+Output\+Ports} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classCircuit}{Circuit}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries getX} () const
+\item 
+double {\bfseries getY} () const
+\item 
+void \mbox{\hyperlink{classCircuit_aef565f72bbdc1983c6be5191a70501c8}{set\+Position}} (double newX, double newY)
+\begin{DoxyCompactList}\small\item\em Sets the element\textquotesingle{}s world position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classGate}{Gate}}}
+\begin{DoxyCompactItemize}
+\item 
+int {\bfseries num\+Inputs} = 0
+\item 
+int {\bfseries num\+Outputs} = 1
+\item 
+double {\bfseries width} = 50.\+0
+\item 
+double {\bfseries height} = 50.\+0
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries input\+Ports}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries output\+Ports}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classCircuit}{Circuit}}}
+\begin{DoxyCompactItemize}
+\item 
+double {\bfseries x} = 0
+\item 
+double {\bfseries y} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classOrGate_aae3da5a6719ab0a230ed9a37244bd098}\label{classOrGate_aae3da5a6719ab0a230ed9a37244bd098} 
+\index{OrGate@{OrGate}!contains@{contains}}
+\index{contains@{contains}!OrGate@{OrGate}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily bool Or\+Gate\+::contains (\begin{DoxyParamCaption}\item[{double}]{worldX,  }\item[{double}]{worldY }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classCircuit}{Circuit}}.
+
+\Hypertarget{classOrGate_a24cf50d2af94489df5e7683e3af0596e}\label{classOrGate_a24cf50d2af94489df5e7683e3af0596e} 
+\index{OrGate@{OrGate}!draw@{draw}}
+\index{draw@{draw}!OrGate@{OrGate}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Or\+Gate\+::draw (\begin{DoxyParamCaption}\item[{QPainter \&}]{painter,  }\item[{\mbox{\hyperlink{classSpritesheet}{Spritesheet}} \&}]{sprites,  }\item[{double}]{screenX,  }\item[{double}]{screenY,  }\item[{double}]{zoom }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Renders the circuit element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em painter} & QPainter used for drawing \\
+\hline
+{\em sprites} & \doxylink{classSpritesheet}{Spritesheet} stored in this variable \\
+\hline
+{\em screenX} & Horizontal screen positon \\
+\hline
+{\em screenY} & Vertical screen position \\
+\hline
+{\em zoom} & Current canvas zoom factor \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classCircuit_a20f38173696bbfb00a85fd625a02bd45}{Circuit}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+gates.\+h\end{DoxyCompactItemize}

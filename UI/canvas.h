@@ -73,38 +73,85 @@ public:
 
 
     /**
+     * @brief Draws the workspace grid
      *
+     * @details
+     * Draws vertical and horizontal grid line,
+     * based on the current camera position,
+     * zoom, and grid spacing
+     * 
+     * @param painter Painter is used for rendering
      */
     void drawGrid(QPainter&);
 
     /**
+     * @brief Converts screenX coordinates to world space
      *
+     * @param screenX Horizontal screen coordinate
+     * @return Horizontal world coordinate
      */
     double screenToWorldX(double) const;
+    
+    /**
+     * @brief Converts screenY coordinates to world space
+     *
+     * @param screenY Vertical screen coordinate
+     * @return Vertical world coordinate
+     */
     double screenToWorldY(double) const;
 
+    /**
+     * @brief Converts worldX coordinates to screen space
+     *
+     * @param worldX Horizontal world coordinate
+     * @return Horizontal screen coordinate
+     */
     double worldToScreenX(double) const;
+
+    /**
+     * @brief Converts worldY coordinates to screen space
+     *
+     * @param worldY vertical world coordinate
+     * @return Vertical screen coordinate
+     */
     double worldToScreenY(double) const;
 
+    /**
+     * @brief Rounds a coordinate down to a grid boundary for circuit objects
+     *
+     * @param  value Coordinate to align
+     * @return Coordinate aligned to the grid
+     */
     double snapToGrid(double);
 
     /**
+     * @brief Updates camera's position
      *
+     * @details The camera's panning speed
+     * determines the displacement of its
+     * x/y coordinates, while the zoom magnifies
+     * its position relative to the screen
      */
     // ---- MOVE TO CAMERA CLASS LATER ----
     void updateCamera();
     // ---- MOVE TO CAMERA CLASS LATER ----
 
     /**
+     * @brief Creats a new gate object relative to the mouse's coordinates
      *
+     * @param newGate New gate to place in the workspace
      */
     void placeGate(Gate*);
 
     /**
+     * @brief Finds the type of port selected at the specified world coordinate
      *
+     * @param worldX Horizontal world coordinate
+     * @param worldY Vertical world coordinate
+     * @return Port type found at world coordinate, NULL if no port found
      */
     Port *findport(double, double);
-
+ 
 protected:
     void initializeGL() override;
     void paintGL() override;
@@ -114,9 +161,85 @@ protected:
     void drawTempWire(QPainter&);
 
     // Control Events
+    /**
+     * @brief Processes mouse buttons that are pressed
+     *
+     * @details
+     *
+     * The behavior depends on the event that happens
+     *
+     * Convert the event position to mouse Position coordinates
+     *
+     * When left button clicked:
+     * - Check if mouse clicked a port or a gate
+     * - If mouse clicked a port:
+     *     - Draw wire from start to end
+     *     - drawing wire state is true
+     * - If mouse clicked a gate:
+     *     - Gate is selected
+     *     - Dragging State is true
+     *     - Set dragging offset coordinates
+     *
+     * When middle button is clicked
+     * - Set panning state to true
+     *
+     * @param event QT mouse event
+     *
+     * @see mouseMoveEvent()
+     * @see mouseReleaseEvent()
+     * @see screenToWorldX()
+     * @see screenToWorldY()
+     */
     void mousePressEvent(QMouseEvent *event) override;
+
+    /**
+     * @brief Processes mouse movement within the workspace
+     *
+     * @details
+     * The behavor depends on the current interaction state
+     *
+     * When drawing wire state is true
+     * - requests a redraw to the screen
+     *
+     * When dragging state is true:
+     * - Converts mouse coordinates to world coordinates
+     * - Applies the drag offset
+     * - Snaps the gate position ot the nearest grid point
+     * - Requests a redraw of the screen
+     * 
+     * When panning state is true:
+     * - Calculate mouse displacement
+     * - Adjust camera position relative to zoom
+     * - Requests a redraw to the screen
+     *
+     * @param event Qt mouse movement event
+     *
+     * @see mousePressEvent()
+     * @see mouseReleaseEvent()
+     * @see screenToWorldX()
+     * @see screenToWorldY()
+     */
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+    /**
+     * @brief Changes the workspace zoom using the mouse wheel
+     *
+     * @details
+     * Zooming is centered at the current mouse position
+     * 
+     * The function first records the world coordinates
+     * beneath the cursor. It then modifies the zoom factor
+     * and recalculates the camera position so the same
+     * world point remains beneath the cursor.
+     *
+     * The zoom factor is limited to [0.5, 10.0].
+     *
+     * @param event QT mouse wheel event containing the scroll
+     *              direction and cursor position
+     *
+     * @note Each wheel event scales zoom by a factor of 1.1.
+     */
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

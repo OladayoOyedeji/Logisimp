@@ -1,0 +1,109 @@
+\doxysection{canvas.\+h}
+\hypertarget{canvas_8h_source}{}\label{canvas_8h_source}\mbox{\hyperlink{canvas_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#ifndef\ CANVAS\_H}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ CANVAS\_H}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ <QOpenGLWidget>}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ <QOpenGLFunctions>}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ <QMouseEvent>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <QWheelEvent>}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ <QKeyEvent>}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ <QTimer>}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ <QCursor>}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#include\ "{}port.h"{}}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#include\ "{}spritesheet.h"{}}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classWire}{Wire}};}
+\DoxyCodeLine{00056\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classPort}{Port}};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCanvas}{Canvas}}\ :\ \textcolor{keyword}{public}\ QOpenGLWidget,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}\ QOpenGLFunctions}
+\DoxyCodeLine{00060\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classCanvas_a98436c7d9b5ee877c057f190b5db0b24}{Canvas}}(QWidget\ *\ parent\ =\ NULL);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCanvas_a0d1de5de538102d6070c1e7066306e40}{drawGrid}}(QPainter\&);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classCanvas_a83d320042c7433c05b46a23feb6e1bd3}{screenToWorldX}}(\textcolor{keywordtype}{double})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ \ \ \ \ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194}{screenToWorldY}}(\textcolor{keywordtype}{double})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classCanvas_ac62e0e56957fbb6605763c106cde097d}{worldToScreenX}}(\textcolor{keywordtype}{double})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classCanvas_a67877d478065d50bdf1110f0d8c0b657}{worldToScreenY}}(\textcolor{keywordtype}{double})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classCanvas_a04b996fbd8a53d49c8be70800c5f69f7}{snapToGrid}}(\textcolor{keywordtype}{double});}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/\ MOVE\ TO\ CAMERA\ CLASS\ LATER\ -\/-\/-\/-\/}}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCanvas_a6832027b637a12859be573e9af25df7e}{updateCamera}}();}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/\ MOVE\ TO\ CAMERA\ CLASS\ LATER\ -\/-\/-\/-\/}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCanvas_ad01e1a922d7752fd3cb2360706119df2}{placeGate}}(\mbox{\hyperlink{classGate}{Gate}}*);}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00153\ \ \ \ \ \mbox{\hyperlink{classPort}{Port}}\ *\mbox{\hyperlink{classCanvas_ae6a2017a90c0b827a49b077126460259}{findport}}(\textcolor{keywordtype}{double},\ \textcolor{keywordtype}{double});}
+\DoxyCodeLine{00154\ \ }
+\DoxyCodeLine{00155\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ initializeGL()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ paintGL()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordtype}{void}\ resizeGL(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{void}\ drawPort(QPainter\&,\ \mbox{\hyperlink{classPort}{Port}}*);}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordtype}{void}\ drawWire(QPainter\&,\ \mbox{\hyperlink{classWire}{Wire}}*);}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ drawTempWire(QPainter\&);}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{//\ Control\ Events}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCanvas_ac766a4e369f781943df021b80e5922c4}{mousePressEvent}}(QMouseEvent\ *event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCanvas_ae9f5a1c5981b802814aa5b189faba710}{mouseMoveEvent}}(QMouseEvent\ *event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{void}\ mouseReleaseEvent(QMouseEvent\ *event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCanvas_a803e71255d31871cdb8cf12e9f3a1336}{wheelEvent}}(QWheelEvent\ *event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{void}\ keyPressEvent(QKeyEvent\ *event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{void}\ keyReleaseEvent(QKeyEvent\ *event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00248\ \ \ \ \ \mbox{\hyperlink{classSpritesheet}{Spritesheet}}\ spriteSheet;}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/\ MOVE\ TO\ CAMERA\ CLASS\ LATER\ -\/-\/-\/-\/}}
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keywordtype}{double}\ zoom\ =\ 1.0;}
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{double}\ cameraX\ =\ 0.0;}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{double}\ cameraY\ =\ 0.0;}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ QTimer\ cameraTimer;}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/\ MOVE\ TO\ CAMERA\ CLASS\ LATER\ -\/-\/-\/-\/}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ gridsize\ =\ 25;}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{bool}\ panning\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{bool}\ draggingGate\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00262\ \ \ \ \ \mbox{\hyperlink{classGate}{Gate}}\ *selectedGate\ =\ NULL;}
+\DoxyCodeLine{00263\ \ \ \ \ QPoint\ lastMousePosition;}
+\DoxyCodeLine{00264\ \ \ \ \ QPoint\ dragOffset;}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordtype}{bool}\ wPressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordtype}{bool}\ aPressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{bool}\ sPressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{bool}\ dPressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{classPort}{Port}}\ *wireStart\ =\ NULL;}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordtype}{bool}\ drawingWire\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ std::vector<Gate*>\ gates;}
+\DoxyCodeLine{00275\ \ \ \ \ std::vector<Wire*>\ wires;}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ QPointF\ mousePosition;}
+\DoxyCodeLine{00278\ \};}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CANVAS\_H}}
+
+\end{DoxyCode}

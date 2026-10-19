@@ -1,0 +1,32 @@
+<map id="canvas.h" name="canvas.h">
+<area shape="rect" id="Node000001" title="This declares the interactive circuit workspace." alt="" coords="757,5,837,33"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,81,133,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="757,26,505,46,148,83,148,78,504,41,757,21"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="157,81,301,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="757,28,320,84,317,84,317,79,319,78,756,23"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="766,157,842,184"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="757,22,662,23,543,31,485,38,434,49,392,64,366,83,360,95,366,107,391,125,431,140,480,151,536,158,652,166,750,167,750,173,652,171,535,164,479,156,429,145,389,130,362,110,355,95,362,79,390,59,432,44,484,33,543,25,661,18,757,17"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="376,81,487,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="757,31,504,82,502,77,756,26"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="512,81,621,109"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="758,36,623,78,621,73,756,31"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="646,81,738,109"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="780,36,724,74,721,70,777,31"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="762,81,832,109"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="800,34,800,65,794,65,794,34"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="856,81,930,109"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="816,31,865,69,862,73,813,36"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="954,81,1016,109"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="832,31,940,73,939,78,830,36"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1040,81,1125,109"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="838,28,1026,76,1025,82,837,33"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1149,81,1211,109"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="837,24,966,44,1134,78,1133,83,965,49,837,29"/>
+<area shape="rect" id="Node000013" href="$port_8h_source.html" title=" " alt="" coords="1235,81,1295,109"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="838,22,1001,41,1108,57,1221,78,1220,84,1107,62,1000,46,837,27"/>
+<area shape="rect" id="Node000014" href="$spritesheet_8h_source.html" title=" " alt="" coords="1319,81,1425,109"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="837,22,1033,42,1303,78,1303,83,1033,48,836,27"/>
+<area shape="poly" id="edge15_Node000014_Node000004" title=" " alt="" coords="1318,109,1307,111,1055,145,857,167,857,161,1055,140,1306,106,1317,104"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1332,157,1412,184"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="1374,109,1374,141,1369,141,1369,109"/>
+</map>

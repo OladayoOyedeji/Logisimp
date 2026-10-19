@@ -29,7 +29,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gates.h
         port.h port.cpp
         wire.h wire.cpp
-        wire.h wire.cpp
         spritesheet.h spritesheet.cpp
     )
 # Define target properties for Android with Qt 6 as:
