@@ -1,5 +1,6 @@
 .PHONY: p program e exe b build a asan g git r run c clean
 .PHONY: d docs do docs-open dc docs-clean
+.PHONY: uml uml-svg uml-ui uml-ui-svg
 
 DOXYGEN ?= doxygen
 
@@ -70,6 +71,21 @@ c clean:
 # Documentation
 d docs:
 	$(DOXYGEN) Doxyfile
+
+# Optional UML generation. Qt development packages are needed only for uml-ui*.
+uml: build
+	cmake --build build --target uml
+
+uml-svg: build
+	cmake --build build --target uml-svg
+
+uml-ui:
+	cmake -S UI -B build/ui $(CMAKE_GENERATOR)
+	cmake --build build/ui --target uml
+
+uml-ui-svg:
+	cmake -S UI -B build/ui $(CMAKE_GENERATOR)
+	cmake --build build/ui --target uml-svg
 
 $(DOCS_INDEX): $(DOCS_INPUTS)
 	$(MAKE) docs

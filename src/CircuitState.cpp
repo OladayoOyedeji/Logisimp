@@ -12,6 +12,8 @@
 #include "Simulator.h"
 #include "Subcircuit.h"
 #include "Net.h"
+#include "Pin.h"
+#include "Port.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -91,6 +93,8 @@ void CircuitState::reset()
 {
     clear_component_states();
     net_values_.clear();
+    output_values_.clear();
+    pin_shapes_.clear();
 
     try
     {
@@ -111,6 +115,20 @@ void CircuitState::reset()
         // fresh storage so repeated placements have independent runtime values.
         for (Component * component : circuit_->components())
         {
+            // Output values belong to this instance even while no wire is
+            // attached. Live connectivity edits can seed replacement nets from
+            // the last driven value without replacing the component's state.
+            for (Port * output_port : component->outputs())
+            {
+                output_values_.emplace(output_port, LogicVector(output_port->width(), UNKNOWN));
+            }
+
+            const Pin * pin = dynamic_cast< const Pin * >(component);
+            if (pin != nullptr)
+            {
+                pin_shapes_.emplace(component, std::make_pair(int(pin->type()), pin->width()));
+            }
+
             ComponentState * component_state = component->create_state(*this);
 
             if (component_state != nullptr)
@@ -135,6 +153,8 @@ void CircuitState::reset()
         // hierarchy rather than expose a mixture of initialized and absent state.
         clear_component_states();
         net_values_.clear();
+        output_values_.clear();
+        pin_shapes_.clear();
         throw;
     }
 }

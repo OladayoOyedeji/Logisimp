@@ -6,6 +6,7 @@
 
 #include "Component.h"
 #include "Port.h"
+#include "ProjectEdit.h"
 
 #include <algorithm>
 #include <limits>
@@ -160,7 +161,10 @@ void Component::remove_port(Port & port)
         }
 
         inputs_.erase(position);
-        delete &port;
+        if (edit_ == nullptr || !edit_->retains(&port))
+        {
+            delete &port;
+        }
         return;
     }
 
@@ -174,7 +178,10 @@ void Component::remove_port(Port & port)
         }
 
         outputs_.erase(position);
-        delete &port;
+        if (edit_ == nullptr || !edit_->retains(&port))
+        {
+            delete &port;
+        }
         return;
     }
 

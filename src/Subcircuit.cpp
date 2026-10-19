@@ -55,11 +55,8 @@ void Subcircuit::evaluate(Simulator & simulator, CircuitState & state)
     {
         Port * parent_output_port = output_port(i);
 
-        if (parent_output_port->net() != nullptr)
-        {
-            Pin * child_output_pin = circuit_->output_pins().at(i);
-            simulator.drive(state, *parent_output_port->net(), child_output_pin->value(child_state));
-        }
+        Pin * child_output_pin = circuit_->output_pins().at(i);
+        simulator.drive(state, *parent_output_port, child_output_pin->value(child_state));
     }
 }
 

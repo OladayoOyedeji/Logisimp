@@ -1,0 +1,68 @@
+
+# Paths are relative to this configuration, not the shell's working directory.
+compilation_database_dir: build
+output_directory: docs/uml
+relative_to: .
+generate_metadata: false
+
+# MSYS2 UCRT64 GCC 16.2.0 standard library headers.
+# Required because clang-uml does not automatically locate
+# MinGW's C++ standard library on Windows.
+add_compile_flags:
+  # Match the 64-bit MinGW target.
+  - '--target=x86_64-w64-windows-gnu'
+
+  # MSYS2 UCRT64 GCC 16.2.0 headers.
+  - '-IC:/msys64/ucrt64/include/c++/16.2.0'
+  - '-IC:/msys64/ucrt64/include/c++/16.2.0/x86_64-w64-mingw32'
+  - '-IC:/msys64/ucrt64/include/c++/16.2.0/backward'
+  - '-IC:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include'
+  - '-IC:/msys64/ucrt64/include'
+
+diagrams:
+  simulator_full:
+    type: class
+    glob:
+      - src/*.cpp
+      - src/**/*.cpp
+    include:
+      paths:
+        - include
+        - src
+    exclude:
+      namespaces:
+        - std
+    generate_packages: false
+    generate_method_arguments: full
+    include_relations_also_as_members: true
+    plantuml:
+      before:
+        - "skinparam classAttributeIconSize 0"
+
+  simulator_architecture:
+    type: class
+    glob:
+      - src/*.cpp
+      - src/**/*.cpp
+    include:
+      paths:
+        - include
+        - src
+    exclude:
+      namespaces:
+        - std
+      paths:
+        - include/ProjectEdit.h
+        - include/StateUpdate.h
+        - src/ProjectController.cpp
+      elements:
+        - ProjectEdit
+        - StateUpdate
+        # clang-uml can internally separate nested names with ## instead of ::.
+        - r: 'Project(::|##)Placement'
+        - r: 'Simulator(::|##)Event(Hash)?'
+    generate_packages: false
+    # Hide at rendering time so member-based relationship inference is retained.
+    plantuml:
+      before:
+        - "hide members"
