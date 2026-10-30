@@ -1,6 +1,6 @@
 /**
  * @file LogicVector.cpp
- * @brief Implements a fixed-width collection of three-state logic values.
+ * @brief Implements a fixed-width collection of four-state logic values.
  * @author Cole Schwandt
  */
 
@@ -42,7 +42,7 @@ bool LogicVector::fully_known() const
 {
     for (LogicValue bit : bits_)
     {
-        if (bit == UNKNOWN)
+        if (bit != LOW && bit != HIGH)
         {
             return false;
         }

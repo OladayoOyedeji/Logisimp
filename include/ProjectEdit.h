@@ -70,11 +70,11 @@ public:
     void commit() noexcept;
 
 private:
-    /** @brief Saves a circuit's ownership lists, interface order, and ID counters. */
+    /** @brief Saves a circuit's name, ownership lists, lookup maps, and interface order. */
     struct CircuitSnapshot
     {
         /**
-         * @brief Copies the structural lists and counters needed for rollback.
+         * @brief Copies the structural lists and lookup maps needed for rollback.
          * @param circuit Circuit whose storage is being snapshotted.
          */
         explicit CircuitSnapshot(Circuit & circuit);
@@ -82,8 +82,14 @@ private:
         /// Borrowed original circuit, kept alive until the transaction finishes.
         Circuit * circuit;
 
+        /// Original persistent display name, restored without allocating.
+        std::string name;
+
         /// Original owning component list, restored on rollback.
         std::vector< Component * > components;
+        std::unordered_map< int, Component * > components_by_id;
+        std::unordered_map< int, WireNode * > nodes_by_id;
+        std::unordered_map< int, WireEdge * > edges_by_id;
 
         /// Original owning wire-node list, restored on rollback.
         std::vector< WireNode * > nodes;
@@ -99,18 +105,6 @@ private:
 
         /// Borrowed output pins in their original interface order.
         std::vector< Pin * > outputs;
-
-        /// Next component ID before the candidate edit.
-        int next_component_id;
-
-        /// Next wire-node ID before the candidate edit.
-        int next_node_id;
-
-        /// Next wire-edge ID before the candidate edit.
-        int next_edge_id;
-
-        /// Next derived-net ID before the candidate edit.
-        int next_net_id;
     };
 
     /** @brief Saves a component's ports, metadata, and optional pin configuration. */
@@ -133,9 +127,7 @@ private:
 
         /// Original owning output-port list.
         std::vector< Port * > outputs;
-
-        /// Next port ID before the candidate edit.
-        int next_port_id;
+        std::unordered_map< int, Port * > ports_by_id;
 
         /// Borrowed pin view of the component, or nullptr for other component types.
         Pin * pin;
@@ -224,6 +216,7 @@ private:
 
     /// Original owning circuit list, retained for rollback and retirement checks.
     std::vector< Circuit * > circuits_;
+    std::unordered_map< int, Circuit * > circuits_by_id_;
 
     /// Original registry of borrowed parent-circuit and placement pointers.
     std::unordered_map< const Circuit *, std::vector< Project::Placement > > placements_;

@@ -57,13 +57,7 @@ LogicValue Gate::input_value(int index, CircuitState & state) const
 {
     Port * gate_input_port = input_port(index);
 
-    if (gate_input_port->net() == nullptr)
-    {
-        // A missing connection supplies no evidence of either known logic level.
-        return UNKNOWN;
-    }
-
-    return state.value(*gate_input_port->net())[0];
+    return state.value(*gate_input_port)[0];
 }
 
 void Gate::drive_output(LogicValue value, Simulator & simulator, CircuitState & state)

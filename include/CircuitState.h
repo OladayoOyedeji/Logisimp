@@ -10,10 +10,12 @@
 
 #include "LogicVector.h"
 
+#include <iostream>
 #include <ostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 class Circuit;
 class Component;
@@ -23,6 +25,40 @@ class Simulator;
 class Net;
 class Port;
 class StateUpdate;
+class CircuitState;
+
+/** @brief Classifies a structural fault or a current runtime signal fault. */
+enum class DiagnosticKind
+{
+    WidthMismatch,
+    DriverConflict,
+    SignalError
+};
+
+/**
+ * @brief Identifies a fault in one particular circuit instance.
+ *
+ * The state and net pointers borrow the runtime instance and its current
+ * blueprint. Reacquire diagnostics after editing or stopping a state. Empty
+ * bits identifies a fault affecting the whole net, such as a width mismatch.
+ */
+struct CircuitDiagnostic
+{
+    DiagnosticKind kind;
+    const CircuitState * state;
+    const Net * net;
+    std::vector< int > bits;
+    std::string message;
+};
+
+/**
+ * @brief Prints current diagnostics for an instance and its nested instances.
+ * @param state Instance whose current diagnostic records are queried.
+ * @param out Destination stream; defaults to standard output.
+ * @note Prints the kind, instance relationship, net ID, affected bits, and message.
+ * Requeries diagnostics on each call so old borrowed net pointers are not retained.
+ */
+void print_diagnostics(const CircuitState & state, std::ostream & out = std::cout);
 
 /**
  * @brief Stores the runtime values of one circuit instance.
@@ -101,6 +137,29 @@ public:
      * @throws std::out_of_range If the net has no stored value.
      */
     LogicVector value(const Net & net) const;
+
+    /**
+     * @brief Samples a port without changing its configured width.
+     * @param port Port owned by this instance's blueprint.
+     * @return The resolved connected net value, including contention ERROR bits.
+     * A disconnected output returns its most recent driven value. Disconnected
+     * inputs and incompatible-width nets return UNKNOWN bits of port.width().
+     * @note Call the controller's run() to settle pending evaluations.
+     * @throws std::invalid_argument If the port belongs to another blueprint.
+     * @throws std::out_of_range If its connected net has no runtime storage.
+     */
+    LogicVector value(const Port & port) const;
+
+    /**
+     * @brief Reports structural width faults and current runtime signal faults.
+     * @param recursive Include diagnostics from nested subcircuit instances.
+     * @return Faults whose state pointers identify the affected runtime instance.
+     * @note This reads current cached driver intents and resolved net values;
+     * call run() to settle pending work. Width faults are available before run().
+     * Conflicting LOW/HIGH bits are reported as DriverConflict instead of also
+     * being reported as SignalError. Width faults apply to the whole net.
+     */
+    std::vector< CircuitDiagnostic > diagnostics(bool recursive = true) const;
 
     /**
      * @brief Returns a component's runtime-specific state.

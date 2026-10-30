@@ -102,6 +102,7 @@ Pin & Circuit::create_pin(PinType type, int width)
         // Interface registration is part of pin creation; do not retain a
         // component that the circuit's public interface cannot find.
         components_.pop_back();
+        components_by_id_.erase(pin->id());
         discard(pin);
         throw;
     }
@@ -151,7 +152,16 @@ WireNode & Circuit::create_wire_node(int width, const std::string & label)
     WireNode * node = new WireNode(*this, next_node_id_, width, label);
     try
     {
-        wire_nodes_.push_back(node);
+        nodes_by_id_.emplace(node->id(), node);
+        try
+        {
+            wire_nodes_.push_back(node);
+        }
+        catch (...)
+        {
+            nodes_by_id_.erase(node->id());
+            throw;
+        }
     }
     catch (...)
     {
@@ -165,6 +175,7 @@ WireNode & Circuit::create_wire_node(int width, const std::string & label)
     catch (...)
     {
         wire_nodes_.pop_back();
+        nodes_by_id_.erase(node->id());
         discard(node);
         throw;
     }
@@ -199,6 +210,15 @@ WireEdge & Circuit::create_wire_edge(WireNode & first, WireNode & second)
     first.edges_.reserve(first.edges_.size() + 1);
     second.edges_.reserve(second.edges_.size() + 1);
     WireEdge * edge = new WireEdge(*this, next_edge_id_, first, second);
+    try
+    {
+        edges_by_id_.emplace(edge->id(), edge);
+    }
+    catch (...)
+    {
+        discard(edge);
+        throw;
+    }
     wire_edges_.push_back(edge);
     first.edges_.push_back(edge);
     second.edges_.push_back(edge);
@@ -211,6 +231,7 @@ WireEdge & Circuit::create_wire_edge(WireNode & first, WireNode & second)
         second.edges_.pop_back();
         first.edges_.pop_back();
         wire_edges_.pop_back();
+        edges_by_id_.erase(edge->id());
         discard(edge);
         throw;
     }
@@ -255,14 +276,24 @@ void Circuit::set_pin_width(Pin & pin, int width)
     }
 
     Port * pin_port = pin.type_ == INPUT_PIN ? pin.output_port(0) : pin.input_port(0);
-    // Do not resize a net shared with other ports. Detach this endpoint before
-    // changing its shape so the remaining connections stay width-compatible.
-    if (pin_port->net() != nullptr && pin_port->net()->width() != width)
-    {
-        disconnect(*pin_port);
-    }
+    int previous_width = pin.width_;
     pin_port->width_ = width;
     pin.width_ = width;
+    try
+    {
+        // Preserve the endpoint so an incompatible width remains visible as a
+        // property of the connected net, rather than silently deleting wiring.
+        if (pin_port->node() != nullptr)
+        {
+            rebuild_nets();
+        }
+    }
+    catch (...)
+    {
+        pin_port->width_ = previous_width;
+        pin.width_ = previous_width;
+        throw;
+    }
 }
 
 void Circuit::set_pin_type(Pin & pin, PinType type)
@@ -461,11 +492,20 @@ void Circuit::sync_subcircuit_ports(Subcircuit & subcircuit, const std::vector< 
         else if (matching_port->width() != interface_pin->width())
         {
             require_editable();
-            if (matching_port->net() != nullptr && matching_port->net()->width() != interface_pin->width())
-            {
-                disconnect(*matching_port);
-            }
+            int previous_width = matching_port->width_;
             matching_port->width_ = interface_pin->width();
+            try
+            {
+                if (matching_port->node() != nullptr)
+                {
+                    rebuild_nets();
+                }
+            }
+            catch (...)
+            {
+                matching_port->width_ = previous_width;
+                throw;
+            }
         }
 
         if (matching_port->label() != interface_pin->label())
@@ -615,6 +655,7 @@ void Circuit::remove_component(Component & component)
         remove_pin_reference(*pin);
     }
     components_.erase(position);
+    components_by_id_.erase(component.id());
     discard(component_pointer);
 }
 
@@ -653,6 +694,7 @@ void Circuit::remove_wire_edge(WireEdge & edge)
         second->edges_.insert(second->edges_.begin() + second_index, &edge);
         throw;
     }
+    edges_by_id_.erase(edge.id());
     discard(&edge);
 }
 
@@ -706,8 +748,10 @@ void Circuit::remove_wire_node(WireNode & node)
     }
     for (WireEdge * edge : incident_edges)
     {
+        edges_by_id_.erase(edge->id());
         discard(edge);
     }
+    nodes_by_id_.erase(node.id());
     discard(&node);
 }
 
@@ -740,6 +784,9 @@ void Circuit::clear()
     {
         discard(component);
     }
+    components_by_id_.clear();
+    nodes_by_id_.clear();
+    edges_by_id_.clear();
     nets_.clear();
     wire_edges_.clear();
     wire_nodes_.clear();
@@ -768,7 +815,16 @@ void Circuit::store_component(Component * component)
     try
     {
         component->edit_ = edit_;
-        components_.push_back(component);
+        components_by_id_.emplace(component->id(), component);
+        try
+        {
+            components_.push_back(component);
+        }
+        catch (...)
+        {
+            components_by_id_.erase(component->id());
+            throw;
+        }
     }
     catch (...)
     {
@@ -877,7 +933,8 @@ void Circuit::rebuild_nets()
                 return first->id() < second->id();
             });
             int width = 0;
-            Port * driver = nullptr;
+            bool width_mismatch = false;
+            std::vector< Port * > drivers;
             std::vector< Port * > ports;
             std::vector< Port * > listeners;
             for (WireNode * node : component_nodes)
@@ -886,27 +943,21 @@ void Circuit::rebuild_nets()
                 {
                     if (width != 0 && width != node->width())
                     {
-                        throw std::invalid_argument("Connected node width constraints do not match");
+                        width_mismatch = true;
                     }
-                    width = node->width();
+                    width = std::max(width, node->width());
                 }
                 for (Port * port : node->ports_)
                 {
                     if (width != 0 && width != port->width())
                     {
-                        throw std::invalid_argument("Attached port widths do not match the connected graph");
+                        width_mismatch = true;
                     }
-                    width = port->width();
+                    width = std::max(width, port->width());
                     ports.push_back(port);
                     if (port->direction() == OUTPUT)
                     {
-                        // The signal model has no multiple-driver resolution. Reject a second
-                        // source instead of making propagation depend on evaluation order.
-                        if (driver != nullptr)
-                        {
-                            throw std::invalid_argument("Connected graph already has an OUTPUT driver");
-                        }
-                        driver = port;
+                        drivers.push_back(port);
                     }
                     else
                     {
@@ -914,9 +965,10 @@ void Circuit::rebuild_nets()
                     }
                 }
             }
-            // Bare geometry can be built before its signal width is known.
-            // Only components containing ports need runtime signal storage.
-            if (ports.empty())
+            // Ordinary bare geometry needs no runtime signal storage. Retain a
+            // derived net for incompatible constraints so that fault is visible
+            // even before any ports are attached.
+            if (ports.empty() && !width_mismatch)
             {
                 continue;
             }
@@ -935,7 +987,8 @@ void Circuit::rebuild_nets()
                 throw;
             }
             ++next_id;
-            net->driver_ = driver;
+            net->width_mismatch_ = width_mismatch;
+            net->drivers_.swap(drivers);
             net->nodes_.swap(component_nodes);
             net->ports_.swap(ports);
             net->listeners_.swap(listeners);
@@ -983,4 +1036,40 @@ void Circuit::rebuild_nets()
     {
         discard(net);
     }
+}
+
+Component * Circuit::find_component(int id)
+{
+    auto found = components_by_id_.find(id);
+    return found == components_by_id_.end() ? nullptr : found->second;
+}
+
+const Component * Circuit::find_component(int id) const
+{
+    auto found = components_by_id_.find(id);
+    return found == components_by_id_.end() ? nullptr : found->second;
+}
+
+WireNode * Circuit::find_wire_node(int id)
+{
+    auto found = nodes_by_id_.find(id);
+    return found == nodes_by_id_.end() ? nullptr : found->second;
+}
+
+const WireNode * Circuit::find_wire_node(int id) const
+{
+    auto found = nodes_by_id_.find(id);
+    return found == nodes_by_id_.end() ? nullptr : found->second;
+}
+
+WireEdge * Circuit::find_wire_edge(int id)
+{
+    auto found = edges_by_id_.find(id);
+    return found == edges_by_id_.end() ? nullptr : found->second;
+}
+
+const WireEdge * Circuit::find_wire_edge(int id) const
+{
+    auto found = edges_by_id_.find(id);
+    return found == edges_by_id_.end() ? nullptr : found->second;
 }

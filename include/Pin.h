@@ -15,8 +15,9 @@
  */
 enum PinType
 {
-    INPUT_PIN,  ///< Provides input to the circuit.
-    OUTPUT_PIN  ///< Receives output from the circuit.
+    INVALID_PIN_TYPE = -1, ///< No pin role, used for non-pin inspection results.
+    INPUT_PIN = 0,        ///< Provides input to the circuit.
+    OUTPUT_PIN = 1        ///< Receives output from the circuit.
 };
 
 /**

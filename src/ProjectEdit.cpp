@@ -24,11 +24,11 @@ template< typename T > bool contains(const std::vector< T * > & objects, const T
 }
 
 ProjectEdit::CircuitSnapshot::CircuitSnapshot(Circuit & circuit)
-    : circuit(&circuit), components(circuit.components_), nodes(circuit.wire_nodes_), edges(circuit.wire_edges_), nets(circuit.nets_), inputs(circuit.input_pins_), outputs(circuit.output_pins_), next_component_id(circuit.next_component_id_), next_node_id(circuit.next_node_id_), next_edge_id(circuit.next_edge_id_), next_net_id(circuit.next_net_id_)
+    : circuit(&circuit), name(circuit.name_), components(circuit.components_), components_by_id(circuit.components_by_id_), nodes_by_id(circuit.nodes_by_id_), edges_by_id(circuit.edges_by_id_), nodes(circuit.wire_nodes_), edges(circuit.wire_edges_), nets(circuit.nets_), inputs(circuit.input_pins_), outputs(circuit.output_pins_)
 {}
 
 ProjectEdit::ComponentSnapshot::ComponentSnapshot(Component & component)
-    : component(&component), label(component.label_), inputs(component.inputs_), outputs(component.outputs_), next_port_id(component.next_port_id_), pin(dynamic_cast< Pin * >(&component)), pin_type(pin == nullptr ? INPUT_PIN : pin->type_), pin_width(pin == nullptr ? 0 : pin->width_)
+    : component(&component), label(component.label_), inputs(component.inputs_), outputs(component.outputs_), ports_by_id(component.ports_by_id_), pin(dynamic_cast< Pin * >(&component)), pin_type(pin == nullptr ? INPUT_PIN : pin->type_), pin_width(pin == nullptr ? 0 : pin->width_)
 {}
 
 ProjectEdit::PortSnapshot::PortSnapshot(Port & port)
@@ -50,6 +50,7 @@ ProjectEdit::ProjectEdit(Project & project)
     // Every potentially allocating copy finishes before granting edit access.
     // Original objects are recorded even if an edit later removes their owner.
     circuits_ = project.circuits_;
+    circuits_by_id_ = project.circuits_by_id_;
     placements_ = project.placements_;
     circuit_snapshots_.reserve(circuits_.size());
     for (Circuit * circuit : circuits_)
@@ -207,7 +208,8 @@ void ProjectEdit::rollback() noexcept
         component.label_.swap(snapshot.label);
         component.inputs_.swap(snapshot.inputs);
         component.outputs_.swap(snapshot.outputs);
-        component.next_port_id_ = snapshot.next_port_id;
+        component.ports_by_id_.swap(snapshot.ports_by_id);
+        // Consumed IDs and port generations remain retired after rollback.
         if (snapshot.pin != nullptr)
         {
             snapshot.pin->type_ = snapshot.pin_type;
@@ -236,18 +238,20 @@ void ProjectEdit::rollback() noexcept
     for (CircuitSnapshot & snapshot : circuit_snapshots_)
     {
         Circuit & circuit = *snapshot.circuit;
+        circuit.name_.swap(snapshot.name);
         circuit.components_.swap(snapshot.components);
         circuit.wire_nodes_.swap(snapshot.nodes);
         circuit.wire_edges_.swap(snapshot.edges);
         circuit.nets_.swap(snapshot.nets);
         circuit.input_pins_.swap(snapshot.inputs);
         circuit.output_pins_.swap(snapshot.outputs);
-        circuit.next_component_id_ = snapshot.next_component_id;
-        circuit.next_node_id_ = snapshot.next_node_id;
-        circuit.next_edge_id_ = snapshot.next_edge_id;
-        circuit.next_net_id_ = snapshot.next_net_id;
+        circuit.components_by_id_.swap(snapshot.components_by_id);
+        circuit.nodes_by_id_.swap(snapshot.nodes_by_id);
+        circuit.edges_by_id_.swap(snapshot.edges_by_id);
+        // Counters remain monotonic: handles exposed by a failed edit stay stale.
     }
     project_.circuits_.swap(circuits_);
+    project_.circuits_by_id_.swap(circuits_by_id_);
     project_.placements_.swap(placements_);
     finished_ = true;
 }

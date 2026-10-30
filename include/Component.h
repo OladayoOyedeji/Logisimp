@@ -10,6 +10,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class Circuit;
 class Port;
@@ -30,7 +31,7 @@ public:
      * @param label Optional descriptive label.
      */
     Component(int id, const std::string & label = "")
-        : id_(id), label_(label), next_port_id_(0), edit_(nullptr)
+        : id_(id), label_(label), next_port_id_(0), next_port_generation_(0), edit_(nullptr)
     {}
 
     /** @brief Components cannot be copied. */
@@ -58,6 +59,10 @@ public:
      * @return Copy of the identifier.
      */
     int id() const { return id_; }
+
+    /** @brief Finds a stable component-local port ID; nullptr means absent. */
+    Port * find_port(int id);
+    const Port * find_port(int id) const;
 
     /**
      * @brief Accesses the component's label.
@@ -194,6 +199,8 @@ private:
     std::vector< Port * > inputs_; ///< Input ports belonging to this component.
     std::vector< Port * > outputs_; ///< Output ports belonging to this component.
     int next_port_id_; ///< Next identifier for automatic port assignment.
+    int next_port_generation_; ///< Monotonic creation identity, never rolled back.
+    std::unordered_map< int, Port * > ports_by_id_;
 
     ProjectEdit * edit_; ///< Borrowed transaction retaining removed ports.
 

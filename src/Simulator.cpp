@@ -14,7 +14,6 @@
 #include "SubcircuitState.h"
 #include "Net.h"
 
-#include <algorithm>
 #include <stdexcept>
 
 void Simulator::enqueue(CircuitState & state, Component * component)
@@ -24,8 +23,9 @@ void Simulator::enqueue(CircuitState & state, Component * component)
         return;
     }
 
-    const std::vector< Component * > & components = state.circuit().components();
-    if (std::find(components.begin(), components.end(), component) == components.end())
+    // Validate against the candidate blueprint rather than the runtime map:
+    // StateUpdate prepares events for new components before committing storage.
+    if (state.circuit().find_component(component->id()) != component)
     {
         throw std::invalid_argument("Component does not belong to this circuit state");
     }
@@ -89,32 +89,11 @@ void Simulator::notify_parent(CircuitState & state)
 
 void Simulator::drive(CircuitState & state, Net & net, const LogicVector & value)
 {
-    if (net.width() != value.width())
+    if (net.drivers().size() != 1)
     {
-        throw std::runtime_error("Cannot drive a net with a value of a different width");
+        throw std::invalid_argument("A net drive requires exactly one output driver; drive a specific output port instead");
     }
-
-    LogicVector & current_value = state.value(net);
-    if (net.driver() != nullptr)
-    {
-        // Keep low-level net drives consistent with the output-value cache too.
-        state.output_values_.at(net.driver()) = value;
-    }
-    if (current_value == value)
-    {
-        // Stable signals, including identical UNKNOWN bits, must not keep
-        // feedback paths alive by repeatedly scheduling their listeners.
-        return;
-    }
-
-    current_value = value;
-
-    // Store the signal before scheduling: deduplicated listeners will observe
-    // the most recent net value when their FIFO event is eventually evaluated.
-    for (Port * listener : net.listeners())
-    {
-        enqueue(state, listener->owner());
-    }
+    drive(state, *net.drivers().front(), value);
 }
 
 void Simulator::drive(CircuitState & state, Port & port, const LogicVector & value)
@@ -129,7 +108,20 @@ void Simulator::drive(CircuitState & state, Port & port, const LogicVector & val
     state.output_values_.at(&port) = value;
     if (port.net() != nullptr)
     {
-        drive(state, *port.net(), value);
+        Net & net = *port.net();
+        // Resolve independent output intentions together. Never copy the resolved
+        // conflict back into a driver's cache: it must recover when others change.
+        LogicVector resolved = net.resolve(state.output_values_);
+        LogicVector & current_value = state.value(net);
+        if (current_value == resolved)
+        {
+            return;
+        }
+        current_value = resolved;
+        for (Port * listener : net.listeners())
+        {
+            enqueue(state, listener->owner());
+        }
     }
 }
 

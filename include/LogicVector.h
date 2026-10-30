@@ -71,8 +71,8 @@ public:
     bool operator!=(const LogicVector & other) const;
 
      /**
-     * @brief Checks whether every bit has a known value.
-     * @return True if no bits are UNKOWN, false otherwise
+     * @brief Checks whether every bit has a known binary value.
+     * @return True if every bit is LOW or HIGH, false for UNKNOWN or ERROR.
      */
     bool fully_known() const;
 
@@ -83,7 +83,7 @@ public:
     std::string to_string() const;
 
 private:
-    std::vector< LogicValue > bits_; ///< Vector of logic values, such as [LOW, HIGH, UNKNOWN, LOW]
+    std::vector< LogicValue > bits_; ///< Vector of logic values, such as [LOW, HIGH, UNKNOWN, ERROR].
 };
 
 /**

@@ -4,12 +4,12 @@
  * @brief Owns the components, wire graph, and nets that make up a circuit.
  * @author Cole Schwandt
  */
-// TODO: add labels to circuits
 
 #ifndef CIRCUIT_H
 #define CIRCUIT_H
 
 #include "Component.h"
+#include "Handles.h"
 #include "Pin.h"
 #include "Port.h"
 #include "WireNode.h"
@@ -18,6 +18,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class AndGate;
 class NandGate;
@@ -48,6 +49,20 @@ class XorGate;
 class Circuit
 {
 public:
+    /** @brief Project-scoped identity, never reused by the owning project. */
+    CircuitId id() const { return id_; }
+
+    /** @brief Project-unique display name; rename through Project or its controller. */
+    const std::string & name() const { return name_; }
+
+    /** @brief ID lookups return nullptr for deleted or unknown circuit-local IDs. */
+    Component * find_component(int id);
+    const Component * find_component(int id) const;
+    WireNode * find_wire_node(int id);
+    const WireNode * find_wire_node(int id) const;
+    WireEdge * find_wire_edge(int id);
+    const WireEdge * find_wire_edge(int id) const;
+
     /** @brief Circuits cannot be copied. */
     Circuit(const Circuit & other) = delete;
 
@@ -146,8 +161,8 @@ private:
     /**
      * @brief Constructs an empty circuit with initialized ID counters.
      */
-    Circuit()
-        : next_component_id_(0), next_node_id_(0), next_edge_id_(0), next_net_id_(0), active_states_(0), edit_(nullptr)
+    Circuit(CircuitId id, const std::string & name)
+        : id_(id), name_(name), next_component_id_(0), next_node_id_(0), next_edge_id_(0), next_net_id_(0), active_states_(0), edit_(nullptr)
     {}
 
     /**
@@ -243,7 +258,7 @@ private:
      * @brief Changes an interface pin's signal width.
      * @param pin Pin to modify.
      * @param width New positive signal width.
-     * @note Disconnects the pin if its current net has an incompatible width.
+     * @note Preserves wiring and reports incompatible connected widths on the derived net.
      */
     void set_pin_width(Pin & pin, int width);
 
@@ -300,7 +315,7 @@ private:
      * @param port Port to attach.
      * @param node Target wire node.
      * @throws std::invalid_argument If either object is foreign or the port is already attached.
-     * @note Rebuilds nets and rejects incompatible widths or multiple drivers.
+     * @note Rebuilds nets while retaining incompatible widths and multiple output drivers.
      */
     void connect(Port & port, WireNode & node);
 
@@ -420,9 +435,9 @@ private:
     /**
      * @brief Reconstructs nets from connected wire nodes and attached ports.
      *
-     * Each connected region containing ports becomes a net.
-     * Validates signal widths and permits at most one OUTPUT driver.
-     * Regions without ports do not produce nets.
+     * Each connected region containing ports becomes a net. Multiple output
+     * drivers and incompatible widths remain part of the graph for inspection
+     * and simulation. Bare regions produce nets only for conflicting widths.
      *
      * @note On success, replaces all existing Net objects and updates
      * node and port net references. Existing Net pointers become invalid.
@@ -435,6 +450,12 @@ private:
      * @note Rebuilds nets once and restores attachments if rebuilding fails.
      */
     void detach_ports(const std::vector< Port * > & ports);
+
+    CircuitId id_;
+    std::string name_;
+    std::unordered_map< int, Component * > components_by_id_;
+    std::unordered_map< int, WireNode * > nodes_by_id_;
+    std::unordered_map< int, WireEdge * > edges_by_id_;
 
     /// Components owned by this circuit.
     std::vector< Component * > components_;

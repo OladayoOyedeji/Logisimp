@@ -128,27 +128,10 @@ void StateUpdate::prepare()
 
     for (const Net * net : state_.circuit().nets())
     {
-        LogicVector value(net->width(), UNKNOWN);
-        if (net->driver() != nullptr)
-        {
-            auto old_net_value = state_.net_values_.find(net);
-            if (old_net_value != state_.net_values_.end() && old_net_value->second.width() == net->width())
-            {
-                value = old_net_value->second;
-            }
-            else
-            {
-                // Net identity changes on a rebuild; driver identity and its
-                // last output value are independent of the wire graph.
-                auto driver_value = output_values_.find(net->driver());
-                if (driver_value != output_values_.end() && driver_value->second.width() == net->width())
-                {
-                    value = driver_value->second;
-                }
-            }
-        }
-        // Fragments with no driver start UNKNOWN, never with stale split data.
-        net_values_.emplace(net, value);
+        // Re-resolve from individual drivers, including when net identity survives.
+        // This clears old contention after a repair without losing drive intentions.
+        // Incompatible widths and fragments with no driver resolve to UNKNOWN.
+        net_values_.emplace(net, net->resolve(output_values_));
     }
 }
 

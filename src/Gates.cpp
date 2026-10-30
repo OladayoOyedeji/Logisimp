@@ -21,7 +21,7 @@ void AndGate::evaluate(Simulator & simulator, CircuitState & state)
 
         if (result == LOW)
         {
-            // LOW controls AND even if a remaining input is UNKNOWN.
+            // LOW controls AND even if a remaining input is UNKNOWN or ERROR.
             break;
         }
     }
@@ -57,7 +57,7 @@ void OrGate::evaluate(Simulator & simulator, CircuitState & state)
 
         if (result == HIGH)
         {
-            // HIGH controls OR even if a remaining input is UNKNOWN.
+            // HIGH controls OR even if a remaining input is UNKNOWN or ERROR.
             break;
         }
     }
@@ -116,7 +116,7 @@ void NandGate::evaluate(Simulator & simulator, CircuitState & state)
 
         if (result == LOW)
         {
-            // A controlling LOW fixes the final inverted result to HIGH.
+            // A controlling LOW masks UNKNOWN/ERROR before the final inversion.
             break;
         }
     }
@@ -152,7 +152,7 @@ void NorGate::evaluate(Simulator & simulator, CircuitState & state)
 
         if (result == HIGH)
         {
-            // A controlling HIGH fixes the final inverted result to LOW.
+            // A controlling HIGH masks UNKNOWN/ERROR before the final inversion.
             break;
         }
     }
@@ -186,9 +186,9 @@ void XorGate::evaluate(Simulator & simulator, CircuitState & state)
     {
         result = logic_xor(result, input_value(i, state));
 
-        if (result == UNKNOWN)
+        if (result == ERROR)
         {
-            // Unlike AND/OR, later known inputs cannot resolve unknown parity.
+            // ERROR cannot be resolved; UNKNOWN must still inspect later errors.
             break;
         }
     }
@@ -222,9 +222,9 @@ void XnorGate::evaluate(Simulator & simulator, CircuitState & state)
     {
         result = logic_xor(result, input_value(i, state));
 
-        if (result == UNKNOWN)
+        if (result == ERROR)
         {
-            // Unknown parity remains unknown under both XOR and final inversion.
+            // ERROR survives inversion; UNKNOWN must still inspect later errors.
             break;
         }
     }

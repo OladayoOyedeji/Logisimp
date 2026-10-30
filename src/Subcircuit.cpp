@@ -40,9 +40,7 @@ void Subcircuit::evaluate(Simulator & simulator, CircuitState & state)
         Port * parent_input_port = input_port(i);
         Pin * child_input_pin = circuit_->input_pins().at(i);
 
-        LogicVector input_value = (parent_input_port->net() == nullptr
-                                  ? LogicVector(child_input_pin->width(), UNKNOWN)
-                                  : state.value(*parent_input_port->net()));
+        LogicVector input_value = state.value(*parent_input_port);
 
         child_input_pin->set(input_value, simulator, child_state);
     }

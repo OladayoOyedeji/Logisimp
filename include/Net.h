@@ -7,8 +7,11 @@
 #ifndef NET_H
 #define NET_H
 
+#include "LogicVector.h"
+
 #include <ostream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class Circuit;
@@ -26,7 +29,7 @@ class WireNode;
  * time a signal changes to discover all connected input ports.
  *
  * A Net stores this connectivity information in advance. It groups
- * electrically connected wire nodes and ports, identifies the output port
+ * electrically connected wire nodes and ports, identifies the output ports
  * driving the signal, and stores the input ports receiving it. This allows
  * the simulator to find affected components directly through listeners(),
  * without repeatedly traversing the wire graph.
@@ -92,13 +95,14 @@ class WireNode;
  * listeners.
  *
  * Each connected group containing at least one port produces a Net.
- * Groups containing no ports do not produce nets.
+ * Bare geometry also produces a Net when positive node width constraints
+ * conflict, so the fault can be inspected before attaching any ports.
  *
- * The following restrictions are enforced:
- * - Connected ports must have compatible bit widths.
- * - Nonzero wire node width constraints must agree with the net width.
- * - A net may have at most one output driver.
- * - A net may have no driver if it contains only input ports.
+ * Connections are retained when their declared widths disagree or several
+ * outputs drive the same net. width_mismatch() reports incompatible positive
+ * widths; width() is then the maximum declared width used for runtime storage.
+ * Driver values are resolved independently for each runtime circuit instance.
+ * A net with no output drivers resolves to UNKNOWN.
  *
  * @par Runtime State
  * A Net describes electrical connectivity, not the current signal value.
@@ -145,10 +149,29 @@ public:
     std::string label() const;
 
     /**
-     * @brief Gets the port driving this net.
-     * @return Pointer to the driving port, or nullptr if none.
+     * @brief Gets the sole port driving this net.
+     * @return Pointer to the driver, or nullptr when there are zero or multiple drivers.
+     * @note Use drivers() to distinguish an undriven net from a shared net.
      */
-    Port * driver() const { return driver_; }
+    Port * driver() const { return drivers_.size() == 1 ? drivers_[0] : nullptr; }
+
+    /**
+     * @brief Gets every output port attached to this net.
+     * @return Borrowed driver ports in deterministic wire traversal order.
+     */
+    const std::vector< Port * > & drivers() const { return drivers_; }
+
+    /** @brief Reports conflicting positive node or port width declarations. */
+    bool width_mismatch() const { return width_mismatch_; }
+
+    /**
+     * @brief Resolves the current per-output values of one circuit instance.
+     * @param output_values Last driven values indexed by output port.
+     * @return UNKNOWN for incompatible widths or undriven bits; ERROR for conflicting known drives.
+     * @note UNKNOWN driver bits are neutral: a known drive resolves an otherwise unknown bit.
+     * @note Does not modify individual driver values or schedule evaluations.
+     */
+    LogicVector resolve(const std::unordered_map< const Port *, LogicVector > & output_values) const;
 
     /**
      * @brief Gets the input ports that receive signals from this net.
@@ -193,8 +216,9 @@ private:
 
     int id_; ///< Unique net identifier.
     Circuit * circuit_; ///< Circuit containing this net.
-    int width_; ///< Number of bits carried by the net.
-    Port * driver_; ///< Port driving this net, or nullptr if none.
+    int width_; ///< Runtime width, using the largest declared width when incompatible.
+    bool width_mismatch_; ///< Conflicting positive width declarations in this connected region.
+    std::vector< Port * > drivers_; ///< Output ports driving this net.
     std::vector< Port * > listeners_; ///< Input ports receiving signals from this net.
     std::vector< Port * > ports_; ///< All ports connected to this net.
     std::vector< WireNode * > nodes_; ///< Wire nodes belonging to this net.

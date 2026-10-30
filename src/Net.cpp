@@ -12,12 +12,48 @@
 #include <stdexcept>
 
 Net::Net(Circuit & circuit, int id, int width)
-    : id_(id), circuit_(&circuit), width_(width), driver_(nullptr)
+    : id_(id), circuit_(&circuit), width_(width), width_mismatch_(false)
 {
     if (width <= 0)
     {
         throw std::invalid_argument("Net width must be positive");
     }
+}
+
+LogicVector Net::resolve(const std::unordered_map< const Port *, LogicVector > & output_values) const
+{
+    LogicVector resolved(width_, UNKNOWN);
+    if (width_mismatch_ || drivers_.empty())
+    {
+        return resolved;
+    }
+
+    for (const Port * driver : drivers_)
+    {
+        const LogicVector & value = output_values.at(driver);
+        if (value.width() != width_)
+        {
+            throw std::logic_error("Driver cache width does not match its net");
+        }
+        for (int bit = 0; bit < width_; ++bit)
+        {
+            // An undetermined contribution does not override another driver's
+            // known value. ERROR is absorbing, including an earlier conflict.
+            if (value[bit] == UNKNOWN)
+            {
+                continue;
+            }
+            if (resolved[bit] == UNKNOWN)
+            {
+                resolved[bit] = value[bit];
+            }
+            else if (resolved[bit] != value[bit])
+            {
+                resolved[bit] = ERROR;
+            }
+        }
+    }
+    return resolved;
 }
 
 std::string Net::label() const
@@ -51,16 +87,20 @@ std::string Net::to_string() const
     ret += std::to_string(width_);
     ret += ", label=\"";
     ret += label();
-    ret += "\", driver=";
+    ret += "\", drivers=";
+    ret += std::to_string(drivers_.size());
+    ret += ", width_mismatch=";
+    ret += width_mismatch_ ? "true" : "false";
+    ret += ", driver=";
 
-    if (driver_ == nullptr)
+    if (driver() == nullptr)
     {
-        ret += "none";
+        ret += drivers_.empty() ? "none" : "multiple";
     }
     else
     {
         ret += "port ";
-        ret += std::to_string(driver_->id());
+        ret += std::to_string(driver()->id());
     }
 
     ret += ", listeners=";

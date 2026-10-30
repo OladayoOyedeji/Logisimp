@@ -55,6 +55,9 @@ public:
      */
     int id() const { return id_; }
 
+    /** @brief Creation identity within the owning component, stable until deletion. */
+    int generation() const { return generation_; }
+
     /**
      * @brief Gets the port's bit width.
      * @return Number of bits it can output or take in as input.
@@ -116,6 +119,7 @@ private:
     friend class ProjectEdit;
     
     int id_; ///< Unique port identifier.
+    int generation_; ///< Distinguishes replacements with the same semantic ID.
     int width_; ///< Number of bits this port outputs or inputs.
     PortDirection direction_; ///< Whether the port is an input or output.
     Component * owner_; ///< Component that this port belongs to

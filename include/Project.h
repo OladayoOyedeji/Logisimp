@@ -16,6 +16,13 @@
 class Subcircuit;
 class ProjectEdit;
 
+/** @brief An owned-value snapshot for project navigation without graph pointers. */
+struct CircuitInfo
+{
+    CircuitId id;
+    std::string name;
+};
+
 /**
  * @brief Owns circuit blueprints and coordinates edits across their placements.
  *
@@ -25,6 +32,10 @@ class ProjectEdit;
  *
  * @note Direct structural editing requires releasing affected runtime states.
  * Use ProjectController to edit live instances without managing that lifetime.
+ * @note Wiring accepts incompatible widths and multiple output drivers as
+ * electrical issues. Inspect Net::drivers() and Net::width_mismatch() on the
+ * derived nets, and CircuitState::diagnostics() on a ProjectController-managed
+ * simulation instance, to examine those issues.
  */
 class Project
 {
@@ -33,7 +44,7 @@ public:
      * @brief Creates an empty project.
      */
     Project()
-        : edit_(nullptr)
+        : next_circuit_id_(0), edit_(nullptr)
     {}
 
     /**
@@ -71,8 +82,31 @@ public:
     /**
      * @brief Creates an empty circuit blueprint.
      * @return Borrowed reference to the circuit owned by this project.
+     * @note Assigns an unused Circuit N name, starting at its new ID plus one.
      */
     Circuit & create_circuit();
+
+    /** @brief Looks up a project-scoped blueprint ID; nullptr means deleted or unknown. */
+    Circuit * find_circuit(CircuitId id);
+    const Circuit * find_circuit(CircuitId id) const;
+
+    /**
+     * @brief Changes a circuit's persistent project-unique display name.
+     * @param id Existing circuit ID in this project.
+     * @param name Display name, trimmed of leading and trailing ASCII whitespace.
+     * @throws std::invalid_argument If the ID is stale, the name is blank, or
+     * another circuit has the same name when ASCII letter case is ignored.
+     * @note Preserves UTF-8 display bytes and letter case. This metadata change
+     * is allowed while runtime instances exist and does not rebuild the circuit.
+     */
+    void set_circuit_name(CircuitId id, const std::string & name);
+
+    /**
+     * @brief Returns a copy of a circuit's persistent display name.
+     * @param id Existing circuit ID in this project.
+     * @throws std::invalid_argument If the ID is stale or unknown.
+     */
+    std::string circuit_name(CircuitId id) const;
 
     /**
      * @brief Creates a separate copy of a circuit's structure.
@@ -88,6 +122,7 @@ public:
      * @note Copied subcircuit placements reference the same child blueprints
      * as their sources; nested blueprints are not recursively duplicated.
      * @note A failed copy removes the partially created destination.
+     * @note Assigns source name + " copy", adding a numeric suffix when needed.
      */
     Circuit & copy_circuit(const Circuit & source);
 
@@ -141,6 +176,9 @@ public:
      * still refer to mutable Circuit objects.
      */
     const std::vector< Circuit * > & circuits() const { return circuits_; }
+
+    /** @brief Returns circuit IDs and display names by value in project order. */
+    std::vector< CircuitInfo > circuit_infos() const;
 
     /**
      * @brief Places a circuit blueprint inside another circuit.
@@ -221,8 +259,10 @@ public:
      * by circuit, or width is not positive.
      * @throws std::logic_error If affected circuits have live runtime states.
      *
-     * Detaches incompatible connections at the pin and corresponding placement
-     * ports. Other ports and node constraints are not resized automatically.
+     * Preserves attachments at the pin and corresponding placement ports,
+     * including connections made electrically incompatible by the new width.
+     * Other ports and node constraints are not resized automatically; resulting
+     * width mismatches are recorded on the derived nets and in runtime diagnostics.
      */
     void set_pin_width(Circuit & circuit, Pin & pin, int width);
 
@@ -235,8 +275,9 @@ public:
      * by circuit, or type is invalid.
      * @throws std::logic_error If affected circuits have live runtime states.
      *
-     * A changed role replaces the pin's internal port, removes its old
-     * connection, and appends the pin to its new direction's interface list.
+     * A changed role replaces the pin's internal port and corresponding
+     * placement ports, removes their old connections, and appends the pin to
+     * its new direction's interface list.
      */
     void set_pin_type(Circuit & circuit, Pin & pin, PinType type);
 
@@ -365,13 +406,13 @@ public:
      * @param second Second endpoint.
      * @return Borrowed reference to the new edge.
      * @throws std::invalid_argument If circuit or either endpoint is foreign,
-     * the endpoints are identical, the edge already exists, widths conflict,
-     * or the resulting connection has multiple output drivers.
+     * the endpoints are identical, or the edge already exists.
      * @throws std::logic_error If circuit has live runtime states.
      * @throws std::overflow_error If edge or derived-net IDs are exhausted.
      *
      * Endpoint order does not imply signal direction. Successful creation
-     * rebuilds the circuit's derived nets.
+     * rebuilds the circuit's derived nets. Width mismatches and multiple output
+     * drivers preserve the connection and are reported as electrical issues.
      */
     WireEdge & create_wire_edge(Circuit & circuit, WireNode & first, WireNode & second);
 
@@ -406,12 +447,14 @@ public:
      * @param circuit Circuit that owns the port and node.
      * @param port Previously unattached port.
      * @param node Node that receives the attachment.
-     * @throws std::invalid_argument If ownership is invalid, port is already
-     * attached, widths conflict, or the resulting net has multiple drivers.
+     * @throws std::invalid_argument If ownership is invalid or the port is
+     * already attached.
      * @throws std::logic_error If circuit has live runtime states.
      *
      * Creates no nodes or edges. Repeated attachment to the same node is also
-     * rejected. A successful connection rebuilds derived nets.
+     * rejected. A successful connection rebuilds derived nets. Width mismatches
+     * and multiple output drivers preserve the attachment and are reported as
+     * electrical issues.
      */
     void connect(Circuit & circuit, Port & port, WireNode & node);
 
@@ -482,6 +525,8 @@ private:
      * @pre Circuit is registered in this project.
      *
      * Synchronizes placement port membership, widths, labels, and ordering.
+     * Width changes preserve attachments, including incompatible connections.
+     * Role changes replace the affected ports and remove their old connections.
      * Earlier updates may remain applied if a later synchronization throws.
      */
     void sync_interfaces(const Circuit & circuit);
@@ -503,6 +548,8 @@ private:
     void require_interfaces_editable(const Circuit & circuit) const;
 
     std::vector< Circuit * > circuits_; ///< Owned circuit blueprints.
+    std::unordered_map< int, Circuit * > circuits_by_id_;
+    int next_circuit_id_; ///< Monotonic, including IDs consumed by failed transactions.
 
     /**
      * @brief Tracks placements by the blueprint they reference.

@@ -14,8 +14,65 @@
 #include "ProjectEdit.h"
 
 #include <algorithm>
+#include <limits>
 #include <stdexcept>
 #include <typeinfo>
+
+namespace
+{
+/** @brief Folds ASCII letters without changing UTF-8 bytes or using a locale. */
+char folded_name_character(char value)
+{
+    if (value >= 'A' && value <= 'Z')
+    {
+        return char(value - 'A' + 'a');
+    }
+    return value;
+}
+
+/** @brief Compares display names under the project's ASCII case policy. */
+bool circuit_names_equal(const std::string & first, const std::string & second)
+{
+    if (first.size() != second.size())
+    {
+        return false;
+    }
+    for (std::size_t i = 0; i < first.size(); ++i)
+    {
+        if (folded_name_character(first[i]) != folded_name_character(second[i]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+/** @brief Checks current circuits, including changes already made in a batch. */
+bool circuit_name_used(const std::vector< Circuit * > & circuits, const std::string & name, const Circuit * ignored = nullptr)
+{
+    for (const Circuit * circuit : circuits)
+    {
+        if (circuit != ignored && circuit_names_equal(circuit->name(), name))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+/** @brief Trims the permitted surrounding whitespace and rejects blank names. */
+std::string trimmed_circuit_name(const std::string & name)
+{
+    const std::string whitespace = " \t\n\r\f\v";
+    std::string::size_type first = name.find_first_not_of(whitespace);
+    if (first == std::string::npos)
+    {
+        throw std::invalid_argument("Circuit name must not be blank");
+    }
+    std::string::size_type last = name.find_last_not_of(whitespace);
+    return name.substr(first, last - first + 1);
+}
+}
 
 Project::~Project()
 {
@@ -32,7 +89,19 @@ Project::~Project()
 Circuit & Project::create_circuit()
 {
     // Keep ownership and the placement registry in step if insertion fails.
-    Circuit * circuit = new Circuit();
+    if (next_circuit_id_ == std::numeric_limits< int >::max())
+    {
+        throw std::overflow_error("Circuit IDs are exhausted");
+    }
+    unsigned long long number = next_circuit_id_;
+    std::string name;
+    do
+    {
+        ++number;
+        name = "Circuit " + std::to_string(number);
+    }
+    while (circuit_name_used(circuits_, name));
+    Circuit * circuit = new Circuit(CircuitId(next_circuit_id_++), name);
     circuit->edit_ = edit_;
 
     try
@@ -42,6 +111,15 @@ Circuit & Project::create_circuit()
         try
         {
             placements_.emplace(circuit, std::vector< Placement >());
+            try
+            {
+                circuits_by_id_.emplace(circuit->id().value, circuit);
+            }
+            catch (...)
+            {
+                placements_.erase(circuit);
+                throw;
+            }
         }
         catch (...) // in case of memory failure
         {
@@ -61,10 +139,19 @@ Circuit & Project::create_circuit()
 Circuit & Project::copy_circuit(const Circuit & source)
 {
     require_circuit(source);
+    std::string base_name = source.name() + " copy";
+    std::string name = base_name;
+    unsigned long long suffix = 1;
+    while (circuit_name_used(circuits_, name))
+    {
+        ++suffix;
+        name = base_name + " " + std::to_string(suffix);
+    }
     Circuit & destination = create_circuit();
 
     try
     {
+        destination.name_.swap(name);
         std::unordered_map< const Component *, Component * > copied_components;
         std::unordered_map< const Port *, Port * > copied_ports;
         copied_components.reserve(source.components().size());
@@ -525,6 +612,7 @@ void Project::remove_circuit(Circuit & circuit)
     std::vector< Circuit * >::iterator position = std::find(circuits_.begin(), circuits_.end(), &circuit);
 
     placements_.erase(&circuit);
+    circuits_by_id_.erase(circuit.id().value);
     circuits_.erase(position);
 
     if (edit_ == nullptr || !edit_->retains(&circuit))
@@ -551,4 +639,52 @@ void Project::require_interfaces_editable(const Circuit & circuit) const
     {
         placement.parent->require_editable();
     }
+}
+
+Circuit * Project::find_circuit(CircuitId id)
+{
+    auto found = circuits_by_id_.find(id.value);
+    return found == circuits_by_id_.end() ? nullptr : found->second;
+}
+
+const Circuit * Project::find_circuit(CircuitId id) const
+{
+    auto found = circuits_by_id_.find(id.value);
+    return found == circuits_by_id_.end() ? nullptr : found->second;
+}
+
+void Project::set_circuit_name(CircuitId id, const std::string & name)
+{
+    Circuit * circuit = find_circuit(id);
+    if (circuit == nullptr)
+    {
+        throw std::invalid_argument("Circuit ID does not belong to this project");
+    }
+    std::string trimmed = trimmed_circuit_name(name);
+    if (circuit_name_used(circuits_, trimmed, circuit))
+    {
+        throw std::invalid_argument("Circuit name is already used in this project");
+    }
+    circuit->name_.swap(trimmed);
+}
+
+std::string Project::circuit_name(CircuitId id) const
+{
+    const Circuit * circuit = find_circuit(id);
+    if (circuit == nullptr)
+    {
+        throw std::invalid_argument("Circuit ID does not belong to this project");
+    }
+    return circuit->name();
+}
+
+std::vector< CircuitInfo > Project::circuit_infos() const
+{
+    std::vector< CircuitInfo > result;
+    result.reserve(circuits_.size());
+    for (const Circuit * circuit : circuits_)
+    {
+        result.push_back({circuit->id(), circuit->name()});
+    }
+    return result;
 }

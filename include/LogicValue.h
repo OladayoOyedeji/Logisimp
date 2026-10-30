@@ -1,6 +1,6 @@
 /**
  * @file LogicValue.h
- * @brief Three-state logic values (LOW, HIGH, UNKNOWN) and their basic operations.
+ * @brief Four-state logic values (LOW, HIGH, UNKNOWN, ERROR) and their basic operations.
  * @author Cole Schwandt
  */
 
@@ -11,13 +11,18 @@
 #include <string>
 
 /**
- * @brief Represents three logical values: 0, 1 and X.
+ * @brief Represents four logical values: 0, 1, X, and E.
+ *
+ * UNKNOWN remains undetermined through gate operations unless a controlling
+ * LOW fixes AND or a controlling HIGH fixes OR. ERROR propagates through gate
+ * operations with the same controlling-value exceptions.
  */
 enum LogicValue
 {
     LOW = 0, ///< Logic 0.
     HIGH = 1, ///< Logic 1.
-    UNKNOWN = 2 ///< Unknown value. Can not be determined (such as wires in a cycle).
+    UNKNOWN = 2, ///< Unknown value, such as an undriven wire.
+    ERROR = 3 ///< Invalid signal, such as conflicting output drivers.
 };
 
 /**
@@ -78,7 +83,7 @@ LogicValue logic_xnor(LogicValue a, LogicValue b);
 /**
  * @brief Converts a logic value to its string representation.
  * @param value Logic value to convert.
- * @return "0", "1", or "X".
+ * @return "0", "1", "X", or "E".
  */
 inline std::string to_string(LogicValue value)
 {
@@ -89,6 +94,10 @@ inline std::string to_string(LogicValue value)
     else if (value == HIGH)
     {
         return "1";
+    }
+    else if (value == ERROR)
+    {
+        return "E";
     }
 
     return "X";
@@ -111,7 +120,7 @@ inline std::ostream & operator<<(std::ostream & cout, LogicValue value)
  * @param cin Input stream.
  * @param value Logic value to update.
  * @return Reference to the input stream.
- * @note Accepts 0 (LOW), 1 (HIGH), and 2 or X (UNKNOWN).
+ * @note Accepts 0 (LOW), 1 (HIGH), 2 or X/x (UNKNOWN), and 3 or E/e (ERROR).
  * @note Invalid input leaves the logic value unchanged and sets the stream's fail state.
  */
 inline std::istream & operator>>(std::istream & cin, LogicValue & value)
@@ -134,6 +143,10 @@ inline std::istream & operator>>(std::istream & cin, LogicValue & value)
     else if (input == "2" || input == "X" || input == "x")
     {
         value = UNKNOWN;
+    }
+    else if (input == "3" || input == "E" || input == "e")
+    {
+        value = ERROR;
     }
     else
     {

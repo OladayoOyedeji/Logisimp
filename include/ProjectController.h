@@ -7,12 +7,16 @@
 #define PROJECTCONTROLLER_H
 
 #include "Project.h"
+#include "RuntimePath.h"
 #include "Simulator.h"
 
 #include <functional>
+#include <memory>
+#include <unordered_map>
 #include <vector>
 
 class CircuitState;
+class CircuitSession;
 
 /**
  * @brief Application API that keeps runtime instances synchronized with edits.
@@ -26,7 +30,8 @@ class CircuitState;
  * If preparation throws, the previous structure, runtime storage, and queue
  * remain usable. Call run() after editing or setting inputs to settle signals.
  *
- * @note This is an untimed simulator: successful edits reschedule all roots.
+ * @note This is an untimed simulator: structural edits reschedule all roots.
+ * Descriptive label edits preserve runtime storage and pending work.
  * No timestamps or in-flight signal delays are preserved by this policy.
  * @warning Use from one thread. Reentrant edits during evaluation are rejected.
  * Do not destroy/reset owned states or manage additional states for these
@@ -39,6 +44,9 @@ class CircuitState;
  * Creation and copying return borrowed objects; the controller retains ownership.
  * Successful connectivity rebuilds replace Net objects, so reacquire net pointers
  * through surviving ports or nodes after an edit.
+ * Electrical width mismatches and multiple output attachments are retained in
+ * the wire graph. After run(), inspect CircuitState::diagnostics() for the
+ * displayed runtime instance. A settled queue can still contain electrical faults.
  *
  * @see @ref gui_api_reference "GUI API reference"
  *
@@ -62,7 +70,7 @@ class ProjectController
 {
 public:
     /** @brief Creates an empty project controller with no active runtime roots. */
-    ProjectController() : busy_(false) {}
+    ProjectController() : lifetime_(std::make_shared< int >(0)), next_runtime_id_(0), revision_(0), busy_(false), batching_(false), batch_failed_(false), structural_changed_(false) {}
 
     /**
      * @brief Disallows copying ownership of blueprints and runtime hierarchies.
@@ -96,6 +104,62 @@ public:
      * All borrowed references to this controller's objects then become invalid.
      */
     ~ProjectController();
+
+    /** @brief Opens a lightweight blueprint view without starting simulation. */
+    CircuitSession open(CircuitId circuit);
+
+    /** @brief Opens a view bound to a particular live root or nested instance. */
+    CircuitSession open(CircuitId circuit, const RuntimePath & instance);
+
+    /**
+     * @brief Lists live root and nested instances using a circuit blueprint.
+     * @param circuit Existing project-scoped circuit ID.
+     * @return Value paths in root creation and component traversal order.
+     * @note Does not create, stop, reset, or evaluate any runtime instance.
+     * Callers must choose explicitly when more than one instance is available.
+     * @throws std::invalid_argument If the circuit ID is unknown or deleted.
+     * @throws std::logic_error If inspection is attempted during an operation.
+     */
+    std::vector< RuntimePath > instances(CircuitId circuit) const;
+
+    /** @brief Returns value snapshots of project circuit IDs and display names. */
+    std::vector< CircuitInfo > circuit_infos() const;
+
+    /**
+     * @brief Renames a circuit without rebuilding its structure or runtime state.
+     * @param circuit Existing project-scoped circuit ID.
+     * @param name Nonblank project-unique name; surrounding ASCII whitespace is trimmed.
+     * @note Uniqueness ignores ASCII letter case. Pending simulation work survives.
+     * Failed edits and batches restore the previous name through ProjectEdit.
+     */
+    void set_circuit_name(CircuitId circuit, const std::string & name);
+
+    /** @brief Returns a copy of the current display name for a live circuit ID. */
+    std::string circuit_name(CircuitId circuit) const;
+
+    /** @brief Starts an independent root, returning its non-owning identity. */
+    RuntimePath start_instance(CircuitId circuit);
+
+    /** @brief Stops a root identified by a path with no placement steps. */
+    void stop(const RuntimePath & instance);
+
+    /** @brief Returns this blueprint's shared default root, creating it lazily. */
+    RuntimePath default_instance(CircuitId circuit);
+
+    /**
+     * @brief Applies related edits in one transaction and one runtime update.
+     * @note A failed inner mutation invalidates the whole batch even if caught.
+     * Nested batches and runtime operations inside a batch are rejected.
+     */
+    void batch(const std::function< void() > & operation);
+
+    /** @brief Monotonic successful edit count; clients can poll for changes. */
+    unsigned long revision() const { return revision_; }
+    /** @brief Reports evaluation/edit activity so view metadata can wait for a committed graph. */
+    bool operation_active() const { return busy_; }
+
+    /** @brief Changes a component label without rescheduling simulation. */
+    void set_label(Circuit & circuit, Component & component, const std::string & label);
 
     /**
      * @brief Returns borrowed project-owned circuit pointers.
@@ -159,7 +223,8 @@ public:
      * @param pin INPUT_PIN belonging to state.circuit().
      * @throws std::invalid_argument If the state or pin ownership is invalid.
      * @throws std::logic_error If pin is an OUTPUT_PIN or another operation is in progress.
-     * @note Exchanges LOW and HIGH; UNKNOWN stays UNKNOWN. Call run() to settle listeners.
+     * @note Exchanges LOW and HIGH; UNKNOWN and ERROR retain their values.
+     * Call run() to settle listeners.
      */
     void toggle(CircuitState & state, Pin & pin);
 
@@ -170,6 +235,9 @@ public:
      * @throws std::logic_error If another controller operation is in progress.
      * @note Propagates evaluation exceptions. Pending work is cleared after an
      * evaluation exception or limit failure; signal writes are not rolled back.
+     * A true result reports queue completion, not circuit validity. Inspect
+     * CircuitState::diagnostics() after settling to identify width mismatches,
+     * conflicting driven bits, and propagated ERROR values.
      */
     bool run();
 
@@ -179,6 +247,14 @@ public:
      * @note Does not create a runtime instance; use start() when simulation is needed.
      */
     Circuit & create_circuit();
+
+    /**
+     * @brief Creates and names an empty circuit in one transaction.
+     * @param name Nonblank project-unique name; follows set_circuit_name() validation.
+     * @return The new circuit's project-scoped ID.
+     * @note A rejected name leaves no circuit behind. Does not open an editor or start simulation.
+     */
+    CircuitId add_circuit(const std::string & name);
 
     /**
      * @brief Copies structure, sharing referenced child blueprints, without runtime values.
@@ -260,13 +336,15 @@ public:
     void remove_component(Circuit & circuit, Component & component);
 
     /**
-     * @brief Resizes a pin, resetting its state and detaching incompatible connections.
+     * @brief Resizes a pin, resetting its state while retaining its connections.
      * @param circuit Blueprint owned by this controller that contains pin.
      * @param pin Interface component owned by circuit to resize.
      * @param width New positive signal width in bits.
      * @throws std::invalid_argument If ownership is invalid or width is not positive.
      * @note An actual width change resets this pin's runtime storage, updates
-     * placement port widths, and detaches incompatible connections at both levels.
+     * placement port widths, and preserves node attachments at both levels.
+     * Incompatible connected widths are reported by Net::width_mismatch() and
+     * CircuitState::diagnostics(); other ports and node constraints are not resized.
      * Supplying the existing width preserves the pin's runtime storage.
      */
     void set_pin_width(Circuit & circuit, Pin & pin, int width);
@@ -379,15 +457,17 @@ public:
     WireNode & create_wire_node(Circuit & circuit, int width = 0, const std::string & label = "");
 
     /**
-     * @brief Creates an explicit wire segment, rejecting width or driver conflicts.
+     * @brief Creates an explicit wire segment while retaining electrical faults.
      * @param circuit Blueprint owned by this controller that contains both endpoints.
      * @param first First existing wire node owned by circuit.
      * @param second Distinct second node owned by circuit.
      * @return Borrowed reference to the new undirected edge owned by circuit.
      * @throws std::invalid_argument If ownership is invalid, endpoints coincide,
-     * a direct edge already exists, widths conflict, or the merge has multiple drivers.
+     * or a direct edge already exists.
      * @note Joins electrical regions without automatically creating nodes. Geometric
      * crossings and matching labels do not join regions unless edges/nodes connect them.
+     * Width mismatches and multiple output attachments are accepted. Call run(),
+     * then query CircuitState::diagnostics() for faults in each runtime instance.
      */
     WireEdge & create_wire_edge(Circuit & circuit, WireNode & first, WireNode & second);
 
@@ -416,12 +496,16 @@ public:
      * @param circuit Blueprint owned by this controller that contains port and node.
      * @param port Previously unattached component port owned by circuit.
      * @param node Existing wire node owned by circuit to receive the attachment.
-     * @throws std::invalid_argument If ownership is invalid, port is already attached,
-     * widths conflict, or the resulting net would have more than one OUTPUT driver.
+     * @throws std::invalid_argument If ownership is invalid or port is already attached.
      * @note Creates no nodes or edges. Reattaching to the same node is also rejected;
      * use create_wire_edge() to connect two wire nodes, and run() to settle listeners.
+     * Retains incompatible widths and multiple output drivers for runtime diagnosis.
+     * Matching driven bits can share a net; opposing LOW/HIGH bits resolve to ERROR.
      */
     void connect(Circuit & circuit, Port & port, WireNode & node);
+
+    /** @brief Connects ports atomically, preserving their existing wire branches. */
+    void connect(Circuit & circuit, Port & first, Port & second);
 
     /**
      * @brief Detaches a port; fragments without a driver become UNKNOWN.
@@ -444,6 +528,11 @@ public:
     void clear_circuit(Circuit & circuit);
 
 private:
+    friend class CircuitSession;
+
+    void change(const std::function< void() > & operation, bool structural, bool grouped = false);
+    void require_runtime_idle();
+    CircuitState & resolve_instance(const RuntimePath & instance) const;
     /**
      * @brief Runs a structural operation and commits matching runtime storage and work.
      * @param operation Callable that edits this controller's Project once permission is granted.
@@ -458,6 +547,9 @@ private:
      * @param[in,out] instances Destination list; existing entries are retained.
      */
     void collect_instances(CircuitState & state, std::vector< CircuitState * > & instances) const;
+
+    /** @brief Appends occurrence paths for a blueprint, including nested placements. */
+    void collect_instance_paths(const CircuitState & state, const RuntimePath & path, CircuitId circuit, std::vector< RuntimePath > & instances) const;
 
     /**
      * @brief Checks that every live instance of every owned blueprint is tracked.
@@ -483,7 +575,17 @@ private:
     Project project_; ///< Owns all blueprints and their placement registry.
     Simulator simulator_; ///< Owns pending events borrowing the managed runtime hierarchies.
     std::vector< CircuitState * > root_states_; ///< Owns roots; nested instances are owned by placements' runtime states.
+    std::shared_ptr< int > lifetime_; ///< Sessions only retain a weak lifetime token.
+    std::unordered_map< int, CircuitState * > runtime_roots_; ///< Live root identities.
+    std::unordered_map< int, RuntimeId > default_roots_; ///< Lazily selected roots per blueprint.
+    int next_runtime_id_; ///< IDs are consumed even when starting a root fails.
+    unsigned long revision_; ///< Successful transaction count, including metadata.
     bool busy_; ///< True during a mutating operation or evaluation; prevents reentry on one thread.
+    bool batching_;
+    bool batch_failed_;
+    bool structural_changed_;
 };
+
+#include "CircuitSession.h"
 
 #endif // PROJECTCONTROLLER_H

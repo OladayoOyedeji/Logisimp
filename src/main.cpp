@@ -1,543 +1,435 @@
 /**
  * @file main.cpp
- * @brief Examples of circuit construction, simulation, and live editing through ProjectController.
+ * @brief Common GUI actions using ProjectController and EditorController.
  * @author Cole Schwandt, Ethan Graham, Robert Oyedeji
  */
 
 #include "ProjectController.h"
-#include "CircuitState.h"
-#include "Gates.h"
-#include "Subcircuit.h"
+#include "EditorController.h"
 
 #include <iostream>
 #include <stdexcept>
 
-//=============================================================
-// EXAMPLE 1: Basic AND Gate
-//=============================================================
-void and_gate_example()
+void create_circuit_example()
 {
-    // Create the project controller and circuit.
-    ProjectController controller;
-    Circuit & circuit = controller.create_circuit();
+    ProjectController project;
 
-    // Create two inputs and one output.
-    Pin & a = controller.create_pin(circuit, INPUT_PIN);
-    Pin & b = controller.create_pin(circuit, INPUT_PIN);
-    Pin & result = controller.create_pin(circuit, OUTPUT_PIN);
-
-    // Create an AND gate.
-    AndGate & gate = controller.create_and_gate(circuit);
-
-    // Create three wire nodes.
-    WireNode & a_node = controller.create_wire_node(circuit);
-    WireNode & b_node = controller.create_wire_node(circuit);
-    WireNode & result_node = controller.create_wire_node(circuit);
-
-    // Connect input A to the first gate input.
-    controller.connect(circuit, *a.output_port(0), a_node);
-    controller.connect(circuit, *gate.input_port(0), a_node);
-
-    // Connect input B to the second gate input.
-    controller.connect(circuit, *b.output_port(0), b_node);
-    controller.connect(circuit, *gate.input_port(1), b_node);
-
-    // Connect the gate output to the circuit output.
-    controller.connect(circuit, *gate.output_port(), result_node);
-    controller.connect(circuit, *result.input_port(0), result_node);
-
-    // Create the simulation.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    // Supply pin input values.
-    controller.set(state, a, LogicVector(1, HIGH));
-    controller.set(state, b, LogicVector(1, HIGH));
-
-    // Run the simulator.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // Read output.
-    std::cout << "AND(1, 1) = " << result.value(state)[0] << '\n';
-
-    // End simulation.
-    controller.stop(state);
-    // The controller also stops remaining states automatically on destruction.
+    // User clicks Add Circuit.
+    CircuitId circuit = project.add_circuit("Main");
+    // User renames the circuit.
+    project.set_circuit_name(circuit, "My circuit");
+    std::cout << "Circuit " << circuit.value << ": " << project.circuit_name(circuit) << '\n';
 }
 
-
-//=============================================================
-// EXAMPLE 2: Creating a Custom NAND Circuit
-//=============================================================
-// NAND = NOT(AND(A, B))
-//
-// This function builds a reusable circuit blueprint.
-// It does not create a simulation.
-Circuit & create_custom_nand(ProjectController & controller)
+void place_component_example()
 {
-    // Create a new circuit.
-    Circuit & circuit = controller.create_circuit();
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
 
-    // Create the circuit's external inputs and output.
-    Pin & a = controller.create_pin(circuit, INPUT_PIN);
-    Pin & b = controller.create_pin(circuit, INPUT_PIN);
-    Pin & result = controller.create_pin(circuit, OUTPUT_PIN);
-
-    // Create the internal gates.
-    AndGate & and_gate = controller.create_and_gate(circuit);
-    NotGate & not_gate = controller.create_not_gate(circuit);
-
-    // Create the wire nodes.
-    WireNode & a_node = controller.create_wire_node(circuit);
-    WireNode & b_node = controller.create_wire_node(circuit);
-    WireNode & middle_node = controller.create_wire_node(circuit);
-    WireNode & result_node = controller.create_wire_node(circuit);
-
-    // Connect the circuit inputs to the AND gate.
-    controller.connect(circuit, *a.output_port(0), a_node);
-    controller.connect(circuit, *and_gate.input_port(0), a_node);
-
-    controller.connect(circuit, *b.output_port(0), b_node);
-    controller.connect(circuit, *and_gate.input_port(1), b_node);
-
-    // Connect the AND gate output to the NOT gate input.
-    controller.connect(circuit, *and_gate.output_port(), middle_node);
-    controller.connect(circuit, *not_gate.input_port(0), middle_node);
-
-    // Connect the NOT gate to the circuit output.
-    controller.connect(circuit, *not_gate.output_port(), result_node);
-    controller.connect(circuit, *result.input_port(0), result_node);
-
-    // Return the reusable circuit.
-    return circuit;
+    // User selects NAND from the toolbar. Nothing is created yet.
+    editor.select_tool(EditorTool::NandGate);
+    // User clicks the canvas.
+    ComponentId nand = editor.on_canvas_click({200, 150});
+    std::cout << "Placed NAND " << nand.value << '\n';
 }
 
-void custom_nand_example()
+void add_component_example()
 {
-    ProjectController controller;
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
 
-    // Build the custom NAND circuit.
-    Circuit & circuit = create_custom_nand(controller);
-
-    // Get its input and output pins.
-    Pin & a = circuit.input_pin(0);
-    Pin & b = circuit.input_pin(1);
-    Pin & result = circuit.output_pin(0);
-
-    // Create the simulation.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    // Supply input values.
-    controller.set(state, a, LogicVector(1, HIGH));
-    controller.set(state, b, LogicVector(1, LOW));
-
-    // Run the simulator.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // Read the output.
-    std::cout << "Custom NAND(1, 0) = "
-              << result.value(state)[0] << '\n';
+    // GUI creates an AND gate directly, without changing the toolbar tool.
+    ComponentId gate = editor.add_component(ComponentKind::AndGate, {200, 150});
+    std::cout << "Created AND " << gate.value << '\n';
 }
 
-
-//=============================================================
-// EXAMPLE 3: Using a Custom Circuit Inside Another Circuit
-//=============================================================
-void subcircuit_example()
+void select_component_example()
 {
-    // Create the project controller.
-    ProjectController controller;
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId gate = editor.add_component(ComponentKind::AndGate, {200, 150});
+    ComponentId clicked_id = gate; // Reuse the created ID in place of GUI hit-testing.
 
-    // Create custom NAND circuit.
-    Circuit & nand_circuit = create_custom_nand(controller);
-
-    // Create a second circuit.
-    Circuit & circuit = controller.create_circuit();
-
-    // Create the second circuit's inputs and output.
-    Pin & a = controller.create_pin(circuit, INPUT_PIN);
-    Pin & b = controller.create_pin(circuit, INPUT_PIN);
-    Pin & result = controller.create_pin(circuit, OUTPUT_PIN);
-
-    // Place the custom NAND inside the second circuit.
-    Subcircuit & nand_gate = controller.create_subcircuit(circuit, nand_circuit);
-
-    // Create three wire nodes.
-    WireNode & a_node = controller.create_wire_node(circuit);
-    WireNode & b_node = controller.create_wire_node(circuit);
-    WireNode & result_node = controller.create_wire_node(circuit);
-
-    // Connect the external inputs to the custom NAND.
-    controller.connect(circuit, *a.output_port(0), a_node);
-    controller.connect(circuit, *nand_gate.input_port(0), a_node);
-
-    controller.connect(circuit, *b.output_port(0), b_node);
-    controller.connect(circuit, *nand_gate.input_port(1), b_node);
-
-    // Connect the custom NAND output to the circuit output.
-    controller.connect(circuit, *nand_gate.output_port(0), result_node);
-    controller.connect(circuit, *result.input_port(0), result_node);
-
-    // Create the simulation for the outer circuit.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    // Supply input values.
-    controller.set(state, a, LogicVector(1, HIGH));
-    controller.set(state, b, LogicVector(1, HIGH));
-
-    // Run the simulator.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // Read the output.
-    std::cout << "Subcircuit NAND(1, 1) = "
-              << result.value(state)[0] << '\n';
+    // User clicks the gate with the selection tool.
+    editor.on_component_click(clicked_id);
+    std::cout << "Selected component: " << editor.selected_component().value << '\n';
 }
 
-
-//=============================================================
-// EXAMPLE 4: Connecting Wire Edges and Branching
-//=============================================================
-// One input feeds two output pins:
-//
-//              +---- Output 1
-//              |
-// Input A -----+
-//              |
-//              +---- Output 2
-//
-// Unlike the earlier examples, the ports are attached to
-// different nodes. WireEdge objects connect those nodes.
-void wire_branch_example()
+void edit_component_example()
 {
-    // Create the project controller and circuit.
-    ProjectController controller;
-    Circuit & circuit = controller.create_circuit();
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId input = editor.add_component(ComponentKind::InputPin, {100, 150});
 
-    // Create one input and two outputs.
-    Pin & a = controller.create_pin(circuit, INPUT_PIN);
-    Pin & output1 = controller.create_pin(circuit, OUTPUT_PIN);
-    Pin & output2 = controller.create_pin(circuit, OUTPUT_PIN);
+    // User changes the pin's properties.
+    editor.set_pin_width(input, 8);
+    editor.set_label(input, "Data");
+    // GUI reads the properties without changing selection.
+    ComponentProperties info = editor.properties(input);
+    std::cout << info.label << ": " << info.pin_width << " bits\n";
 
-    // Create three wire nodes.
-    WireNode & source_node = controller.create_wire_node(circuit);
-    WireNode & first_node = controller.create_wire_node(circuit);
-    WireNode & second_node = controller.create_wire_node(circuit);
-
-    // Connect the nodes using wire edges.
-    controller.create_wire_edge(circuit, source_node, first_node);
-    controller.create_wire_edge(circuit, source_node, second_node);
-
-    // Attach the input and outputs to their nodes.
-    controller.connect(circuit, *a.output_port(0), source_node);
-    controller.connect(circuit, *output1.input_port(0), first_node);
-    controller.connect(circuit, *output2.input_port(0), second_node);
-
-    // All three nodes now belong to the same logical Net.
-
-    // Create the simulation.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    // Supply an input value.
-    controller.set(state, a, LogicVector(1, HIGH));
-
-    // Run the simulator.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // Read outputs.
-    std::cout << "Branch output 1 = "
-              << output1.value(state)[0] << '\n';
-
-    std::cout << "Branch output 2 = "
-              << output2.value(state)[0] << '\n';
+    // A properties panel can also operate on the current selection.
+    editor.select_component(input);
+    editor.set_selected_label("Selected Data");
 }
 
-
-//=============================================================
-// EXAMPLE 5: Deleting a Wire Edge
-//=============================================================
-// Before:
-//
-// Input A -------- Output
-//
-// After deleting the edge:
-//
-// Input A          Output
-//
-// The output becomes UNKNOWN because its net has no driver.
-void delete_wire_example()
-{
-    // Create the project controller and circuit.
-    ProjectController controller;
-    Circuit & circuit = controller.create_circuit();
-
-    // Create an input and output.
-    Pin & a = controller.create_pin(circuit, INPUT_PIN);
-    Pin & result = controller.create_pin(circuit, OUTPUT_PIN);
-
-    // Create two nodes.
-    WireNode & first_node = controller.create_wire_node(circuit);
-    WireNode & second_node = controller.create_wire_node(circuit);
-
-    // Connect the nodes with an edge.
-    WireEdge & wire_edge = controller.create_wire_edge(circuit, first_node, second_node);
-
-    // Attach the input and output.
-    controller.connect(circuit, *a.output_port(0), first_node);
-    controller.connect(circuit, *result.input_port(0), second_node);
-
-    // Simulate the connected circuit.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    controller.set(state, a, LogicVector(1, HIGH));
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    std::cout << "Before deleting wire = "
-              << result.value(state)[0] << '\n';
-
-    // Delete the wire edge.
-    // The controller coordinates queued events and updates this existing state.
-    controller.remove_wire_edge(circuit, wire_edge);
-
-    // Continue the simulation using the modified circuit and the same state.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // The output is now disconnected from A.
-    std::cout << "After deleting wire = "
-              << result.value(state)[0] << '\n';
-}
-
-
-//=============================================================
-// EXAMPLE 6: Deleting a Component
-//=============================================================
-// Before:
-//
-// Input A ---- NOT ---- Output
-//
-// After deleting the NOT gate:
-//
-// Input A ----     ---- Output
 void delete_component_example()
 {
-    // Create the project controller and circuit.
-    ProjectController controller;
-    Circuit & circuit = controller.create_circuit();
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId gate = editor.add_component(ComponentKind::AndGate, {200, 150});
+    ComponentId clicked_id = gate; // Reuse the created ID in place of GUI hit-testing.
 
-    // Create an input, output, and NOT gate.
-    Pin & a = controller.create_pin(circuit, INPUT_PIN);
-    Pin & result = controller.create_pin(circuit, OUTPUT_PIN);
-    NotGate & gate = controller.create_not_gate(circuit);
+    // User deletes this known component.
+    editor.delete_component(clicked_id);
+    std::cout << "Selection after deletion: " << editor.selected_component().value << " (-1 means none)\n";
 
-    // Create two wire nodes.
-    WireNode & input_node = controller.create_wire_node(circuit);
-    WireNode & output_node = controller.create_wire_node(circuit);
-
-    // Connect the input to the NOT gate.
-    controller.connect(circuit, *a.output_port(0), input_node);
-    controller.connect(circuit, *gate.input_port(0), input_node);
-
-    // Connect the NOT gate to the output.
-    controller.connect(circuit, *gate.output_port(), output_node);
-    controller.connect(circuit, *result.input_port(0), output_node);
-
-    // Simulate.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    controller.set(state, a, LogicVector(1, HIGH));
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    std::cout << "Before deleting NOT gate = "
-              << result.value(state)[0] << '\n';
-
-    // Delete the NOT gate.
-    // (Its ports are detached from the wire nodes automatically)
-    controller.remove_component(circuit, gate);
-
-    // Continue the same simulation after deleting the component.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // Nothing drives the output anymore.
-    std::cout << "After deleting NOT gate = "
-              << result.value(state)[0] << '\n';
+    gate = editor.add_component(ComponentKind::NandGate, {200, 150});
+    // User selects a component and presses Delete.
+    editor.select_component(gate);
+    editor.delete_selected();
 }
 
-
-//=============================================================
-// EXAMPLE 7: Using a Custom Circuit Twice, Then Deleting One
-//=============================================================
-void delete_subcircuit_example()
+void connect_ports_example()
 {
-    // Create the project controller and reusable NAND circuit.
-    ProjectController controller;
-    Circuit & nand_circuit = create_custom_nand(controller);
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId input = editor.add_component(ComponentKind::InputPin, {100, 150});
+    ComponentId gate = editor.add_component(ComponentKind::AndGate, {300, 150});
 
-    // Create a new circuit with two pairs of inputs and two outputs.
-    Circuit & circuit = controller.create_circuit();
-    Pin & a1 = controller.create_pin(circuit, INPUT_PIN);
-    Pin & b1 = controller.create_pin(circuit, INPUT_PIN);
-    Pin & a2 = controller.create_pin(circuit, INPUT_PIN);
-    Pin & b2 = controller.create_pin(circuit, INPUT_PIN);
-    Pin & first_result = controller.create_pin(circuit, OUTPUT_PIN);
-    Pin & second_result = controller.create_pin(circuit, OUTPUT_PIN);
+    // User connects two known ports.
+    editor.connect_ports(editor.output_port(input), editor.input_port(gate, 0));
+    WireNodeId node = editor.attached_node(editor.output_port(input));
+    std::cout << "Connected at node " << node.value << "; explicit edges: " << editor.edges().size() << '\n';
 
-    // Place the same custom NAND circuit twice.
-    Subcircuit & first_nand = controller.create_subcircuit(circuit, nand_circuit);
-    Subcircuit & second_nand = controller.create_subcircuit(circuit, nand_circuit);
-
-    // Connect the first NAND's inputs and output.
-    WireNode & a1_node = controller.create_wire_node(circuit);
-    WireNode & b1_node = controller.create_wire_node(circuit);
-    WireNode & first_result_node = controller.create_wire_node(circuit);
-
-    controller.connect(circuit, *a1.output_port(0), a1_node);
-    controller.connect(circuit, *first_nand.input_port(0), a1_node);
-    controller.connect(circuit, *b1.output_port(0), b1_node);
-    controller.connect(circuit, *first_nand.input_port(1), b1_node);
-    controller.connect(circuit, *first_nand.output_port(0), first_result_node);
-    controller.connect(circuit, *first_result.input_port(0), first_result_node);
-
-    // Connect the second NAND's inputs and output.
-    WireNode & a2_node = controller.create_wire_node(circuit);
-    WireNode & b2_node = controller.create_wire_node(circuit);
-    WireNode & second_result_node = controller.create_wire_node(circuit);
-
-    controller.connect(circuit, *a2.output_port(0), a2_node);
-    controller.connect(circuit, *second_nand.input_port(0), a2_node);
-    controller.connect(circuit, *b2.output_port(0), b2_node);
-    controller.connect(circuit, *second_nand.input_port(1), b2_node);
-    controller.connect(circuit, *second_nand.output_port(0), second_result_node);
-    controller.connect(circuit, *second_result.input_port(0), second_result_node);
-
-    // Simulate both instances before deleting either one.
-    CircuitState & state = controller.start(circuit);
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Initialization failed");
-    }
-
-    controller.set(state, a1, LogicVector(1, HIGH));
-    controller.set(state, b1, LogicVector(1, HIGH));
-    controller.set(state, a2, LogicVector(1, HIGH));
-    controller.set(state, b2, LogicVector(1, LOW));
-
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    std::cout << "First NAND(1, 1) = "
-              << first_result.value(state)[0] << '\n';
-    std::cout << "Second NAND(1, 0) = "
-              << second_result.value(state)[0] << '\n';
-
-    // Delete the first NAND instance.
-    // The controller keeps this runtime state and the surviving child alive.
-    controller.remove_component(circuit, first_nand);
-
-    // Simulate the modified circuit to show the second NAND still works.
-    // Its input values are preserved without setting them again.
-    if (!controller.run())
-    {
-        throw std::runtime_error("Simulation failed");
-    }
-
-    // The first output is undriven; the second NAND is unaffected.
-    std::cout << "First output after deletion = "
-              << first_result.value(state)[0] << '\n';
-    std::cout << "Second NAND after deletion = "
-              << second_result.value(state)[0] << '\n';
+    // User disconnects the gate's input.
+    editor.disconnect_port(editor.input_port(gate, 0));
 }
 
+void toggle_input_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId input = editor.add_component(ComponentKind::InputPin, {100, 150});
 
-//=============================================================
-// MAIN
-//=============================================================
+    // User clicks the input during simulation.
+    editor.toggle_input(input);
+    if (!editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+    std::cout << "Input after click: " << editor.value(input) << '\n';
+}
+
+void read_signal_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId first_input = editor.add_component(ComponentKind::InputPin, {100, 100});
+    ComponentId second_input = editor.add_component(ComponentKind::InputPin, {100, 200});
+    ComponentId gate = editor.add_component(ComponentKind::AndGate, {300, 150});
+    ComponentId output = editor.add_component(ComponentKind::OutputPin, {500, 150});
+    editor.connect_ports(editor.output_port(first_input), editor.input_port(gate, 0));
+    editor.connect_ports(editor.output_port(second_input), editor.input_port(gate, 1));
+    editor.connect_ports(editor.output_port(gate), editor.input_port(output));
+    editor.set_input(first_input, HIGH);
+    editor.set_input(second_input, HIGH);
+    if (!editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+
+    // GUI reads an output pin, a port, and a wire node to display their values.
+    PortId port = editor.input_port(output);
+    WireNodeId wire = editor.attached_node(port);
+    std::cout << "AND output: " << editor.value(output)
+              << "; port: " << editor.value(port) << "; wire: " << editor.value(wire) << '\n';
+}
+
+void move_component_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId gate = editor.add_component(ComponentKind::NandGate, {200, 150});
+
+    // User drags the gate.
+    editor.move_component(gate, {300, 200});
+    CanvasPosition position;
+    if (editor.component_position(gate, position))
+    {
+        std::cout << "Gate position: " << position.x << ", " << position.y << '\n';
+    }
+}
+
+void duplicate_component_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId gate = editor.add_component(ComponentKind::AndGate, {200, 150}, 3);
+    editor.set_label(gate, "Three-input AND");
+
+    // User duplicates the gate. External wiring is not copied.
+    ComponentId copy = editor.duplicate_component(gate, {400, 200});
+    ComponentProperties info = editor.properties(copy);
+    std::cout << "Copy " << copy.value << ": " << info.label << ", " << info.inputs.size() << " inputs\n";
+}
+
+void place_subcircuit_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId nand_circuit = project.add_circuit("NAND");
+    EditorController nand_editor(project, nand_circuit, layout);
+    ComponentId first_input = nand_editor.add_component(ComponentKind::InputPin, {100, 100});
+    ComponentId second_input = nand_editor.add_component(ComponentKind::InputPin, {100, 200});
+    ComponentId gate = nand_editor.add_component(ComponentKind::NandGate, {300, 150});
+    ComponentId output = nand_editor.add_component(ComponentKind::OutputPin, {500, 150});
+    nand_editor.connect_ports(nand_editor.output_port(first_input), nand_editor.input_port(gate, 0));
+    nand_editor.connect_ports(nand_editor.output_port(second_input), nand_editor.input_port(gate, 1));
+    nand_editor.connect_ports(nand_editor.output_port(gate), nand_editor.input_port(output));
+    nand_editor.set_input(first_input, HIGH);
+    nand_editor.set_input(second_input, HIGH);
+    if (!nand_editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+    std::cout << "Reusable NAND(1, 1): " << nand_editor.value(output) << '\n';
+
+    CircuitId main_circuit = project.add_circuit("Main");
+    EditorController editor(project, main_circuit, layout);
+    // User chooses NAND from the reusable-circuit list.
+    editor.set_subcircuit_blueprint(nand_circuit);
+    editor.select_tool(EditorTool::Subcircuit);
+    // User clicks the Main canvas.
+    ComponentId placement = editor.on_canvas_click({300, 150});
+    std::cout << "Placed NAND: " << placement.value << ", inputs: " << editor.inputs(placement).size() << '\n';
+
+    ComponentId clicked_id = placement; // Reuse the placed ID in place of GUI hit-testing.
+    // User clicks this NAND placement and presses Delete.
+    editor.select_component(clicked_id);
+    editor.delete_selected();
+}
+
+void delete_wire_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId input = editor.add_component(ComponentKind::InputPin, {100, 100});
+    ComponentId first_output = editor.add_component(ComponentKind::OutputPin, {400, 100});
+    ComponentId second_output = editor.add_component(ComponentKind::OutputPin, {400, 200});
+    editor.connect_ports(editor.output_port(input), editor.input_port(first_output));
+
+    // Advanced: add an explicit branch with a session.
+    CircuitSession session = project.open(circuit);
+    WireNodeId junction = editor.attached_node(editor.output_port(input));
+    WireNodeId branch = session.add_node();
+    WireEdgeId edge = session.add_edge(junction, branch);
+    session.attach(editor.input_port(second_output), branch);
+    layout.set_node_position(circuit, junction, {250, 100});
+    layout.set_node_position(circuit, branch, {250, 200});
+
+    WireEdgeId clicked_edge = edge; // Reuse the segment ID in place of GUI hit-testing.
+    // User clicks and deletes this segment; the other branch stays connected.
+    editor.delete_wire(clicked_edge);
+    std::cout << "Remaining edges: " << editor.edges().size() << '\n';
+}
+
+void inspect_objects_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId input = editor.add_component(ComponentKind::InputPin, {100, 100});
+    ComponentId output = editor.add_component(ComponentKind::OutputPin, {400, 100});
+    editor.connect_ports(editor.output_port(input), editor.input_port(output));
+
+    // GUI associates each returned ID with the component it draws.
+    for (ComponentId id : editor.components())
+    {
+        ComponentProperties info = editor.properties(id);
+        std::cout << "Component " << id.value << ", type " << int(info.kind) << ", label " << info.label << '\n';
+        if (info.has_position)
+        {
+            std::cout << "  Position: " << info.position.x << ", " << info.position.y << '\n';
+        }
+        for (PortId port : info.inputs)
+        {
+            std::cout << "  Input " << port.value << " attaches to node " << editor.attached_node(port).value << '\n';
+        }
+        for (PortId port : info.outputs)
+        {
+            std::cout << "  Output " << port.value << " attaches to node " << editor.attached_node(port).value << '\n';
+        }
+    }
+    for (WireNodeId id : editor.nodes())
+    {
+        CanvasPosition position;
+        std::cout << "Node " << id.value;
+        if (editor.node_position(id, position))
+        {
+            std::cout << " at " << position.x << ", " << position.y;
+        }
+        std::cout << '\n';
+    }
+    for (WireEdgeId id : editor.edges())
+    {
+        auto endpoints = editor.edge_endpoints(id);
+        std::cout << "Edge " << id.value << ": nodes " << endpoints.first.value << ", " << endpoints.second.value << '\n';
+    }
+}
+
+void switch_circuit_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId main_circuit = project.add_circuit("Main");
+    CircuitId other_circuit = project.add_circuit("Other");
+    EditorController editor(project, main_circuit, layout);
+    ComponentId input = editor.add_component(ComponentKind::InputPin, {100, 100});
+    editor.set_input(input, HIGH);
+    if (!editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+
+    // User opens another circuit, then returns to Main.
+    editor.view_circuit(other_circuit);
+    editor.view_circuit(main_circuit);
+    std::cout << "Main input still holds " << editor.value(input) << '\n';
+}
+
+void grouped_edits_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    CircuitSession session = project.open(circuit);
+    CircuitLayout staged_layout = layout;
+
+    // Advanced: group related edits and positions into one user action.
+    session.batch([&](CircuitSession & edit)
+    {
+        ComponentId input = edit.create(ComponentKind::InputPin);
+        ComponentId output = edit.create(ComponentKind::OutputPin);
+        edit.connect(edit.output_port(input), edit.input_port(output));
+        staged_layout.set_component_position(circuit, input, {-40, 100});
+        staged_layout.set_component_position(circuit, output, {200, 100});
+    });
+    layout.swap(staged_layout);
+    std::cout << "Grouped action created " << session.components().size() << " components\n";
+}
+
+void display_diagnostics_example()
+{
+    ProjectController project;
+    CircuitLayout layout;
+    CircuitId circuit = project.add_circuit("Main");
+    EditorController editor(project, circuit, layout);
+    ComponentId first_input = editor.add_component(ComponentKind::InputPin, {100, 100});
+    ComponentId second_input = editor.add_component(ComponentKind::InputPin, {100, 200});
+    ComponentId inverter = editor.add_component(ComponentKind::NotGate, {300, 150});
+    ComponentId output = editor.add_component(ComponentKind::OutputPin, {500, 150});
+    editor.connect_ports(editor.output_port(first_input), editor.input_port(inverter));
+    editor.connect_ports(editor.output_port(second_input), editor.input_port(inverter));
+    editor.connect_ports(editor.output_port(inverter), editor.input_port(output));
+    editor.set_input(first_input, HIGH);
+    editor.set_input(second_input, LOW);
+    if (!editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+
+    // GUI displays electrical errors without removing the user's wires.
+    for (const SessionDiagnostic & diagnostic : editor.diagnostics())
+    {
+        std::cout << diagnostic.message << '\n';
+    }
+    // User repairs the conflicting inputs.
+    editor.set_input(second_input, HIGH);
+    if (!editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+    std::cout << "Repaired output: " << editor.value(output) << '\n';
+
+    // User changes one connected pin to an incompatible width.
+    editor.set_pin_width(first_input, 8);
+    if (!editor.run_simulation())
+    {
+        throw std::runtime_error("Simulation did not settle");
+    }
+    for (const SessionDiagnostic & diagnostic : editor.diagnostics())
+    {
+        std::cout << diagnostic.message << '\n';
+    }
+}
+
 int main()
 {
     try
     {
-        std::cout << "\n--- Example 1: AND Gate ---\n";
-        and_gate_example();
-
-        std::cout << "\n--- Example 2: Custom NAND ---\n";
-        custom_nand_example();
-
-        std::cout << "\n--- Example 3: Subcircuit ---\n";
-        subcircuit_example();
-
-        std::cout << "\n--- Example 4: Wire Branching ---\n";
-        wire_branch_example();
-
-        std::cout << "\n--- Example 5: Delete Wire ---\n";
-        delete_wire_example();
-
-        std::cout << "\n--- Example 6: Delete Component ---\n";
+        std::cout << "\n--- Create and rename a circuit ---\n";
+        create_circuit_example();
+        std::cout << "\n--- Place with a toolbar tool ---\n";
+        place_component_example();
+        std::cout << "\n--- Create directly ---\n";
+        add_component_example();
+        std::cout << "\n--- Select an existing component ---\n";
+        select_component_example();
+        std::cout << "\n--- Edit component properties ---\n";
+        edit_component_example();
+        std::cout << "\n--- Delete a component ---\n";
         delete_component_example();
-
-        std::cout << "\n--- Example 7: Delete One Custom Circuit Instance ---\n";
-        delete_subcircuit_example();
+        std::cout << "\n--- Connect and disconnect ports ---\n";
+        connect_ports_example();
+        std::cout << "\n--- Toggle an input ---\n";
+        toggle_input_example();
+        std::cout << "\n--- Read pin, port, and wire values ---\n";
+        read_signal_example();
+        std::cout << "\n--- Move a component ---\n";
+        move_component_example();
+        std::cout << "\n--- Duplicate a component ---\n";
+        duplicate_component_example();
+        std::cout << "\n--- Place and delete a reusable NAND ---\n";
+        place_subcircuit_example();
+        std::cout << "\n--- Delete an explicit wire segment ---\n";
+        delete_wire_example();
+        std::cout << "\n--- Inspect objects for drawing ---\n";
+        inspect_objects_example();
+        std::cout << "\n--- Switch circuits ---\n";
+        switch_circuit_example();
+        std::cout << "\n--- Group advanced edits ---\n";
+        grouped_edits_example();
+        std::cout << "\n--- Display diagnostics ---\n";
+        display_diagnostics_example();
     }
     catch (const std::exception & error)
     {
         std::cerr << "Error: " << error.what() << '\n';
         return 1;
     }
-
     return 0;
 }

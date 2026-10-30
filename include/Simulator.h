@@ -150,21 +150,25 @@ public:
     void notify_parent(CircuitState & state);
 
     /**
-     * @brief Updates a net value and schedules affected components.
+     * @brief Drives the sole output of a net and schedules affected components.
      * @param state Runtime state containing the net.
      * @param net Net whose value is being driven.
      * @param value New signal value.
-     * @throws std::invalid_argument If the signal width does not match the net.
-     * @note Unchanged values do not schedule additional evaluations.
+     * @throws std::invalid_argument If the net does not have exactly one driver,
+     * or the value width does not match that driver's port.
+     * @note Use the port overload for shared nets so the source is unambiguous.
+     * Unchanged resolved values do not schedule additional evaluations.
      */
     void drive(CircuitState & state, Net & net, const LogicVector & value);
 
     /**
-     * @brief Records an output value and drives its currently connected net.
+     * @brief Records an output value and resolves its net against all other drivers.
      * @param state Runtime instance containing the output port.
      * @param port Output port belonging to the instance's blueprint.
      * @param value Signal matching the port width.
      * @note Disconnected outputs retain their value for later live connections.
+     * Opposing known drivers produce ERROR bits. Incompatible widths remain
+     * connected but block signal transmission; query CircuitState::diagnostics().
      */
     void drive(CircuitState & state, Port & port, const LogicVector & value);
 
