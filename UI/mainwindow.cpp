@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Logisimp");
     resize(1200, 800);
 
-    Canvas *canvas = new Canvas(this);
+    gui::Canvas *canvas = new gui::Canvas(this);
 
     setCentralWidget(canvas);
 }

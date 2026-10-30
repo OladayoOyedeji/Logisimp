@@ -1,32 +1,42 @@
-#ifndef PORT_H
-#define PORT_H
+#pragma once
 
-class Gate;
+// This is the Logic port class
+// I should change the name of this header
+// to avoid confusion
+#include "Port.h"
 
-enum class PortType
+namespace gui
 {
-    INPUT,
-    OUTPUT
-};
+    class Gate;
 
-class Port
-{
-public:
-    Port(Gate*, double, double, PortType);
+    enum class PortType
+    {
+        INPUT,
+        OUTPUT
+    };
 
-    double getX() const;
-    double getY() const;
+    class Port
+    {
+    public:
+        Port(Gate*, double, double, PortType);
 
-    PortType getType();
+        double getX() const;
+        double getY() const;
 
-    bool contains(double, double) const;
-private:
-    Gate *parentGate;
+        PortType getType();
 
-    double offsetX;
-    double offsetY;
+        bool contains(double, double) const;
 
-    PortType type;
-};
+        void setLogicPort(::Port*);
+        ::Port* getLogicPort() const;
+    private:
+        Gate *parentGate;
 
-#endif // PORT_H
+        double offsetX;
+        double offsetY;
+
+        PortType type;
+
+        ::Port* logicPort = nullptr;
+    };
+}

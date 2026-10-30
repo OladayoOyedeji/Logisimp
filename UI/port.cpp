@@ -1,31 +1,44 @@
 #include "port.h"
 #include "gate.h"
 
-Port::Port(Gate* Gate, double x, double y, PortType type)
-    : parentGate(Gate), offsetX(x), offsetY(y), type(type)
-{}
-
-double Port::getX() const
+namespace gui
 {
-    return parentGate->getX() + offsetX;
-}
+    Port::Port(Gate* Gate, double x, double y, PortType type)
+        : parentGate(Gate), offsetX(x), offsetY(y), type(type)
+    {}
 
-double Port::getY() const
-{
-    return parentGate->getY() + offsetY;
-}
+    double Port::getX() const
+    {
+        return parentGate->getX() + offsetX;
+    }
 
-PortType Port::getType()
-{
-    return type;
-}
+    double Port::getY() const
+    {
+        return parentGate->getY() + offsetY;
+    }
 
-bool Port::contains(double x, double y) const
-{
-    double dx = x - getX();
-    double dy = y - getY();
+    PortType Port::getType()
+    {
+        return type;
+    }
 
-    double radius = 8.0;
+    bool Port::contains(double x, double y) const
+    {
+        double dx = x - getX();
+        double dy = y - getY();
 
-    return dx * dx + dy * dy <= radius * radius;
+        double radius = 8.0;
+
+        return dx * dx + dy * dy <= radius * radius;
+    }
+
+    void Port::setLogicPort(::Port* port)
+    {
+        logicPort = port;
+    }
+    
+    ::Port* Port::getLogicPort() const
+    {
+        return logicPort;
+    }
 }

@@ -1,32 +1,40 @@
-#ifndef GATE_H
-#define GATE_H
+#pragma once
 
 #include "circuit.h"
 #include <vector>
 #include <iostream>
 
-class Port;
+class Component;
 
-class Gate : public Circuit
+namespace gui
 {
-public:
-    virtual ~Gate() = default;
+    class Port;
+    
+    class Gate : public Circuit
+    {
+    public:
+        virtual ~Gate() = default;
 
-    double getX();
-    double getY();
+        double getX();
+        double getY();
 
-    const std::vector<Port*>& getInputPorts() const;
-    const std::vector<Port*>& getOutputPorts() const;
+        const std::vector<Port*>& getInputPorts() const;
+        const std::vector<Port*>& getOutputPorts() const;
 
-protected:
-    int numInputs = 0;
-    int numOutputs = 1;
+        void setLogicComponent(::Component* component);
+        ::Component* getLogicComponent() const;
 
-    double width = 50.0;
-    double height = 50.0;
+    protected:
+        int numInputs = 0;
+        int numOutputs = 1;
 
-    std::vector<Port*> inputPorts;
-    std::vector<Port*> outputPorts;
-};
+        double width = 50.0;
+        double height = 50.0;
 
-#endif // GATE_H
+        std::vector<Port*> inputPorts;
+        std::vector<Port*> outputPorts;
+
+    private:
+        ::Component* logicComponent = NULL;
+    };
+}

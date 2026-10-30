@@ -1,18 +1,18 @@
-#ifndef WIRE_H
-#define WIRE_H
+#pragma once
 
-class Port;
-
-class Wire
+namespace gui
 {
-public:
-    Wire(Port*, Port*);
+    class Port;
 
-    Port *getStart() const;
-    Port *getEnd() const;
-private:
-    Port *start;
-    Port *end;
-};
+    class Wire
+    {
+    public:
+        Wire(Port*, Port*);
 
-#endif // WIRE_H
+        Port *getStart() const;
+        Port *getEnd() const;
+    private:
+        Port *start;
+        Port *end;
+    };
+}

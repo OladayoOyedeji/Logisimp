@@ -1,133 +1,133 @@
-#ifndef GATES_H
-#define GATES_H
+#pragma once
 
 #include "gate.h"
 #include "port.h"
 #include "spritesheet.h"
 
-class AndGate : public Gate
+namespace gui
 {
-public:
-    AndGate()
+    class AndGate : public Gate
     {
-        numInputs = 2;
+    public:
+        AndGate()
+        {
+            numInputs = 2;
 
-        inputPorts.push_back(new Port(this, -width / 2, -12, PortType::INPUT));
-        inputPorts.push_back(new Port(this, -width / 2, 12, PortType::INPUT));
-        outputPorts.push_back(new Port(this, width / 2, 0, PortType::OUTPUT));
-    }
+            inputPorts.push_back(new Port(this, -width / 2, -12, PortType::INPUT));
+            inputPorts.push_back(new Port(this, -width / 2, 12, PortType::INPUT));
+            outputPorts.push_back(new Port(this, width / 2, 0, PortType::OUTPUT));
+        }
 
-    void draw(QPainter &painter, Spritesheet &sprites, double screenX, double screenY, double zoom) override
-    {
-        double drawWidth = width * zoom;
-        double drawHeight = height * zoom;
+        void draw(QPainter &painter, Spritesheet &sprites, double screenX, double screenY, double zoom) override
+        {
+            double drawWidth = width * zoom;
+            double drawHeight = height * zoom;
 
-        sprites.drawSprite(painter, 0, 0,
-                           screenX - drawWidth / 2, screenY - drawHeight / 2,
-                            drawWidth, drawHeight);
+            sprites.drawSprite(painter, 0, 0,
+                               screenX - drawWidth / 2, screenY - drawHeight / 2,
+                               drawWidth, drawHeight);
 
-        QPen gridPen(QColor(0, 0, 250));
+            QPen gridPen(QColor(0, 0, 250));
 
-        painter.setPen(gridPen);
+            painter.setPen(gridPen);
 
-        double screenWidth = width * zoom;
-        double screenHeight = height * zoom;
+            double screenWidth = width * zoom;
+            double screenHeight = height * zoom;
 
-        painter.drawRect(screenX - screenWidth / 2.0,
-                         screenY - screenHeight / 2.0,
-                         screenWidth, screenHeight);
-    }
+            painter.drawRect(screenX - screenWidth / 2.0,
+                             screenY - screenHeight / 2.0,
+                             screenWidth, screenHeight);
+        }
 
-    bool contains(double worldX, double worldY) const
-    {
-        return worldX >= x - width / 2.0 &&
-               worldX <= x + width / 2.0 &&
-               worldY >= y - height / 2.0 &&
-               worldY <= y + height / 2.0;
-    }
-};
-
-class OrGate : public Gate
-{
-public:
-    OrGate()
-    {
-        numInputs = 2;
-
-        inputPorts.push_back(new Port(this, -width / 2, -12, PortType::INPUT));
-        inputPorts.push_back(new Port(this, -width / 2, 12, PortType::INPUT));
-        outputPorts.push_back(new Port(this, width / 2, 0, PortType::OUTPUT));
-    }
-
-    void draw(QPainter &painter, Spritesheet &sprites, double screenX, double screenY, double zoom) override
-    {
-        double drawWidth = width * zoom;
-        double drawHeight = height * zoom;
-
-        sprites.drawSprite(painter, 0, 1,
-                           screenX - drawWidth / 2, screenY - drawHeight / 2,
-                           drawWidth, drawHeight);
-
-        QPen gridPen(QColor(0, 250, 0));
-
-        painter.setPen(gridPen);
-
-        double screenWidth = width * zoom;
-        double screenHeight = height * zoom;
-
-        painter.drawRect(screenX - screenWidth / 2.0,
-                         screenY - screenHeight / 2.0,
-                         screenWidth, screenHeight);
-    }
-
-    bool contains(double worldX, double worldY) const
-    {
-        return worldX >= x - width / 2.0 &&
-               worldX <= x + width / 2.0 &&
-               worldY >= y - height / 2.0 &&
-               worldY <= y + height / 2.0;
+        bool contains(double worldX, double worldY) const
+        {
+            return worldX >= x - width / 2.0 &&
+                worldX <= x + width / 2.0 &&
+                worldY >= y - height / 2.0 &&
+                worldY <= y + height / 2.0;
+        }
     };
-};
 
-class NotGate : public Gate
-{
-public:
-    NotGate()
+    class OrGate : public Gate
     {
-        numInputs = 1;
+    public:
+        OrGate()
+        {
+            numInputs = 2;
 
-        inputPorts.push_back(new Port(this, -width / 2, 0, PortType::INPUT));
-        outputPorts.push_back(new Port(this, width / 2, 0, PortType::OUTPUT));
-    }
+            inputPorts.push_back(new Port(this, -width / 2, -12, PortType::INPUT));
+            inputPorts.push_back(new Port(this, -width / 2, 12, PortType::INPUT));
+            outputPorts.push_back(new Port(this, width / 2, 0, PortType::OUTPUT));
+        }
 
-    void draw(QPainter &painter, Spritesheet &sprites, double screenX, double screenY, double zoom) override
+        void draw(QPainter &painter, Spritesheet &sprites, double screenX, double screenY, double zoom) override
+        {
+            double drawWidth = width * zoom;
+            double drawHeight = height * zoom;
+
+            sprites.drawSprite(painter, 0, 1,
+                               screenX - drawWidth / 2, screenY - drawHeight / 2,
+                               drawWidth, drawHeight);
+
+            QPen gridPen(QColor(0, 250, 0));
+
+            painter.setPen(gridPen);
+
+            double screenWidth = width * zoom;
+            double screenHeight = height * zoom;
+
+            painter.drawRect(screenX - screenWidth / 2.0,
+                             screenY - screenHeight / 2.0,
+                             screenWidth, screenHeight);
+        }
+
+        bool contains(double worldX, double worldY) const
+        {
+            return worldX >= x - width / 2.0 &&
+                worldX <= x + width / 2.0 &&
+                worldY >= y - height / 2.0 &&
+                worldY <= y + height / 2.0;
+        };
+    };
+
+    class NotGate : public Gate
     {
-        double drawWidth = width * zoom;
-        double drawHeight = height * zoom;
+    public:
+        NotGate()
+        {
+            numInputs = 1;
 
-        sprites.drawSprite(painter, 0, 2,
-                           screenX - drawWidth / 2, screenY - drawHeight / 2,
-                           drawWidth, drawHeight);
+            inputPorts.push_back(new Port(this, -width / 2, 0, PortType::INPUT));
+            outputPorts.push_back(new Port(this, width / 2, 0, PortType::OUTPUT));
+        }
 
-        QPen gridPen(QColor(250, 0, 0));
+        void draw(QPainter &painter, Spritesheet &sprites, double screenX, double screenY, double zoom) override
+        {
+            double drawWidth = width * zoom;
+            double drawHeight = height * zoom;
 
-        painter.setPen(gridPen);
+            sprites.drawSprite(painter, 0, 2,
+                               screenX - drawWidth / 2, screenY - drawHeight / 2,
+                               drawWidth, drawHeight);
 
-        double screenWidth = width * zoom;
-        double screenHeight = height * zoom;
+            QPen gridPen(QColor(250, 0, 0));
 
-        painter.drawRect(screenX - screenWidth / 2.0,
-                         screenY - screenHeight / 2.0,
-                         screenWidth, screenHeight);
-    }
+            painter.setPen(gridPen);
 
-    bool contains(double worldX, double worldY) const
-    {
-        return worldX >= x - width / 2.0 &&
-               worldX <= x + width / 2.0 &&
-               worldY >= y - height / 2.0 &&
-               worldY <= y + height / 2.0;
-    }
-};
+            double screenWidth = width * zoom;
+            double screenHeight = height * zoom;
 
-#endif // GATES_H
+            painter.drawRect(screenX - screenWidth / 2.0,
+                             screenY - screenHeight / 2.0,
+                             screenWidth, screenHeight);
+        }
+
+        bool contains(double worldX, double worldY) const
+        {
+            return worldX >= x - width / 2.0 &&
+                worldX <= x + width / 2.0 &&
+                worldY >= y - height / 2.0 &&
+                worldY <= y + height / 2.0;
+        }
+    };
+}

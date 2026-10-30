@@ -1,18 +1,20 @@
 #include "circuit.h"
 
-
-double Circuit::getX() const
+namespace gui
 {
-    return x;
-}
+    double Circuit::getX() const
+    {
+        return x;
+    }
 
-double Circuit::getY() const
-{
-    return y;
-}
+    double Circuit::getY() const
+    {
+        return y;
+    }
 
-void Circuit::setPosition(double newX, double newY)
-{
-    x = newX;
-    y = newY;
+    void Circuit::setPosition(double newX, double newY)
+    {
+        x = newX;
+        y = newY;
+    }
 }
