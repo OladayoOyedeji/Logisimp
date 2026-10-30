@@ -1,7 +1,7 @@
 /**
  * @file Test.h
- * @brief Archived test harness from the earlier simulator API.
- * @author Cole Schwandt
+ * @brief Archived testing code from an earlier version.
+ * @author Robert Oyedeji
  */
 
 /*

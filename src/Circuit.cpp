@@ -12,6 +12,7 @@
 #include "WireNode.h"
 #include "WireEdge.h"
 #include "Net.h"
+#include "ProjectEdit.h"
 
 #include <algorithm>
 #include <limits>
@@ -101,7 +102,7 @@ Pin & Circuit::create_pin(PinType type, int width)
         // Interface registration is part of pin creation; do not retain a
         // component that the circuit's public interface cannot find.
         components_.pop_back();
-        delete pin;
+        discard(pin);
         throw;
     }
 
@@ -154,7 +155,7 @@ WireNode & Circuit::create_wire_node(int width, const std::string & label)
     }
     catch (...)
     {
-        delete node;
+        discard(node);
         throw;
     }
     try
@@ -164,7 +165,7 @@ WireNode & Circuit::create_wire_node(int width, const std::string & label)
     catch (...)
     {
         wire_nodes_.pop_back();
-        delete node;
+        discard(node);
         throw;
     }
     ++next_node_id_;
@@ -210,7 +211,7 @@ WireEdge & Circuit::create_wire_edge(WireNode & first, WireNode & second)
         second.edges_.pop_back();
         first.edges_.pop_back();
         wire_edges_.pop_back();
-        delete edge;
+        discard(edge);
         throw;
     }
     ++next_edge_id_;
@@ -614,7 +615,7 @@ void Circuit::remove_component(Component & component)
         remove_pin_reference(*pin);
     }
     components_.erase(position);
-    delete component_pointer;
+    discard(component_pointer);
 }
 
 void Circuit::remove_component(Pin & pin)
@@ -652,7 +653,7 @@ void Circuit::remove_wire_edge(WireEdge & edge)
         second->edges_.insert(second->edges_.begin() + second_index, &edge);
         throw;
     }
-    delete &edge;
+    discard(&edge);
 }
 
 void Circuit::remove_wire_node(WireNode & node)
@@ -705,9 +706,9 @@ void Circuit::remove_wire_node(WireNode & node)
     }
     for (WireEdge * edge : incident_edges)
     {
-        delete edge;
+        discard(edge);
     }
-    delete &node;
+    discard(&node);
 }
 
 void Circuit::clear()
@@ -725,19 +726,19 @@ void Circuit::clear()
     }
     for (Net * net : nets_)
     {
-        delete net;
+        discard(net);
     }
     for (WireEdge * edge : wire_edges_)
     {
-        delete edge;
+        discard(edge);
     }
     for (WireNode * node : wire_nodes_)
     {
-        delete node;
+        discard(node);
     }
     for (Component * component : components_)
     {
-        delete component;
+        discard(component);
     }
     nets_.clear();
     wire_edges_.clear();
@@ -749,10 +750,14 @@ void Circuit::clear()
 
 void Circuit::store_component(Component * component)
 {
-    if (active_states_ != 0)
+    try
+    {
+        require_editable();
+    }
+    catch (...)
     {
         delete component;
-        require_editable();
+        throw;
     }
     if (next_component_id_ == std::numeric_limits< int >::max())
     {
@@ -762,6 +767,7 @@ void Circuit::store_component(Component * component)
 
     try
     {
+        component->edit_ = edit_;
         components_.push_back(component);
     }
     catch (...)
@@ -828,10 +834,15 @@ bool Circuit::owns_port(const Port & port) const
 
 void Circuit::require_editable() const
 {
-    if (active_states_ != 0)
+    if (active_states_ != 0 && edit_ == nullptr)
     {
-        throw std::logic_error("Clear affected simulator queues and destroy runtime states before structural editing");
+        throw std::logic_error("Use ProjectController for live edits, or clear affected simulator queues and destroy runtime states before direct Project editing");
     }
+}
+
+bool Circuit::preserves(const void * object) const noexcept
+{
+    return edit_ != nullptr && edit_->retains(object);
 }
 
 void Circuit::rebuild_nets()
@@ -920,7 +931,7 @@ void Circuit::rebuild_nets()
             }
             catch (...)
             {
-                delete net;
+                discard(net);
                 throw;
             }
             ++next_id;
@@ -934,7 +945,7 @@ void Circuit::rebuild_nets()
     {
         for (Net * net : staged_nets)
         {
-            delete net;
+            discard(net);
         }
         throw;
     }
@@ -970,6 +981,6 @@ void Circuit::rebuild_nets()
     }
     for (Net * net : staged_nets)
     {
-        delete net;
+        discard(net);
     }
 }

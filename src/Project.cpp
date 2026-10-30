@@ -11,6 +11,7 @@
 #include "Subcircuit.h"
 #include "WireEdge.h"
 #include "WireNode.h"
+#include "ProjectEdit.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -32,6 +33,7 @@ Circuit & Project::create_circuit()
 {
     // Keep ownership and the placement registry in step if insertion fails.
     Circuit * circuit = new Circuit();
+    circuit->edit_ = edit_;
 
     try
     {
@@ -525,7 +527,10 @@ void Project::remove_circuit(Circuit & circuit)
     placements_.erase(&circuit);
     circuits_.erase(position);
 
-    delete &circuit;
+    if (edit_ == nullptr || !edit_->retains(&circuit))
+    {
+        delete &circuit;
+    }
 }
 
 void Project::require_circuit(const Circuit & circuit) const

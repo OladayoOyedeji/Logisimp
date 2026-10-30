@@ -22,7 +22,6 @@ docs/xml/
 *CMakeFiles/
 *cmake_install.cmake
 *CTestTestfile.cmake
-Makefile
 
 # Debugging/profiling files
 core

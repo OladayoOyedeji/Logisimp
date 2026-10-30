@@ -9,6 +9,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Keep this prototype's compilation database and diagrams separate from core.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/Uml.cmake")
+logisimp_add_uml_targets("${CMAKE_CURRENT_SOURCE_DIR}/../.clang-uml-ui" gui_prototype)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
 
@@ -98,3 +103,6 @@ install(TARGETS Logisimp
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Logisimp)
 endif()
+
+# clang-uml needs ui_mainwindow.h and the other Qt-generated headers to exist.
+add_dependencies(uml Logisimp_autogen)

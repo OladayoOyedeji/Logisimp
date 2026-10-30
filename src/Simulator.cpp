@@ -95,6 +95,11 @@ void Simulator::drive(CircuitState & state, Net & net, const LogicVector & value
     }
 
     LogicVector & current_value = state.value(net);
+    if (net.driver() != nullptr)
+    {
+        // Keep low-level net drives consistent with the output-value cache too.
+        state.output_values_.at(net.driver()) = value;
+    }
     if (current_value == value)
     {
         // Stable signals, including identical UNKNOWN bits, must not keep
@@ -109,6 +114,22 @@ void Simulator::drive(CircuitState & state, Net & net, const LogicVector & value
     for (Port * listener : net.listeners())
     {
         enqueue(state, listener->owner());
+    }
+}
+
+void Simulator::drive(CircuitState & state, Port & port, const LogicVector & value)
+{
+    if (port.direction() != OUTPUT || port.width() != value.width())
+    {
+        throw std::invalid_argument("Output drive requires an output port with matching width");
+    }
+
+    // The map also validates that this output belongs to the runtime instance.
+    // A disconnected output still has a value, independently of derived nets.
+    state.output_values_.at(&port) = value;
+    if (port.net() != nullptr)
+    {
+        drive(state, *port.net(), value);
     }
 }
 
@@ -160,6 +181,37 @@ void Simulator::clear()
     }
 
     queued_components_.clear();
+}
+
+void Simulator::discard(CircuitState & state)
+{
+    Simulator replacement;
+    std::queue< Event > pending = work_queue_;
+    while (!pending.empty())
+    {
+        Event event = pending.front();
+        pending.pop();
+
+        CircuitState * ancestor = event.state;
+        while (ancestor != nullptr && ancestor != &state)
+        {
+            ancestor = ancestor->parent();
+        }
+
+        if (ancestor == nullptr)
+        {
+            replacement.enqueue(*event.state, event.component);
+        }
+    }
+
+    // Allocation failures above leave the original queue and set untouched.
+    swap_pending(replacement);
+}
+
+void Simulator::swap_pending(Simulator & other) noexcept
+{
+    work_queue_.swap(other.work_queue_);
+    queued_components_.swap(other.queued_components_);
 }
 
 std::string Simulator::to_string() const

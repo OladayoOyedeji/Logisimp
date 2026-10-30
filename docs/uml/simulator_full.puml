@@ -1,0 +1,857 @@
+@startuml
+skinparam classAttributeIconSize 0
+abstract "Component" as C_0012021292812520796288
+abstract C_0012021292812520796288 {
++Component(int id, const std::string & label = "") : void
++Component(const Component & other) = deleted : void
++Component(Component && other) = deleted : void
++~Component() : void
+..
++operator=(const Component & other) = deleted : Component &
++operator=(Component && other) = deleted : Component &
+..
+#add_input(int width = 1, const std::string & label = "", int port_id = -1) : Port *
+#add_output(int width = 1, const std::string & label = "", int port_id = -1) : Port *
+-clear_ports() : void
++create_state(CircuitState &) const : ComponentState *
+{abstract} +evaluate(Simulator & simulator, CircuitState & state) = 0 : void
++id() const : int
++input_count() const : int
++input_port(int i) : Port *
++input_port(int i) const : Port *
++inputs() const : const std::vector<Port *> &
++label() : std::string &
++label() const : std::string
++output_count() const : int
++output_port(int i) : Port *
++output_port(int i) const : Port *
++outputs() const : const std::vector<Port *> &
+-remove_port(Port & port) : void
+-resolve_port_id(int port_id) const : int
++to_string() const : std::string
+__
+-edit_ : ProjectEdit *
+-id_ : int
+-inputs_ : std::vector<Port *>
+-label_ : std::string
+-next_port_id_ : int
+-outputs_ : std::vector<Port *>
+}
+enum "LogicValue" as C_0005627372102267362270
+enum C_0005627372102267362270 {
+LOW
+HIGH
+UNKNOWN
+}
+class "LogicVector" as C_0000095447136309579022
+class C_0000095447136309579022 {
++LogicVector(int width = 1, LogicValue initial_value = UNKNOWN) : void
+..
++operator!=(const LogicVector & other) const : bool
++operator==(const LogicVector & other) const : bool
++operator[](int index) : LogicValue &
++operator[](int index) const : LogicValue
+..
++bits() : std::vector<LogicValue> &
++bits() const : std::vector<LogicValue>
++fully_known() const : bool
++to_string() const : std::string
++width() const : int
+__
+-bits_ : std::vector<LogicValue>
+}
+enum "PinType" as C_0008839915355094929020
+enum C_0008839915355094929020 {
+INPUT_PIN
+OUTPUT_PIN
+}
+class "Pin" as C_0010212077193276233652
+class C_0010212077193276233652 {
++Pin(int id, PinType type, int width = 1) : void
+..
++create_state(CircuitState & state) const : ComponentState *
++evaluate(Simulator & simulator, CircuitState & state) : void
++set(const LogicVector & value, Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
++toggle(Simulator & simulator, CircuitState & state) : void
++type() const : PinType
++value(CircuitState & state) : LogicVector &
++value(const CircuitState & state) const : LogicVector
++width() const : int
+__
+-type_ : PinType
+-width_ : int
+}
+enum "PortDirection" as C_0010738309191274922747
+enum C_0010738309191274922747 {
+INPUT
+OUTPUT
+}
+class "Port" as C_0012922195233569016454
+class C_0012922195233569016454 {
++Port(int id, int width, PortDirection direction, const std::string & label = "") : void
++Port(const Port & other) = deleted : void
++Port(Port && other) = deleted : void
+..
++operator=(const Port & other) = deleted : Port &
++operator=(Port && other) = deleted : Port &
+..
++connected() const : bool
++direction() const : PortDirection
++id() const : int
++label() : std::string &
++label() const : std::string
++net() const : Net *
++node() const : WireNode *
++owner() const : Component *
++to_string() const : std::string
++width() const : int
+__
+-direction_ : PortDirection
+-id_ : int
+-label_ : std::string
+-net_ : Net *
+-node_ : WireNode *
+-owner_ : Component *
+-width_ : int
+}
+class "WireNode" as C_0010906916617868605028
+class C_0010906916617868605028 {
++WireNode(const WireNode & other) = deleted : void
++WireNode(WireNode && other) = deleted : void
+-WireNode(Circuit & circuit, int id, int width = 0, const std::string & label = "") : void
++~WireNode() : void
+..
++operator=(const WireNode & other) = deleted : WireNode &
++operator=(WireNode && other) = deleted : WireNode &
+..
++circuit() const : Circuit *
++edges() const : const std::vector<WireEdge *> &
++id() const : int
++label() : std::string &
++label() const : std::string
++net() const : Net *
++ports() const : const std::vector<Port *> &
++to_string() const : std::string
++width() const : int
+__
+-circuit_ : Circuit *
+-edges_ : std::vector<WireEdge *>
+-id_ : int
+-label_ : std::string
+-net_ : Net *
+-ports_ : std::vector<Port *>
+-width_ : int
+}
+class "WireEdge" as C_0011329506470064324141
+class C_0011329506470064324141 {
++WireEdge(const WireEdge & other) = deleted : void
++WireEdge(WireEdge && other) = deleted : void
+-WireEdge(Circuit & circuit, int id, WireNode & first, WireNode & second) : void
++~WireEdge() : void
+..
++operator=(const WireEdge & other) = deleted : WireEdge &
++operator=(WireEdge && other) = deleted : WireEdge &
+..
++circuit() const : Circuit *
++first() const : WireNode *
++id() const : int
++second() const : WireNode *
++to_string() const : std::string
+__
+-circuit_ : Circuit *
+-first_ : WireNode *
+-id_ : int
+-second_ : WireNode *
+}
+class "Net" as C_0003981729738034691704
+class C_0003981729738034691704 {
++Net(const Net & other) = deleted : void
++Net(Net && other) = deleted : void
+-Net(Circuit & circuit, int id, int width) : void
++~Net() : void
+..
++operator=(const Net & other) = deleted : Net &
++operator=(Net && other) = deleted : Net &
+..
++circuit() const : Circuit *
++driver() const : Port *
++id() const : int
++label() const : std::string
++listeners() const : const std::vector<Port *> &
++nodes() const : const std::vector<WireNode *> &
++ports() const : const std::vector<Port *> &
++to_string() const : std::string
++width() const : int
+__
+-circuit_ : Circuit *
+-driver_ : Port *
+-id_ : int
+-listeners_ : std::vector<Port *>
+-nodes_ : std::vector<WireNode *>
+-ports_ : std::vector<Port *>
+-width_ : int
+}
+class "Circuit" as C_0002100354596553851764
+class C_0002100354596553851764 {
++Circuit(const Circuit & other) = deleted : void
++Circuit(Circuit && other) = deleted : void
+-Circuit() : void
+-~Circuit() : void
+..
++operator=(const Circuit & other) = deleted : Circuit &
++operator=(Circuit && other) = deleted : Circuit &
+..
+-clear() : void
++comp_size() const : int
++component_at(int index) : Component &
++component_at(int index) const : const Component &
++components() const : const std::vector<Component *> &
+-connect(Port & port, WireNode & node) : void
+-create_and_gate(int input_count = 2) : AndGate &
+-create_nand_gate(int input_count = 2) : NandGate &
+-create_nor_gate(int input_count = 2) : NorGate &
+-create_not_gate() : NotGate &
+-create_or_gate(int input_count = 2) : OrGate &
+-create_pin(PinType type, int width = 1) : Pin &
+-create_subcircuit(Circuit & circuit) : Subcircuit &
+-create_wire_edge(WireNode & first, WireNode & second) : WireEdge &
+-create_wire_node(int width = 0, const std::string & label = "") : WireNode &
+-create_xnor_gate(int input_count = 2) : XnorGate &
+-create_xor_gate(int input_count = 2) : XorGate &
+-detach_ports(const std::vector<Port *> & ports) : void
+-discard<T>(T * object) : void
+-disconnect(Port & port) : void
++input_pin(int index) : Pin &
++input_pin(int index) const : const Pin &
++input_pins() const : const std::vector<Pin *> &
+-move_pin(Pin & pin, int index) : void
++nets() const : const std::vector<Net *> &
++output_pin(int index) : Pin &
++output_pin(int index) const : const Pin &
++output_pins() const : const std::vector<Pin *> &
+-owns_component(const Component & component) const : bool
+-owns_port(const Port & port) const : bool
+-owns_wire_edge(const WireEdge & edge) const : bool
+-owns_wire_node(const WireNode & node) const : bool
+-preserves(const void * object) const noexcept : bool
+-rebuild_nets() : void
+-remove_component(Component & component) : void
+-remove_component(Pin & pin) : void
+-remove_obsolete_subcircuit_ports(Subcircuit & subcircuit, const std::vector<Pin *> & interface_pins, PortDirection direction) : void
+-remove_pin_reference(Pin & pin) : void
+-remove_wire_edge(WireEdge & edge) : void
+-remove_wire_node(WireNode & node) : void
+-require_editable() const : void
+-set_pin_label(Pin & pin, const std::string & label) : void
+-set_pin_type(Pin & pin, PinType type) : void
+-set_pin_width(Pin & pin, int width) : void
+-store_component(Component * component) : void
+-sync_subcircuit(Subcircuit & subcircuit) : void
+-sync_subcircuit_ports(Subcircuit & subcircuit, const std::vector<Pin *> & interface_pins, PortDirection direction) : void
++uses(const Circuit & circuit) const : bool
++wire_edges() const : const std::vector<WireEdge *> &
++wire_nodes() const : const std::vector<WireNode *> &
+__
+-active_states_ : int
+-components_ : std::vector<Component *>
+-edit_ : ProjectEdit *
+-input_pins_ : std::vector<Pin *>
+-nets_ : std::vector<Net *>
+-next_component_id_ : int
+-next_edge_id_ : int
+-next_net_id_ : int
+-next_node_id_ : int
+-output_pins_ : std::vector<Pin *>
+-wire_edges_ : std::vector<WireEdge *>
+-wire_nodes_ : std::vector<WireNode *>
+}
+class "Gate" as C_0013080558324401569490
+class C_0013080558324401569490 {
++Gate(int id, int input_count) : void
+..
+#drive_output(LogicValue value, Simulator & simulator, CircuitState & state) : void
+#input_value(int index, CircuitState & state) const : LogicValue
++output_port(int index = 0) : Port *
++output_port(int index = 0) const : Port *
++to_string() const : std::string
+__
+}
+class "AndGate" as C_0015329816840038068697
+class C_0015329816840038068697 {
++AndGate(int id, int input_count = 2) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "OrGate" as C_0007727972120958977347
+class C_0007727972120958977347 {
++OrGate(int id, int input_count = 2) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "NotGate" as C_0014605788223068808997
+class C_0014605788223068808997 {
++NotGate(int id) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "NandGate" as C_0009480862825997698997
+class C_0009480862825997698997 {
++NandGate(int id, int input_count = 2) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "NorGate" as C_0003191460015409381775
+class C_0003191460015409381775 {
++NorGate(int id, int input_count = 2) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "XorGate" as C_0007658747487680159345
+class C_0007658747487680159345 {
++XorGate(int id, int input_count = 2) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "XnorGate" as C_0005807718526989098261
+class C_0005807718526989098261 {
++XnorGate(int id, int input_count = 2) : void
+..
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+}
+class "Subcircuit" as C_0015829559209121425028
+class C_0015829559209121425028 {
++Subcircuit(int id, Circuit & circuit) : void
+..
++circuit() const : Circuit *
++create_state(CircuitState & state) const : ComponentState *
++evaluate(Simulator & simulator, CircuitState & state) : void
++to_string() const : std::string
+__
+-circuit_ : Circuit *
+}
+class "Project" as C_0002891392277436613086
+class C_0002891392277436613086 {
++Project() : void
++Project(const Project & other) = deleted : void
++Project(Project && other) = deleted : void
++~Project() : void
+..
++operator=(const Project & other) = deleted : Project &
++operator=(Project && other) = deleted : Project &
+..
++circuits() const : const std::vector<Circuit *> &
++clear_circuit(Circuit & circuit) : void
++connect(Circuit & circuit, Port & port, WireNode & node) : void
++copy_circuit(const Circuit & source) : Circuit &
++copy_component(Circuit & destination, const Component & source) : Component &
+-copy_component_impl(Circuit & destination, const Component & source) : Component &
++copy_wire_node(Circuit & destination, const WireNode & source) : WireNode &
++create_and_gate(Circuit & circuit, int input_count = 2) : AndGate &
++create_circuit() : Circuit &
++create_nand_gate(Circuit & circuit, int input_count = 2) : NandGate &
++create_nor_gate(Circuit & circuit, int input_count = 2) : NorGate &
++create_not_gate(Circuit & circuit) : NotGate &
++create_or_gate(Circuit & circuit, int input_count = 2) : OrGate &
++create_pin(Circuit & circuit, PinType type, int width = 1) : Pin &
++create_subcircuit(Circuit & parent, Circuit & circuit) : Subcircuit &
++create_wire_edge(Circuit & circuit, WireNode & first, WireNode & second) : WireEdge &
++create_wire_node(Circuit & circuit, int width = 0, const std::string & label = "") : WireNode &
++create_xnor_gate(Circuit & circuit, int input_count = 2) : XnorGate &
++create_xor_gate(Circuit & circuit, int input_count = 2) : XorGate &
++disconnect(Circuit & circuit, Port & port) : void
++move_pin(Circuit & circuit, Pin & pin, int index) : void
++remove_circuit(Circuit & circuit) : void
++remove_component(Circuit & circuit, Component & component) : void
++remove_component(Circuit & circuit, Subcircuit & subcircuit) : void
++remove_component(Circuit & circuit, Pin & pin) : void
++remove_wire_edge(Circuit & circuit, WireEdge & edge) : void
++remove_wire_node(Circuit & circuit, WireNode & node) : void
+-require_circuit(const Circuit & circuit) const : void
+-require_interfaces_editable(const Circuit & circuit) const : void
++set_pin_label(Circuit & circuit, Pin & pin, const std::string & label) : void
++set_pin_type(Circuit & circuit, Pin & pin, PinType type) : void
++set_pin_width(Circuit & circuit, Pin & pin, int width) : void
+-sync_interfaces(const Circuit & circuit) : void
+__
+-circuits_ : std::vector<Circuit *>
+-edit_ : ProjectEdit *
+-placements_ : std::unordered_map<const Circuit *,std::vector<Placement>>
+}
+class "Project::Placement" as C_0016610897616012757099
+class C_0016610897616012757099 {
++Placement(Circuit & parent, Subcircuit & subcircuit) : void
+__
++parent : Circuit *
++subcircuit : Subcircuit *
+}
+class "ProjectEdit" as C_0001785998745313036898
+class C_0001785998745313036898 {
++ProjectEdit(Project & project) : void
++ProjectEdit(const ProjectEdit & other) = deleted : void
++~ProjectEdit() : void
+..
++operator=(const ProjectEdit & other) = deleted : ProjectEdit &
+..
++commit() noexcept : void
+-disable() noexcept : void
++retains(const void * object) const noexcept : bool
+-rollback() noexcept : void
+__
+-circuit_snapshots_ : std::vector<CircuitSnapshot>
+-circuits_ : std::vector<Circuit *>
+-component_snapshots_ : std::vector<ComponentSnapshot>
+-finished_ : bool
+-node_snapshots_ : std::vector<NodeSnapshot>
+-placements_ : std::unordered_map<const Circuit *,std::vector<Project::Placement>>
+-port_snapshots_ : std::vector<PortSnapshot>
+-project_ : Project &
+-retained_ : std::unordered_set<const void *>
+}
+class "ProjectEdit::CircuitSnapshot" as C_0003151428323056022179
+class C_0003151428323056022179 {
++CircuitSnapshot(Circuit & circuit) : void
+__
++circuit : Circuit *
++components : std::vector<Component *>
++edges : std::vector<WireEdge *>
++inputs : std::vector<Pin *>
++nets : std::vector<Net *>
++next_component_id : int
++next_edge_id : int
++next_net_id : int
++next_node_id : int
++nodes : std::vector<WireNode *>
++outputs : std::vector<Pin *>
+}
+class "ProjectEdit::ComponentSnapshot" as C_0011460590110442287143
+class C_0011460590110442287143 {
++ComponentSnapshot(Component & component) : void
+__
++component : Component *
++inputs : std::vector<Port *>
++label : std::string
++next_port_id : int
++outputs : std::vector<Port *>
++pin : Pin *
++pin_type : PinType
++pin_width : int
+}
+class "ProjectEdit::PortSnapshot" as C_0011816962920055355035
+class C_0011816962920055355035 {
++PortSnapshot(Port & port) : void
+__
++direction : PortDirection
++label : std::string
++net : Net *
++node : WireNode *
++owner : Component *
++port : Port *
++width : int
+}
+class "ProjectEdit::NodeSnapshot" as C_0018427948609970008312
+class C_0018427948609970008312 {
++NodeSnapshot(WireNode & node) : void
+__
++edges : std::vector<WireEdge *>
++label : std::string
++net : Net *
++node : WireNode *
++ports : std::vector<Port *>
++width : int
+}
+class "ComponentState" as C_0001126003598956189461
+class C_0001126003598956189461 {
++~ComponentState() : void
+__
+}
+class "CircuitState" as C_0001533191664366905161
+class C_0001533191664366905161 {
++CircuitState(const Circuit & circuit, CircuitState * parent = nullptr, const Subcircuit * parent_subcircuit = nullptr) : void
++CircuitState(const CircuitState & other) = deleted : void
++CircuitState(CircuitState && other) = deleted : void
++~CircuitState() : void
+..
++operator=(const CircuitState & other) = deleted : CircuitState &
++operator=(CircuitState && other) = deleted : CircuitState &
+..
++circuit() const : const Circuit &
+-clear_component_states() : void
++component_state(const Component & component) : ComponentState &
++component_state(const Component & component) const : const ComponentState &
++initialize(Simulator & simulator) : bool
++parent() const : CircuitState *
++placement() const : const Subcircuit *
++reset() : void
++reset(Simulator & simulator) : bool
++to_string() const : std::string
++value(const Net & net) : LogicVector &
++value(const Net & net) const : LogicVector
+__
+-circuit_ : const Circuit *
+-component_states_ : std::unordered_map<const Component *,ComponentState *>
+-net_values_ : std::unordered_map<const Net *,LogicVector>
+-output_values_ : std::unordered_map<const Port *,LogicVector>
+-parent_ : CircuitState *
+-parent_subcircuit_ : const Subcircuit *
+-pin_shapes_ : std::unordered_map<const Component *,std::pair<int,int>>
+}
+class "ProjectController" as C_0007320946052845762590
+class C_0007320946052845762590 {
++ProjectController() : void
++ProjectController(const ProjectController & other) = deleted : void
++ProjectController(ProjectController && other) = deleted : void
++~ProjectController() : void
+..
++operator=(const ProjectController & other) = deleted : ProjectController &
++operator=(ProjectController && other) = deleted : ProjectController &
+..
++circuits() const : const std::vector<Circuit *> &
++clear_circuit(Circuit & circuit) : void
+-collect_instances(CircuitState & state, std::vector<CircuitState *> & instances) const : void
++connect(Circuit & circuit, Port & port, WireNode & node) : void
++copy_circuit(const Circuit & source) : Circuit &
++copy_component(Circuit & destination, const Component & source) : Component &
++copy_wire_node(Circuit & destination, const WireNode & source) : WireNode &
++create_and_gate(Circuit & circuit, int input_count = 2) : AndGate &
++create_circuit() : Circuit &
++create_nand_gate(Circuit & circuit, int input_count = 2) : NandGate &
++create_nor_gate(Circuit & circuit, int input_count = 2) : NorGate &
++create_not_gate(Circuit & circuit) : NotGate &
++create_or_gate(Circuit & circuit, int input_count = 2) : OrGate &
++create_pin(Circuit & circuit, PinType type, int width = 1) : Pin &
++create_subcircuit(Circuit & parent, Circuit & circuit) : Subcircuit &
++create_wire_edge(Circuit & circuit, WireNode & first, WireNode & second) : WireEdge &
++create_wire_node(Circuit & circuit, int width = 0, const std::string & label = "") : WireNode &
++create_xnor_gate(Circuit & circuit, int input_count = 2) : XnorGate &
++create_xor_gate(Circuit & circuit, int input_count = 2) : XorGate &
++disconnect(Circuit & circuit, Port & port) : void
+-edit(const std::function<void ()> & operation) : void
++move_pin(Circuit & circuit, Pin & pin, int index) : void
++remove_circuit(Circuit & circuit) : void
++remove_component(Circuit & circuit, Component & component) : void
++remove_wire_edge(Circuit & circuit, WireEdge & edge) : void
++remove_wire_node(Circuit & circuit, WireNode & node) : void
+-require_managed_instances() const : void
+-require_pin(const CircuitState & state, const Pin & pin) const : void
+-require_state(const CircuitState & state) const : void
++root_states() const : const std::vector<CircuitState *> &
++run() : bool
++set(CircuitState & state, Pin & pin, const LogicVector & value) : void
++set_pin_label(Circuit & circuit, Pin & pin, const std::string & label) : void
++set_pin_type(Circuit & circuit, Pin & pin, PinType type) : void
++set_pin_width(Circuit & circuit, Pin & pin, int width) : void
++simulator() const : const Simulator &
++start(Circuit & circuit) : CircuitState &
++stop(CircuitState & state) : void
++toggle(CircuitState & state, Pin & pin) : void
+__
+-busy_ : bool
+-project_ : Project
+-root_states_ : std::vector<CircuitState *>
+-simulator_ : Simulator
+}
+class "Simulator" as C_0012774722530647903149
+class C_0012774722530647903149 {
++Simulator() : void
++Simulator(const Simulator & other) = deleted : void
++Simulator(Simulator && other) = deleted : void
+..
++operator=(const Simulator & other) = deleted : Simulator &
++operator=(Simulator && other) = deleted : Simulator &
+..
++clear() : void
++discard(CircuitState & state) : void
++drive(CircuitState & state, Net & net, const LogicVector & value) : void
++drive(CircuitState & state, Port & port, const LogicVector & value) : void
++enqueue(CircuitState & state, Component * component) : void
++notify_parent(CircuitState & state) : void
++queued_components() const : const std::unordered_set<Event,EventHash> &
++run() : bool
++schedule(CircuitState & state) : void
++swap_pending(Simulator & other) noexcept : void
++to_string() const : std::string
++work_queue() const : const std::queue<Event> &
+__
+-queued_components_ : std::unordered_set<Event,EventHash>
+-work_queue_ : std::queue<Event>
+}
+class "Simulator::Event" as C_0013557234895996272153
+class C_0013557234895996272153 {
++operator==(const Event & other) const : bool
+..
++Event(CircuitState & state, Component & component) : void
+__
++component : Component *
++state : CircuitState *
+}
+class "Simulator::EventHash" as C_0014392161956102251109
+class C_0014392161956102251109 {
++operator()(const Event & event) const : std::size_t
+__
+}
+class "StateUpdate" as C_0008062408834374337183
+class C_0008062408834374337183 {
++StateUpdate(CircuitState & state) : void
++StateUpdate(const StateUpdate & other) = deleted : void
++~StateUpdate() : void
+..
++operator=(const StateUpdate & other) = deleted : StateUpdate &
+..
+-clear_prepared() noexcept : void
++commit() noexcept : void
+-prepare() : void
++schedule(Simulator & simulator) const : void
+__
+-children_ : std::vector<StateUpdate *>
+-committed_ : bool
+-component_states_ : std::unordered_map<const Component *,ComponentState *>
+-created_states_ : std::vector<ComponentState *>
+-net_values_ : std::unordered_map<const Net *,LogicVector>
+-output_values_ : std::unordered_map<const Port *,LogicVector>
+-pin_shapes_ : std::unordered_map<const Component *,std::pair<int,int>>
+-state_ : CircuitState &
+}
+class "PinState" as C_0005774034676253325705
+class C_0005774034676253325705 {
++PinState(int width, LogicValue initial_value = UNKNOWN) : void
+..
++value() : LogicVector &
++value() const : LogicVector
+__
+-value_ : LogicVector
+}
+class "SubcircuitState" as C_0001305590546556982873
+class C_0001305590546556982873 {
++SubcircuitState(const Subcircuit & subcircuit, CircuitState & parent) : void
+..
++child_state() : CircuitState &
++child_state() const : const CircuitState &
+__
+-child_state_ : CircuitState
+}
+class "ControllerActivity" as C_0013261455967991708896
+class C_0013261455967991708896 {
++ControllerActivity(bool & busy) : void
++~ControllerActivity() : void
+__
+-busy_ : bool &
+}
+C_0012021292812520796288 ..> C_0001533191664366905161
+C_0012021292812520796288 ..> C_0001126003598956189461
+C_0012021292812520796288 ..> C_0012774722530647903149
+C_0012021292812520796288 --> C_0012922195233569016454 : -inputs_
+C_0012021292812520796288 --> C_0012922195233569016454 : -outputs_
+C_0012021292812520796288 --> C_0001785998745313036898 : -edit_
+C_0012021292812520796288 <.. C_0001785998745313036898 : +<<friend>>
+C_0012021292812520796288 <.. C_0002100354596553851764 : +<<friend>>
+C_0000095447136309579022 o-- C_0005627372102267362270 : -bits_
+C_0010212077193276233652 ..> C_0001533191664366905161
+C_0010212077193276233652 ..> C_0000095447136309579022
+C_0010212077193276233652 ..> C_0012774722530647903149
+C_0010212077193276233652 ..> C_0001126003598956189461
+C_0010212077193276233652 o-- C_0008839915355094929020 : -type_
+C_0010212077193276233652 <.. C_0001785998745313036898 : +<<friend>>
+C_0010212077193276233652 <.. C_0002100354596553851764 : +<<friend>>
+C_0012021292812520796288 <|-- C_0010212077193276233652
+C_0012922195233569016454 o-- C_0010738309191274922747 : -direction_
+C_0012922195233569016454 --> C_0012021292812520796288 : -owner_
+C_0012922195233569016454 --> C_0010906916617868605028 : -node_
+C_0012922195233569016454 --> C_0003981729738034691704 : -net_
+C_0012922195233569016454 <.. C_0001785998745313036898 : +<<friend>>
+C_0012922195233569016454 <.. C_0012021292812520796288 : +<<friend>>
+C_0012922195233569016454 <.. C_0002100354596553851764 : +<<friend>>
+C_0010906916617868605028 --> C_0002100354596553851764 : -circuit_
+C_0010906916617868605028 --> C_0011329506470064324141 : -edges_
+C_0010906916617868605028 --> C_0012922195233569016454 : -ports_
+C_0010906916617868605028 --> C_0003981729738034691704 : -net_
+C_0010906916617868605028 <.. C_0001785998745313036898 : +<<friend>>
+C_0010906916617868605028 <.. C_0002100354596553851764 : +<<friend>>
+C_0011329506470064324141 --> C_0002100354596553851764 : -circuit_
+C_0011329506470064324141 --> C_0010906916617868605028 : -first_
+C_0011329506470064324141 --> C_0010906916617868605028 : -second_
+C_0011329506470064324141 <.. C_0002100354596553851764 : +<<friend>>
+C_0003981729738034691704 --> C_0002100354596553851764 : -circuit_
+C_0003981729738034691704 --> C_0012922195233569016454 : -driver_
+C_0003981729738034691704 --> C_0012922195233569016454 : -listeners_
+C_0003981729738034691704 --> C_0012922195233569016454 : -ports_
+C_0003981729738034691704 --> C_0010906916617868605028 : -nodes_
+C_0003981729738034691704 <.. C_0002100354596553851764 : +<<friend>>
+C_0002100354596553851764 ..> C_0015329816840038068697
+C_0002100354596553851764 ..> C_0007727972120958977347
+C_0002100354596553851764 ..> C_0014605788223068808997
+C_0002100354596553851764 ..> C_0009480862825997698997
+C_0002100354596553851764 ..> C_0003191460015409381775
+C_0002100354596553851764 ..> C_0007658747487680159345
+C_0002100354596553851764 ..> C_0005807718526989098261
+C_0002100354596553851764 ..> C_0008839915355094929020
+C_0002100354596553851764 ..> C_0015829559209121425028
+C_0002100354596553851764 ..> C_0010738309191274922747
+C_0002100354596553851764 ..> C_0012922195233569016454
+C_0002100354596553851764 --> C_0012021292812520796288 : -components_
+C_0002100354596553851764 --> C_0010906916617868605028 : -wire_nodes_
+C_0002100354596553851764 --> C_0011329506470064324141 : -wire_edges_
+C_0002100354596553851764 --> C_0003981729738034691704 : -nets_
+C_0002100354596553851764 --> C_0010212077193276233652 : -input_pins_
+C_0002100354596553851764 --> C_0010212077193276233652 : -output_pins_
+C_0002100354596553851764 --> C_0001785998745313036898 : -edit_
+C_0002100354596553851764 <.. C_0001533191664366905161 : +<<friend>>
+C_0002100354596553851764 <.. C_0007320946052845762590 : +<<friend>>
+C_0002100354596553851764 <.. C_0001785998745313036898 : +<<friend>>
+C_0002100354596553851764 <.. C_0002891392277436613086 : +<<friend>>
+C_0013080558324401569490 ..> C_0012922195233569016454
+C_0013080558324401569490 ..> C_0001533191664366905161
+C_0013080558324401569490 ..> C_0005627372102267362270
+C_0013080558324401569490 ..> C_0012774722530647903149
+C_0012021292812520796288 <|-- C_0013080558324401569490
+C_0015329816840038068697 ..> C_0012774722530647903149
+C_0015329816840038068697 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0015329816840038068697
+C_0007727972120958977347 ..> C_0012774722530647903149
+C_0007727972120958977347 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0007727972120958977347
+C_0014605788223068808997 ..> C_0012774722530647903149
+C_0014605788223068808997 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0014605788223068808997
+C_0009480862825997698997 ..> C_0012774722530647903149
+C_0009480862825997698997 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0009480862825997698997
+C_0003191460015409381775 ..> C_0012774722530647903149
+C_0003191460015409381775 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0003191460015409381775
+C_0007658747487680159345 ..> C_0012774722530647903149
+C_0007658747487680159345 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0007658747487680159345
+C_0005807718526989098261 ..> C_0012774722530647903149
+C_0005807718526989098261 ..> C_0001533191664366905161
+C_0013080558324401569490 <|-- C_0005807718526989098261
+C_0015829559209121425028 ..> C_0001533191664366905161
+C_0015829559209121425028 ..> C_0001126003598956189461
+C_0015829559209121425028 ..> C_0012774722530647903149
+C_0015829559209121425028 --> C_0002100354596553851764 : -circuit_
+C_0012021292812520796288 <|-- C_0015829559209121425028
+C_0002891392277436613086 ..> C_0012021292812520796288
+C_0002891392277436613086 ..> C_0010906916617868605028
+C_0002891392277436613086 ..> C_0015829559209121425028
+C_0002891392277436613086 ..> C_0008839915355094929020
+C_0002891392277436613086 ..> C_0010212077193276233652
+C_0002891392277436613086 ..> C_0015329816840038068697
+C_0002891392277436613086 ..> C_0007727972120958977347
+C_0002891392277436613086 ..> C_0014605788223068808997
+C_0002891392277436613086 ..> C_0009480862825997698997
+C_0002891392277436613086 ..> C_0003191460015409381775
+C_0002891392277436613086 ..> C_0007658747487680159345
+C_0002891392277436613086 ..> C_0005807718526989098261
+C_0002891392277436613086 ..> C_0011329506470064324141
+C_0002891392277436613086 ..> C_0012922195233569016454
+C_0002891392277436613086 --> C_0002100354596553851764 : -circuits_
+C_0002891392277436613086 --> C_0002100354596553851764 : -placements_
+C_0002891392277436613086 --> C_0001785998745313036898 : -edit_
+C_0002891392277436613086 <.. C_0007320946052845762590 : +<<friend>>
+C_0002891392277436613086 <.. C_0001785998745313036898 : +<<friend>>
+C_0016610897616012757099 --+ C_0002891392277436613086
+C_0016610897616012757099 --> C_0002100354596553851764 : +parent
+C_0016610897616012757099 --> C_0015829559209121425028 : +subcircuit
+C_0001785998745313036898 --> C_0002891392277436613086 : -project_
+C_0001785998745313036898 --> C_0002100354596553851764 : -circuits_
+C_0001785998745313036898 --> C_0002100354596553851764 : -placements_
+C_0003151428323056022179 --+ C_0001785998745313036898
+C_0003151428323056022179 --> C_0002100354596553851764 : +circuit
+C_0003151428323056022179 --> C_0012021292812520796288 : +components
+C_0003151428323056022179 --> C_0010906916617868605028 : +nodes
+C_0003151428323056022179 --> C_0011329506470064324141 : +edges
+C_0003151428323056022179 --> C_0003981729738034691704 : +nets
+C_0003151428323056022179 --> C_0010212077193276233652 : +inputs
+C_0003151428323056022179 --> C_0010212077193276233652 : +outputs
+C_0011460590110442287143 --+ C_0001785998745313036898
+C_0011460590110442287143 --> C_0012021292812520796288 : +component
+C_0011460590110442287143 --> C_0012922195233569016454 : +inputs
+C_0011460590110442287143 --> C_0012922195233569016454 : +outputs
+C_0011460590110442287143 --> C_0010212077193276233652 : +pin
+C_0011460590110442287143 o-- C_0008839915355094929020 : +pin_type
+C_0011816962920055355035 --+ C_0001785998745313036898
+C_0011816962920055355035 --> C_0012922195233569016454 : +port
+C_0011816962920055355035 o-- C_0010738309191274922747 : +direction
+C_0011816962920055355035 --> C_0012021292812520796288 : +owner
+C_0011816962920055355035 --> C_0010906916617868605028 : +node
+C_0011816962920055355035 --> C_0003981729738034691704 : +net
+C_0018427948609970008312 --+ C_0001785998745313036898
+C_0018427948609970008312 --> C_0010906916617868605028 : +node
+C_0018427948609970008312 --> C_0011329506470064324141 : +edges
+C_0018427948609970008312 --> C_0012922195233569016454 : +ports
+C_0018427948609970008312 --> C_0003981729738034691704 : +net
+C_0001533191664366905161 --> C_0002100354596553851764 : -circuit_
+C_0001533191664366905161 --> C_0001533191664366905161 : -parent_
+C_0001533191664366905161 --> C_0015829559209121425028 : -parent_subcircuit_
+C_0001533191664366905161 --> C_0003981729738034691704 : -net_values_
+C_0001533191664366905161 o-- C_0000095447136309579022 : -net_values_
+C_0001533191664366905161 --> C_0012922195233569016454 : -output_values_
+C_0001533191664366905161 o-- C_0000095447136309579022 : -output_values_
+C_0001533191664366905161 --> C_0012021292812520796288 : -pin_shapes_
+C_0001533191664366905161 --> C_0012021292812520796288 : -component_states_
+C_0001533191664366905161 --> C_0001126003598956189461 : -component_states_
+C_0001533191664366905161 <.. C_0008062408834374337183 : +<<friend>>
+C_0001533191664366905161 <.. C_0012774722530647903149 : +<<friend>>
+C_0007320946052845762590 ..> C_0002100354596553851764
+C_0007320946052845762590 ..> C_0010212077193276233652
+C_0007320946052845762590 ..> C_0000095447136309579022
+C_0007320946052845762590 ..> C_0012021292812520796288
+C_0007320946052845762590 ..> C_0010906916617868605028
+C_0007320946052845762590 ..> C_0015829559209121425028
+C_0007320946052845762590 ..> C_0008839915355094929020
+C_0007320946052845762590 ..> C_0015329816840038068697
+C_0007320946052845762590 ..> C_0007727972120958977347
+C_0007320946052845762590 ..> C_0014605788223068808997
+C_0007320946052845762590 ..> C_0009480862825997698997
+C_0007320946052845762590 ..> C_0003191460015409381775
+C_0007320946052845762590 ..> C_0007658747487680159345
+C_0007320946052845762590 ..> C_0005807718526989098261
+C_0007320946052845762590 ..> C_0011329506470064324141
+C_0007320946052845762590 ..> C_0012922195233569016454
+C_0007320946052845762590 o-- C_0002891392277436613086 : -project_
+C_0007320946052845762590 o-- C_0012774722530647903149 : -simulator_
+C_0007320946052845762590 --> C_0001533191664366905161 : -root_states_
+C_0012774722530647903149 ..> C_0013557234895996272153
+C_0012774722530647903149 ..> C_0014392161956102251109
+C_0012774722530647903149 ..> C_0001533191664366905161
+C_0012774722530647903149 ..> C_0012021292812520796288
+C_0012774722530647903149 ..> C_0003981729738034691704
+C_0012774722530647903149 ..> C_0000095447136309579022
+C_0012774722530647903149 ..> C_0012922195233569016454
+C_0013557234895996272153 --+ C_0012774722530647903149
+C_0013557234895996272153 --> C_0001533191664366905161 : +state
+C_0013557234895996272153 --> C_0012021292812520796288 : +component
+C_0014392161956102251109 --+ C_0012774722530647903149
+C_0014392161956102251109 ..> C_0013557234895996272153
+C_0008062408834374337183 ..> C_0012774722530647903149
+C_0008062408834374337183 --> C_0001533191664366905161 : -state_
+C_0008062408834374337183 --> C_0003981729738034691704 : -net_values_
+C_0008062408834374337183 o-- C_0000095447136309579022 : -net_values_
+C_0008062408834374337183 --> C_0012922195233569016454 : -output_values_
+C_0008062408834374337183 o-- C_0000095447136309579022 : -output_values_
+C_0008062408834374337183 --> C_0012021292812520796288 : -pin_shapes_
+C_0008062408834374337183 --> C_0012021292812520796288 : -component_states_
+C_0008062408834374337183 --> C_0001126003598956189461 : -component_states_
+C_0008062408834374337183 --> C_0001126003598956189461 : -created_states_
+C_0008062408834374337183 --> C_0008062408834374337183 : -children_
+C_0005774034676253325705 ..> C_0005627372102267362270
+C_0005774034676253325705 o-- C_0000095447136309579022 : -value_
+C_0001126003598956189461 <|-- C_0005774034676253325705
+C_0001305590546556982873 ..> C_0015829559209121425028
+C_0001305590546556982873 o-- C_0001533191664366905161 : -child_state_
+C_0001126003598956189461 <|-- C_0001305590546556982873
+@enduml

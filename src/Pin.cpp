@@ -100,10 +100,7 @@ void Pin::evaluate(Simulator & simulator, CircuitState & state)
         // Interface inputs drive the circuit internally, hence their OUTPUT port.
         Port * pin_output_port = output_port(0);
 
-        if (pin_output_port->net() != nullptr)
-        {
-            simulator.drive(state, *pin_output_port->net(), value(state));
-        }
+        simulator.drive(state, *pin_output_port, value(state));
 
         return;
     }
