@@ -57,29 +57,18 @@ LogicValue Gate::input_value(int index, CircuitState & state) const
 {
     Port * gate_input_port = input_port(index);
 
-    if (gate_input_port->net() == nullptr)
-    {
-        // A missing connection supplies no evidence of either known logic level.
-        return UNKNOWN;
-    }
-
-    return state.value(*gate_input_port->net())[0];
+    return state.value(*gate_input_port)[0];
 }
 
 void Gate::drive_output(LogicValue value, Simulator & simulator, CircuitState & state)
 {
     Port * gate_output_port = output_port();
 
-    if (gate_output_port->net() == nullptr)
-    {
-        // A disconnected output has no net value or listeners to update.
-        return;
-    }
-
     LogicVector gate_output_value(1);
     gate_output_value[0] = value;
 
     // drive() suppresses unchanged values and queues listeners in this instance;
     // gate evaluation itself carries no delay or timestamp.
-    simulator.drive(state, *gate_output_port->net(), gate_output_value);
+    // Disconnected outputs retain the computed value for a later connection.
+    simulator.drive(state, *gate_output_port, gate_output_value);
 }

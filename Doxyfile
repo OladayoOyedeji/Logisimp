@@ -61,12 +61,14 @@ HTML_EXTRA_FILES       = docs/theme/LICENSE \
                          docs/theme/logisimp-docs.js \
                          docs/theme/logisimp-function-preview.js
 
-# Graphviz inheritance and collaboration diagrams.
+# Graphviz include dependency diagrams.
 HAVE_DOT               = YES
 DOT_IMAGE_FORMAT       = svg
 INTERACTIVE_SVG        = YES
-CLASS_GRAPH            = YES
-COLLABORATION_GRAPH    = YES
+CLASS_GRAPH            = NO
+COLLABORATION_GRAPH    = NO
+GRAPHICAL_HIERARCHY    = NO
+UML_LOOK               = NO
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
 

@@ -6,6 +6,7 @@
 
 #include "Component.h"
 #include "Port.h"
+#include "ProjectEdit.h"
 
 #include <algorithm>
 #include <limits>
@@ -41,22 +42,14 @@ int Component::resolve_port_id(int port_id) const
         throw std::invalid_argument("Invalid port ID");
     }
 
-    // Both directions share one ID namespace: a blueprint Pin ID must identify
-    // exactly one placement port even when that pin changes direction.
-    for (Port * port : inputs_)
+    // Input and output ports share the same component-local ID namespace.
+    if (ports_by_id_.find(port_id) != ports_by_id_.end())
     {
-        if (port->id() == port_id)
-        {
-            throw std::invalid_argument("Port ID is already in use");
-        }
+        throw std::invalid_argument("Port ID is already in use");
     }
-
-    for (Port * port : outputs_)
+    if (next_port_generation_ == std::numeric_limits< int >::max())
     {
-        if (port->id() == port_id)
-        {
-            throw std::invalid_argument("Port ID is already in use");
-        }
+        throw std::overflow_error("Port generations are exhausted");
     }
 
     return port_id;
@@ -68,10 +61,20 @@ Port * Component::add_input(int width, const std::string & label, int port_id)
 
     Port * port = new Port(port_id, width, INPUT, label);
     port->owner_ = this;
+    port->generation_ = next_port_generation_++;
 
     try
     {
-        inputs_.push_back(port);
+        ports_by_id_.emplace(port_id, port);
+        try
+        {
+            inputs_.push_back(port);
+        }
+        catch (...)
+        {
+            ports_by_id_.erase(port_id);
+            throw;
+        }
     }
     catch (...)
     {
@@ -95,10 +98,20 @@ Port * Component::add_output(int width, const std::string & label, int port_id)
 
     Port * port = new Port(port_id, width, OUTPUT, label);
     port->owner_ = this;
+    port->generation_ = next_port_generation_++;
 
     try
     {
-        outputs_.push_back(port);
+        ports_by_id_.emplace(port_id, port);
+        try
+        {
+            outputs_.push_back(port);
+        }
+        catch (...)
+        {
+            ports_by_id_.erase(port_id);
+            throw;
+        }
     }
     catch (...)
     {
@@ -160,7 +173,11 @@ void Component::remove_port(Port & port)
         }
 
         inputs_.erase(position);
-        delete &port;
+        ports_by_id_.erase(port.id());
+        if (edit_ == nullptr || !edit_->retains(&port))
+        {
+            delete &port;
+        }
         return;
     }
 
@@ -174,7 +191,11 @@ void Component::remove_port(Port & port)
         }
 
         outputs_.erase(position);
-        delete &port;
+        ports_by_id_.erase(port.id());
+        if (edit_ == nullptr || !edit_->retains(&port))
+        {
+            delete &port;
+        }
         return;
     }
 
@@ -193,6 +214,19 @@ void Component::clear_ports()
         delete port;
     }
 
+    ports_by_id_.clear();
     inputs_.clear();
     outputs_.clear();
+}
+
+Port * Component::find_port(int id)
+{
+    auto found = ports_by_id_.find(id);
+    return found == ports_by_id_.end() ? nullptr : found->second;
+}
+
+const Port * Component::find_port(int id) const
+{
+    auto found = ports_by_id_.find(id);
+    return found == ports_by_id_.end() ? nullptr : found->second;
 }

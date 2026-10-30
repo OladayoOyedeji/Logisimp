@@ -10,6 +10,7 @@
 
 Port::Port(int id, int width, PortDirection direction, const std::string & label)
     : id_(id),
+      generation_(-1),
       width_(width),
       direction_(direction),
       owner_(nullptr),

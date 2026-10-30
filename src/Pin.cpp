@@ -70,12 +70,13 @@ void Pin::set(const LogicVector & bits, Simulator & simulator, CircuitState & st
 
 void Pin::toggle(Simulator & simulator, CircuitState & state)
 {
-    // UNKNOWN carries no known binary value, so inversion must preserve it.
-    static const LogicValue toggle_table[3] =
+    // Nonbinary values retain their meaning when an input is toggled.
+    static const LogicValue toggle_table[4] =
     {
         HIGH,
         LOW,
-        UNKNOWN
+        UNKNOWN,
+        ERROR
     };
 
     if (type_ != INPUT_PIN)
@@ -100,23 +101,15 @@ void Pin::evaluate(Simulator & simulator, CircuitState & state)
         // Interface inputs drive the circuit internally, hence their OUTPUT port.
         Port * pin_output_port = output_port(0);
 
-        if (pin_output_port->net() != nullptr)
-        {
-            simulator.drive(state, *pin_output_port->net(), value(state));
-        }
+        simulator.drive(state, *pin_output_port, value(state));
 
         return;
     }
 
     Port * pin_input_port = input_port(0);
 
-    // An undriven interface output must not retain an earlier sampled value.
-    LogicVector bits(width_, UNKNOWN);
-
-    if (pin_input_port->net() != nullptr)
-    {
-        bits = state.value(*pin_input_port->net());
-    }
+    // Port sampling preserves the configured width even on an invalid net.
+    LogicVector bits = state.value(*pin_input_port);
 
     if (value(state) != bits)
     {
