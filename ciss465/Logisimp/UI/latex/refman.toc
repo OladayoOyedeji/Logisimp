@@ -1,0 +1,58 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {chapter}{\numberline {1}Hierarchical Index}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Class Hierarchy}{1}{section.1.1}%
+\contentsline {chapter}{\numberline {2}Class Index}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Class List}{3}{section.2.1}%
+\contentsline {chapter}{\numberline {3}File Index}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}File List}{5}{section.3.1}%
+\contentsline {chapter}{\numberline {4}Class Documentation}{7}{chapter.4}%
+\contentsline {section}{\numberline {4.1}And\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Gate Class Reference}{7}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Member Function Documentation}{9}{subsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.1}contains()}{9}{subsubsection.4.1.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.2}draw()}{9}{subsubsection.4.1.1.2}%
+\contentsline {section}{\numberline {4.2}Canvas Class Reference}{9}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Detailed Description}{11}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Constructor \& Destructor Documentation}{11}{subsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.2.1}Canvas()}{11}{subsubsection.4.2.2.1}%
+\contentsline {subsection}{\numberline {4.2.3}Member Function Documentation}{12}{subsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.3.1}drawGrid()}{12}{subsubsection.4.2.3.1}%
+\contentsline {subsubsection}{\numberline {4.2.3.2}findport()}{12}{subsubsection.4.2.3.2}%
+\contentsline {subsubsection}{\numberline {4.2.3.3}mouseMoveEvent()}{12}{subsubsection.4.2.3.3}%
+\contentsline {subsubsection}{\numberline {4.2.3.4}mousePressEvent()}{13}{subsubsection.4.2.3.4}%
+\contentsline {subsubsection}{\numberline {4.2.3.5}placeGate()}{14}{subsubsection.4.2.3.5}%
+\contentsline {subsubsection}{\numberline {4.2.3.6}screenToWorldX()}{14}{subsubsection.4.2.3.6}%
+\contentsline {subsubsection}{\numberline {4.2.3.7}screenToWorldY()}{15}{subsubsection.4.2.3.7}%
+\contentsline {subsubsection}{\numberline {4.2.3.8}snapToGrid()}{15}{subsubsection.4.2.3.8}%
+\contentsline {subsubsection}{\numberline {4.2.3.9}updateCamera()}{15}{subsubsection.4.2.3.9}%
+\contentsline {subsubsection}{\numberline {4.2.3.10}wheelEvent()}{15}{subsubsection.4.2.3.10}%
+\contentsline {subsubsection}{\numberline {4.2.3.11}worldToScreenX()}{16}{subsubsection.4.2.3.11}%
+\contentsline {subsubsection}{\numberline {4.2.3.12}worldToScreenY()}{16}{subsubsection.4.2.3.12}%
+\contentsline {section}{\numberline {4.3}Circuit Class Reference}{16}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Detailed Description}{17}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Member Function Documentation}{18}{subsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.2.1}draw()}{18}{subsubsection.4.3.2.1}%
+\contentsline {subsubsection}{\numberline {4.3.2.2}setPosition()}{18}{subsubsection.4.3.2.2}%
+\contentsline {section}{\numberline {4.4}Gate Class Reference}{19}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Main\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Window Class Reference}{20}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Not\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Gate Class Reference}{21}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Member Function Documentation}{22}{subsection.4.6.1}%
+\contentsline {subsubsection}{\numberline {4.6.1.1}contains()}{22}{subsubsection.4.6.1.1}%
+\contentsline {subsubsection}{\numberline {4.6.1.2}draw()}{22}{subsubsection.4.6.1.2}%
+\contentsline {section}{\numberline {4.7}Or\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Gate Class Reference}{23}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Member Function Documentation}{25}{subsection.4.7.1}%
+\contentsline {subsubsection}{\numberline {4.7.1.1}contains()}{25}{subsubsection.4.7.1.1}%
+\contentsline {subsubsection}{\numberline {4.7.1.2}draw()}{25}{subsubsection.4.7.1.2}%
+\contentsline {section}{\numberline {4.8}Port Class Reference}{25}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Spritesheet Class Reference}{26}{section.4.9}%
+\contentsline {section}{\numberline {4.10}Wire Class Reference}{26}{section.4.10}%
+\contentsline {chapter}{\numberline {5}File Documentation}{27}{chapter.5}%
+\contentsline {section}{\numberline {5.1}canvas.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h File Reference}{27}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Detailed Description}{27}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}canvas.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{28}{section.5.2}%
+\contentsline {section}{\numberline {5.3}circuit.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{29}{section.5.3}%
+\contentsline {section}{\numberline {5.4}gate.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{29}{section.5.4}%
+\contentsline {section}{\numberline {5.5}gates.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{30}{section.5.5}%
+\contentsline {section}{\numberline {5.6}mainwindow.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{31}{section.5.6}%
+\contentsline {section}{\numberline {5.7}port.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{32}{section.5.7}%
+\contentsline {section}{\numberline {5.8}spritesheet.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{32}{section.5.8}%
+\contentsline {section}{\numberline {5.9}wire.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{32}{section.5.9}%

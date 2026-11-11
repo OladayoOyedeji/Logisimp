@@ -1,0 +1,7 @@
+<map id="NotGate" name="NotGate">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,81,184"/>
+<area shape="rect" id="Node000002" href="$classGate.html" title=" " alt="" coords="17,81,69,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="46,124,46,156,40,156,40,124"/>
+<area shape="rect" id="Node000003" href="$classCircuit.html" title="Abstract base class for graphical circuit elements." alt="" coords="11,5,75,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="46,49,46,81,40,81,40,49"/>
+</map>

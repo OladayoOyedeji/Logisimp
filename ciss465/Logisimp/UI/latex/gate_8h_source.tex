@@ -1,0 +1,37 @@
+\doxysection{gate.\+h}
+\hypertarget{gate_8h_source}{}\label{gate_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GATE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GATE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}circuit.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classPort}{Port}};}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGate}{Gate}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classCircuit}{Circuit}}}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classGate}{\string~Gate}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{double}\ getX();}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{double}\ getY();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Port*>\&\ getInputPorts()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Port*>\&\ getOutputPorts()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{int}\ numInputs\ =\ 0;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{int}\ numOutputs\ =\ 1;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ width\ =\ 50.0;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ height\ =\ 50.0;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ std::vector<Port*>\ inputPorts;}
+\DoxyCodeLine{00029\ \ \ \ \ std::vector<Port*>\ outputPorts;}
+\DoxyCodeLine{00030\ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ GATE\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,7 @@
+<map id="Canvas" name="Canvas">
+<area shape="rect" id="Node000001" title="This class provides an interactive graphical workspace for circuit components." alt="" coords="114,81,184,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,133,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,42,137,79,133,83,93,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="157,5,301,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,46,165,83,161,79,202,42"/>
+</map>

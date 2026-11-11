@@ -1,0 +1,32 @@
+\doxysection{circuit.\+h}
+\hypertarget{circuit_8h_source}{}\label{circuit_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#ifndef\ CIRCUIT\_H}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ CIRCUIT\_H}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}spritesheet.h"{}}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCircuit}{Circuit}}}
+\DoxyCodeLine{00033\ \{}
+\DoxyCodeLine{00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classCircuit}{\string~Circuit}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCircuit_a20f38173696bbfb00a85fd625a02bd45}{draw}}(QPainter\ \&painter,\ \mbox{\hyperlink{classSpritesheet}{Spritesheet}}\ \&sprites,\ \textcolor{keywordtype}{double}\ screenX,\ \textcolor{keywordtype}{double}\ screenY,\ \textcolor{keywordtype}{double}\ zoom)\ =\ 0;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ contains(\textcolor{keywordtype}{double}\ worldX,\ \textcolor{keywordtype}{double}\ worldY)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{double}\ getX()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ getY()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCircuit_aef565f72bbdc1983c6be5191a70501c8}{setPosition}}(\textcolor{keywordtype}{double}\ newX,\ \textcolor{keywordtype}{double}\ newY);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{double}\ x\ =\ 0;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ y\ =\ 0;}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CIRCUIT\_H}}
+
+\end{DoxyCode}

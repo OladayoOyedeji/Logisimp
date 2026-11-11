@@ -1,0 +1,416 @@
+\doxysection{Canvas Class Reference}
+\hypertarget{classCanvas}{}\label{classCanvas}\index{Canvas@{Canvas}}
+
+
+This class provides an interactive graphical workspace for circuit components.  
+
+
+
+
+{\ttfamily \#include $<$canvas.\+h$>$}
+
+
+
+Inheritance diagram for Canvas\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{classCanvas__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Canvas\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{classCanvas__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCanvas_a98436c7d9b5ee877c057f190b5db0b24}{Canvas}} (QWidget \texorpdfstring{$\ast$}{*}parent=NULL)
+\begin{DoxyCompactList}\small\item\em \doxylink{classCanvas}{Canvas} constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCanvas_a0d1de5de538102d6070c1e7066306e40}{draw\+Grid}} (QPainter \&)
+\begin{DoxyCompactList}\small\item\em Draws the workspace grid. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classCanvas_a83d320042c7433c05b46a23feb6e1bd3}{screen\+To\+WorldX}} (double) const
+\begin{DoxyCompactList}\small\item\em Converts screenX coordinates to world space. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194}{screen\+To\+WorldY}} (double) const
+\begin{DoxyCompactList}\small\item\em Converts screenY coordinates to world space. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classCanvas_ac62e0e56957fbb6605763c106cde097d}{world\+To\+ScreenX}} (double) const
+\begin{DoxyCompactList}\small\item\em Converts worldX coordinates to screen space. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classCanvas_a67877d478065d50bdf1110f0d8c0b657}{world\+To\+ScreenY}} (double) const
+\begin{DoxyCompactList}\small\item\em Converts worldY coordinates to screen space. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classCanvas_a04b996fbd8a53d49c8be70800c5f69f7}{snap\+To\+Grid}} (double)
+\begin{DoxyCompactList}\small\item\em Rounds a coordinate down to a grid boundary for circuit objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCanvas_a6832027b637a12859be573e9af25df7e}{update\+Camera}} ()
+\begin{DoxyCompactList}\small\item\em Updates camera\textquotesingle{}s position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCanvas_ad01e1a922d7752fd3cb2360706119df2}{place\+Gate}} (\mbox{\hyperlink{classGate}{Gate}} \texorpdfstring{$\ast$}{*})
+\begin{DoxyCompactList}\small\item\em Creats a new gate object relative to the mouse\textquotesingle{}s coordinates. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classCanvas_ae6a2017a90c0b827a49b077126460259}{findport}} (double, double)
+\begin{DoxyCompactList}\small\item\em Finds the type of port selected at the specified world coordinate. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCanvas_aa1a27b40202cef6e68b59297cf8d7b6a}\label{classCanvas_aa1a27b40202cef6e68b59297cf8d7b6a} 
+void {\bfseries initialize\+GL} () override
+\item 
+\Hypertarget{classCanvas_ab58d5dfef9774e4382dd333c0fb156b4}\label{classCanvas_ab58d5dfef9774e4382dd333c0fb156b4} 
+void {\bfseries paint\+GL} () override
+\item 
+\Hypertarget{classCanvas_a98baffb3ddc8590af99903b7ebe2840a}\label{classCanvas_a98baffb3ddc8590af99903b7ebe2840a} 
+void {\bfseries resize\+GL} (int width, int height) override
+\item 
+\Hypertarget{classCanvas_ae04733553c1729298a8b2154ea995e35}\label{classCanvas_ae04733553c1729298a8b2154ea995e35} 
+void {\bfseries draw\+Port} (QPainter \&, \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classCanvas_a859627a455bcf7c47536b9adb60583df}\label{classCanvas_a859627a455bcf7c47536b9adb60583df} 
+void {\bfseries draw\+Wire} (QPainter \&, \mbox{\hyperlink{classWire}{Wire}} \texorpdfstring{$\ast$}{*})
+\item 
+\Hypertarget{classCanvas_ac354f7e8bd5dd0d0ae027a912fb58daf}\label{classCanvas_ac354f7e8bd5dd0d0ae027a912fb58daf} 
+void {\bfseries draw\+Temp\+Wire} (QPainter \&)
+\item 
+void \mbox{\hyperlink{classCanvas_ac766a4e369f781943df021b80e5922c4}{mouse\+Press\+Event}} (QMouse\+Event \texorpdfstring{$\ast$}{*}event) override
+\begin{DoxyCompactList}\small\item\em Processes mouse buttons that are pressed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCanvas_ae9f5a1c5981b802814aa5b189faba710}{mouse\+Move\+Event}} (QMouse\+Event \texorpdfstring{$\ast$}{*}event) override
+\begin{DoxyCompactList}\small\item\em Processes mouse movement within the workspace. \end{DoxyCompactList}\item 
+\Hypertarget{classCanvas_a0fa87c1ae8fcab07ae22d6c0e63b7148}\label{classCanvas_a0fa87c1ae8fcab07ae22d6c0e63b7148} 
+void {\bfseries mouse\+Release\+Event} (QMouse\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+void \mbox{\hyperlink{classCanvas_a803e71255d31871cdb8cf12e9f3a1336}{wheel\+Event}} (QWheel\+Event \texorpdfstring{$\ast$}{*}event) override
+\begin{DoxyCompactList}\small\item\em Changes the workspace zoom using the mouse wheel. \end{DoxyCompactList}\item 
+\Hypertarget{classCanvas_a24e4ed4c1c5c97eb4c1c15666858bc51}\label{classCanvas_a24e4ed4c1c5c97eb4c1c15666858bc51} 
+void {\bfseries key\+Press\+Event} (QKey\+Event \texorpdfstring{$\ast$}{*}event) override
+\item 
+\Hypertarget{classCanvas_ae2ddf7876b8f657a848cb90aa3797a02}\label{classCanvas_ae2ddf7876b8f657a848cb90aa3797a02} 
+void {\bfseries key\+Release\+Event} (QKey\+Event \texorpdfstring{$\ast$}{*}event) override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class provides an interactive graphical workspace for circuit components. 
+
+\doxylink{classCanvas}{Canvas} is responsible for displaying and managing the GUI for the workspace of the logic simulator
+
+The program uses QOpen\+GLWidget Open\+Gl rendering and QPainter for drawing the grid and circuit elements
+
+Current Features include\+:
+\begin{DoxyItemize}
+\item Rendering a grid-\/based workspace
+\item Displaying AND, OR, and NOT gates
+\item Dragging a gate using the leftmouse button
+\item Panning the grid using either the middle mouse button or using the WASD keys
+\item Zooming in and out toward the mouse cursor
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Note}
+\doxylink{classCircuit}{Circuit} simulation logic is not yet integrated into the graphical user interface
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classCircuit}{Circuit} 
+
+\doxylink{classGate}{Gate} 
+
+Gates 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classCanvas_a98436c7d9b5ee877c057f190b5db0b24}\label{classCanvas_a98436c7d9b5ee877c057f190b5db0b24} 
+\index{Canvas@{Canvas}!Canvas@{Canvas}}
+\index{Canvas@{Canvas}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{Canvas()}{Canvas()}}
+{\footnotesize\ttfamily Canvas\+::\+Canvas (\begin{DoxyParamCaption}\item[{QWidget \texorpdfstring{$\ast$}{*}}]{parent = {\ttfamily NULL} }\end{DoxyParamCaption})}
+
+
+
+\doxylink{classCanvas}{Canvas} constructor. 
+
+Initializes the canvas and for now initializes an AND, OR, and NOT gate
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & Parent QWidget \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCanvas_a0d1de5de538102d6070c1e7066306e40}\label{classCanvas_a0d1de5de538102d6070c1e7066306e40} 
+\index{Canvas@{Canvas}!drawGrid@{drawGrid}}
+\index{drawGrid@{drawGrid}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{drawGrid()}{drawGrid()}}
+{\footnotesize\ttfamily void Canvas\+::draw\+Grid (\begin{DoxyParamCaption}\item[{QPainter \&}]{painter }\end{DoxyParamCaption})}
+
+
+
+Draws the workspace grid. 
+
+Draws vertical and horizontal grid line, based on the current camera position, zoom, and grid spacing
+
+
+\begin{DoxyParams}{Parameters}
+{\em painter} & Painter is used for rendering \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCanvas_ae6a2017a90c0b827a49b077126460259}\label{classCanvas_ae6a2017a90c0b827a49b077126460259} 
+\index{Canvas@{Canvas}!findport@{findport}}
+\index{findport@{findport}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{findport()}{findport()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPort}{Port}} \texorpdfstring{$\ast$}{*} Canvas\+::findport (\begin{DoxyParamCaption}\item[{double}]{worldX,  }\item[{double}]{worldY }\end{DoxyParamCaption})}
+
+
+
+Finds the type of port selected at the specified world coordinate. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worldX} & Horizontal world coordinate \\
+\hline
+{\em worldY} & Vertical world coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classPort}{Port} type found at world coordinate, NULL if no port found 
+\end{DoxyReturn}
+\Hypertarget{classCanvas_ae9f5a1c5981b802814aa5b189faba710}\label{classCanvas_ae9f5a1c5981b802814aa5b189faba710} 
+\index{Canvas@{Canvas}!mouseMoveEvent@{mouseMoveEvent}}
+\index{mouseMoveEvent@{mouseMoveEvent}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{mouseMoveEvent()}{mouseMoveEvent()}}
+{\footnotesize\ttfamily void Canvas\+::mouse\+Move\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Processes mouse movement within the workspace. 
+
+The behavor depends on the current interaction state
+
+When drawing wire state is true
+\begin{DoxyItemize}
+\item requests a redraw to the screen
+\end{DoxyItemize}
+
+When dragging state is true\+:
+\begin{DoxyItemize}
+\item Converts mouse coordinates to world coordinates
+\item Applies the drag offset
+\item Snaps the gate position ot the nearest grid point
+\item Requests a redraw of the screen
+\end{DoxyItemize}
+
+When panning state is true\+:
+\begin{DoxyItemize}
+\item Calculate mouse displacement
+\item Adjust camera position relative to zoom
+\item Requests a redraw to the screen
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & Qt mouse movement event\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classCanvas_ac766a4e369f781943df021b80e5922c4}{mouse\+Press\+Event()} 
+
+mouse\+Release\+Event() 
+
+\doxylink{classCanvas_a83d320042c7433c05b46a23feb6e1bd3}{screen\+To\+World\+X()} 
+
+\doxylink{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194}{screen\+To\+World\+Y()} 
+\end{DoxySeeAlso}
+\Hypertarget{classCanvas_ac766a4e369f781943df021b80e5922c4}\label{classCanvas_ac766a4e369f781943df021b80e5922c4} 
+\index{Canvas@{Canvas}!mousePressEvent@{mousePressEvent}}
+\index{mousePressEvent@{mousePressEvent}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{mousePressEvent()}{mousePressEvent()}}
+{\footnotesize\ttfamily void Canvas\+::mouse\+Press\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Processes mouse buttons that are pressed. 
+
+The behavior depends on the event that happens
+
+Convert the event position to mouse Position coordinates
+
+When left button clicked\+:
+\begin{DoxyItemize}
+\item Check if mouse clicked a port or a gate
+\item If mouse clicked a port\+:
+\begin{DoxyItemize}
+\item Draw wire from start to end
+\item drawing wire state is true
+\end{DoxyItemize}
+\item If mouse clicked a gate\+:
+\begin{DoxyItemize}
+\item \doxylink{classGate}{Gate} is selected
+\item Dragging State is true
+\item Set dragging offset coordinates
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+When middle button is clicked
+\begin{DoxyItemize}
+\item Set panning state to true
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & QT mouse event\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classCanvas_ae9f5a1c5981b802814aa5b189faba710}{mouse\+Move\+Event()} 
+
+mouse\+Release\+Event() 
+
+\doxylink{classCanvas_a83d320042c7433c05b46a23feb6e1bd3}{screen\+To\+World\+X()} 
+
+\doxylink{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194}{screen\+To\+World\+Y()} 
+\end{DoxySeeAlso}
+\Hypertarget{classCanvas_ad01e1a922d7752fd3cb2360706119df2}\label{classCanvas_ad01e1a922d7752fd3cb2360706119df2} 
+\index{Canvas@{Canvas}!placeGate@{placeGate}}
+\index{placeGate@{placeGate}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{placeGate()}{placeGate()}}
+{\footnotesize\ttfamily void Canvas\+::place\+Gate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classGate}{Gate}} \texorpdfstring{$\ast$}{*}}]{new\+Gate }\end{DoxyParamCaption})}
+
+
+
+Creats a new gate object relative to the mouse\textquotesingle{}s coordinates. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Gate} & New gate to place in the workspace \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCanvas_a83d320042c7433c05b46a23feb6e1bd3}\label{classCanvas_a83d320042c7433c05b46a23feb6e1bd3} 
+\index{Canvas@{Canvas}!screenToWorldX@{screenToWorldX}}
+\index{screenToWorldX@{screenToWorldX}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{screenToWorldX()}{screenToWorldX()}}
+{\footnotesize\ttfamily double Canvas\+::screen\+To\+WorldX (\begin{DoxyParamCaption}\item[{double}]{screenX }\end{DoxyParamCaption}) const}
+
+
+
+Converts screenX coordinates to world space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em screenX} & Horizontal screen coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Horizontal world coordinate 
+\end{DoxyReturn}
+\Hypertarget{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194}\label{classCanvas_aa64bf0ac3c3f1c501ea6fd89b78bc194} 
+\index{Canvas@{Canvas}!screenToWorldY@{screenToWorldY}}
+\index{screenToWorldY@{screenToWorldY}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{screenToWorldY()}{screenToWorldY()}}
+{\footnotesize\ttfamily double Canvas\+::screen\+To\+WorldY (\begin{DoxyParamCaption}\item[{double}]{screenY }\end{DoxyParamCaption}) const}
+
+
+
+Converts screenY coordinates to world space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em screenY} & Vertical screen coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vertical world coordinate 
+\end{DoxyReturn}
+\Hypertarget{classCanvas_a04b996fbd8a53d49c8be70800c5f69f7}\label{classCanvas_a04b996fbd8a53d49c8be70800c5f69f7} 
+\index{Canvas@{Canvas}!snapToGrid@{snapToGrid}}
+\index{snapToGrid@{snapToGrid}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{snapToGrid()}{snapToGrid()}}
+{\footnotesize\ttfamily double Canvas\+::snap\+To\+Grid (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})}
+
+
+
+Rounds a coordinate down to a grid boundary for circuit objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Coordinate to align \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Coordinate aligned to the grid 
+\end{DoxyReturn}
+\Hypertarget{classCanvas_a6832027b637a12859be573e9af25df7e}\label{classCanvas_a6832027b637a12859be573e9af25df7e} 
+\index{Canvas@{Canvas}!updateCamera@{updateCamera}}
+\index{updateCamera@{updateCamera}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{updateCamera()}{updateCamera()}}
+{\footnotesize\ttfamily void Canvas\+::update\+Camera (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Updates camera\textquotesingle{}s position. 
+
+The camera\textquotesingle{}s panning speed determines the displacement of its x/y coordinates, while the zoom magnifies its position relative to the screen \Hypertarget{classCanvas_a803e71255d31871cdb8cf12e9f3a1336}\label{classCanvas_a803e71255d31871cdb8cf12e9f3a1336} 
+\index{Canvas@{Canvas}!wheelEvent@{wheelEvent}}
+\index{wheelEvent@{wheelEvent}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{wheelEvent()}{wheelEvent()}}
+{\footnotesize\ttfamily void Canvas\+::wheel\+Event (\begin{DoxyParamCaption}\item[{QWheel\+Event \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Changes the workspace zoom using the mouse wheel. 
+
+Zooming is centered at the current mouse position
+
+The function first records the world coordinates beneath the cursor. It then modifies the zoom factor and recalculates the camera position so the same world point remains beneath the cursor.
+
+The zoom factor is limited to \mbox{[}0.\+5, 10.\+0\mbox{]}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & QT mouse wheel event containing the scroll direction and cursor position\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Each wheel event scales zoom by a factor of 1.\+1. 
+\end{DoxyNote}
+\Hypertarget{classCanvas_ac62e0e56957fbb6605763c106cde097d}\label{classCanvas_ac62e0e56957fbb6605763c106cde097d} 
+\index{Canvas@{Canvas}!worldToScreenX@{worldToScreenX}}
+\index{worldToScreenX@{worldToScreenX}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{worldToScreenX()}{worldToScreenX()}}
+{\footnotesize\ttfamily double Canvas\+::world\+To\+ScreenX (\begin{DoxyParamCaption}\item[{double}]{worldX }\end{DoxyParamCaption}) const}
+
+
+
+Converts worldX coordinates to screen space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worldX} & Horizontal world coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Horizontal screen coordinate 
+\end{DoxyReturn}
+\Hypertarget{classCanvas_a67877d478065d50bdf1110f0d8c0b657}\label{classCanvas_a67877d478065d50bdf1110f0d8c0b657} 
+\index{Canvas@{Canvas}!worldToScreenY@{worldToScreenY}}
+\index{worldToScreenY@{worldToScreenY}!Canvas@{Canvas}}
+\doxysubsubsection{\texorpdfstring{worldToScreenY()}{worldToScreenY()}}
+{\footnotesize\ttfamily double Canvas\+::world\+To\+ScreenY (\begin{DoxyParamCaption}\item[{double}]{worldY }\end{DoxyParamCaption}) const}
+
+
+
+Converts worldY coordinates to screen space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em worldY} & vertical world coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vertical screen coordinate 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{canvas_8h}{canvas.\+h}}\item 
+canvas.\+cpp\end{DoxyCompactItemize}

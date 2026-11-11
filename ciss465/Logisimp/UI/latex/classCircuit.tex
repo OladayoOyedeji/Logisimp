@@ -1,0 +1,113 @@
+\doxysection{Circuit Class Reference}
+\hypertarget{classCircuit}{}\label{classCircuit}\index{Circuit@{Circuit}}
+
+
+Abstract base class for graphical circuit elements.  
+
+
+
+
+{\ttfamily \#include $<$circuit.\+h$>$}
+
+
+
+Inheritance diagram for Circuit\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=281pt]{classCircuit__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classCircuit_a20f38173696bbfb00a85fd625a02bd45}{draw}} (QPainter \&painter, \mbox{\hyperlink{classSpritesheet}{Spritesheet}} \&sprites, double screenX, double screenY, double zoom)=0
+\begin{DoxyCompactList}\small\item\em Renders the circuit element. \end{DoxyCompactList}\item 
+\Hypertarget{classCircuit_aa5e70afda0b77933b66b8d826140b95d}\label{classCircuit_aa5e70afda0b77933b66b8d826140b95d} 
+virtual bool {\bfseries contains} (double worldX, double worldY) const =0
+\item 
+\Hypertarget{classCircuit_aa28ec0e578ef82f8e516606209f7aeb7}\label{classCircuit_aa28ec0e578ef82f8e516606209f7aeb7} 
+double {\bfseries getX} () const
+\item 
+\Hypertarget{classCircuit_a456db93044f865deefe5027724e8b5df}\label{classCircuit_a456db93044f865deefe5027724e8b5df} 
+double {\bfseries getY} () const
+\item 
+void \mbox{\hyperlink{classCircuit_aef565f72bbdc1983c6be5191a70501c8}{set\+Position}} (double newX, double newY)
+\begin{DoxyCompactList}\small\item\em Sets the element\textquotesingle{}s world position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCircuit_a8dc1320d253204f42f6bd032379d2c7f}\label{classCircuit_a8dc1320d253204f42f6bd032379d2c7f} 
+double {\bfseries x} = 0
+\item 
+\Hypertarget{classCircuit_af2453b8393de4afad0ad2e1ae4c413b4}\label{classCircuit_af2453b8393de4afad0ad2e1ae4c413b4} 
+double {\bfseries y} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for graphical circuit elements. 
+
+Defines the shared positions and rendering interface for objects displayed in the circuit workspace
+
+Derived classes must implement \doxylink{classCircuit_a20f38173696bbfb00a85fd625a02bd45}{draw()} to provide their own visual representation
+
+\begin{DoxyNote}{Note}
+Positions are stored within world coordinates
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classGate}{Gate} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCircuit_a20f38173696bbfb00a85fd625a02bd45}\label{classCircuit_a20f38173696bbfb00a85fd625a02bd45} 
+\index{Circuit@{Circuit}!draw@{draw}}
+\index{draw@{draw}!Circuit@{Circuit}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily virtual void Circuit\+::draw (\begin{DoxyParamCaption}\item[{QPainter \&}]{painter,  }\item[{\mbox{\hyperlink{classSpritesheet}{Spritesheet}} \&}]{sprites,  }\item[{double}]{screenX,  }\item[{double}]{screenY,  }\item[{double}]{zoom }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Renders the circuit element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em painter} & QPainter used for drawing \\
+\hline
+{\em sprites} & \doxylink{classSpritesheet}{Spritesheet} stored in this variable \\
+\hline
+{\em screenX} & Horizontal screen positon \\
+\hline
+{\em screenY} & Vertical screen position \\
+\hline
+{\em zoom} & Current canvas zoom factor \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classAndGate_a369f5607306f8534de8aa9e3b2b8a9ce}{And\+Gate}}, \mbox{\hyperlink{classOrGate_a24cf50d2af94489df5e7683e3af0596e}{Or\+Gate}}, and \mbox{\hyperlink{classNotGate_a6b2792f4c9bc91bd102bbb63420e1224}{Not\+Gate}}.
+
+\Hypertarget{classCircuit_aef565f72bbdc1983c6be5191a70501c8}\label{classCircuit_aef565f72bbdc1983c6be5191a70501c8} 
+\index{Circuit@{Circuit}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!Circuit@{Circuit}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily void Circuit\+::set\+Position (\begin{DoxyParamCaption}\item[{double}]{newX,  }\item[{double}]{newY }\end{DoxyParamCaption})}
+
+
+
+Sets the element\textquotesingle{}s world position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em newX} & New horizontal world coordinate \\
+\hline
+{\em newY} & New vertical world coordinate \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+circuit.\+h\item 
+circuit.\+cpp\end{DoxyCompactItemize}
