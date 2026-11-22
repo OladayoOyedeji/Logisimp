@@ -2,7 +2,7 @@
 #include "port.h"
 
 namespace gui
-{
+{    
     double Gate::getX()
     {
         return x;
@@ -23,14 +23,14 @@ namespace gui
         return outputPorts;
     }
 
-    void gui::Gate::setLogicComponent(::Component* component)
+    ComponentId gui::Gate::getComponentId() const
     {
-        logicComponent = component;
+        return componentId;
     }
-    
-    ::Component* gui::Gate::getLogicComponent() const
+
+    void gui::Gate::setComponentId(ComponentId component)
     {
-        return logicComponent;
+        componentId = component;
     }
 }
  

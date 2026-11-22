@@ -32,13 +32,18 @@ namespace gui
         return dx * dx + dy * dy <= radius * radius;
     }
 
-    void Port::setLogicPort(::Port* port)
+    void Port::setPortId(PortId port)
     {
-        logicPort = port;
+        portId = port;
     }
     
-    ::Port* Port::getLogicPort() const
+    PortId Port::getPortId() const
     {
-        return logicPort;
+        return portId;
+    }
+
+    Gate* Port::getParentGate() const
+    {
+        return parentGate;
     }
 }

@@ -13,10 +13,29 @@ MainWindow::MainWindow(QWidget *parent)
 
     gui::Canvas *canvas = new gui::Canvas(this);
 
+    ui->SettingsButton->setParent(canvas);
+    ui->GateToolBar->setParent(canvas);
+
     setCentralWidget(canvas);
+
+    ui->SettingsButton->raise();
+    ui->SettingsButton->show();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_SettingsButton_clicked()
+{
+    // Open settings menu
+}
+
+
+void MainWindow::on_AndButton_clicked()
+{
+    // Make and gate
+    std::cout << "And button clicked" << '\n';
+}
+

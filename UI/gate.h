@@ -1,6 +1,7 @@
 #pragma once
 
 #include "circuit.h"
+#include "Handles.h"
 #include <vector>
 #include <iostream>
 
@@ -21,8 +22,8 @@ namespace gui
         const std::vector<Port*>& getInputPorts() const;
         const std::vector<Port*>& getOutputPorts() const;
 
-        void setLogicComponent(::Component* component);
-        ::Component* getLogicComponent() const;
+        ComponentId getComponentId() const;
+        void setComponentId(ComponentId component);
 
     protected:
         int numInputs = 0;
@@ -35,6 +36,6 @@ namespace gui
         std::vector<Port*> outputPorts;
 
     private:
-        ::Component* logicComponent = NULL;
+        ComponentId componentId;
     };
 }

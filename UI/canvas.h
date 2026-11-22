@@ -1,7 +1,6 @@
 /**
  * @file canvas.h
  * @author Ethan Graham
- * @date 10/16/2026
  * @brief This declares the interactive circuit workspace
  */
 
@@ -47,13 +46,20 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <stdexcept>
+#include <exception>
 
 #include "port.h"
 #include "spritesheet.h"
-#include "circuitcontroller.h"
 #include "Component.h"
 #include "gate.h"
 #include "gates.h"
+#include "camera.h"
+
+// Logic Classes
+#include "ProjectController.h"
+#include "EditorController.h"
+#include "CircuitLayout.h"
 
 class Component;
 
@@ -79,7 +85,6 @@ namespace gui
          */
         Canvas(QWidget * parent = NULL);
 
-
         /**
          * @brief Draws the workspace grid
          *
@@ -91,38 +96,6 @@ namespace gui
          * @param painter Painter is used for rendering
          */
         void drawGrid(QPainter&);
-
-        /**
-         * @brief Converts screenX coordinates to world space
-         *
-         * @param screenX Horizontal screen coordinate
-         * @return Horizontal world coordinate
-         */
-        double screenToWorldX(double) const;
-    
-        /**
-         * @brief Converts screenY coordinates to world space
-         *
-         * @param screenY Vertical screen coordinate
-         * @return Vertical world coordinate
-         */
-        double screenToWorldY(double) const;
-
-        /**
-         * @brief Converts worldX coordinates to screen space
-         *
-         * @param worldX Horizontal world coordinate
-         * @return Horizontal screen coordinate
-         */
-        double worldToScreenX(double) const;
-
-        /**
-         * @brief Converts worldY coordinates to screen space
-         *
-         * @param worldY vertical world coordinate
-         * @return Vertical screen coordinate
-         */
-        double worldToScreenY(double) const;
 
         /**
          * @brief Rounds a coordinate down to a grid boundary for circuit objects
@@ -140,9 +113,7 @@ namespace gui
          * x/y coordinates, while the zoom magnifies
          * its position relative to the screen
          */
-        // ---- MOVE TO CAMERA CLASS LATER ----
         void updateCamera();
-        // ---- MOVE TO CAMERA CLASS LATER ----
 
         /**
          * @brief Creats a new gate object relative to the mouse's coordinates
@@ -150,7 +121,11 @@ namespace gui
          * @param newGate New gate to place in the workspace
          * @param logicGate New logical gate component set to visual gate
          */
-        void placeGate(Gate*, ::Component*);
+        void placeGate(Gate*, ComponentId, double, double);
+        void deleteSelectedGate();
+
+        Wire* findWire(const QPointF&) const;
+        void deleteWire(Wire*);
 
         /**
          * @brief Finds the type of port selected at the specified world coordinate
@@ -160,7 +135,13 @@ namespace gui
          * @return Port type found at world coordinate, NULL if no port found
          */
         Port *findport(double, double);
- 
+        void bindPorts(Gate*, ComponentId);
+
+        bool validConnection(Port*, Port*) const;
+        bool inputOccupied(Port*) const;
+
+        void refreshSimulation();
+        
     protected:
         void initializeGL() override;
         void paintGL() override;
@@ -168,6 +149,8 @@ namespace gui
         void drawPort(QPainter&, Port*);
         void drawWire(QPainter&, Wire*);
         void drawTempWire(QPainter&);
+
+        QColor signalColor(PortId) const;
 
         // Control Events
         /**
@@ -230,6 +213,7 @@ namespace gui
          */
         void mouseMoveEvent(QMouseEvent *event) override;
         void mouseReleaseEvent(QMouseEvent *event) override;
+        void mouseDoubleClickEvent(QMouseEvent* event) override;
 
         /**
          * @brief Changes the workspace zoom using the mouse wheel
@@ -256,20 +240,18 @@ namespace gui
     private:
         Spritesheet spriteSheet;
 
-        // ---- MOVE TO CAMERA CLASS LATER ----
-        double zoom = 1.0;
-        double cameraX = 0.0;
-        double cameraY = 0.0;
-
+        Camera camera;
         QTimer cameraTimer;
-        // ---- MOVE TO CAMERA CLASS LATER ----
 
         const double gridsize = 25;
 
         bool panning = false;
         bool draggingGate = false;
+        
         Gate *selectedGate = NULL;
+        
         QPoint lastMousePosition;
+        QPointF mousePosition;
         QPoint dragOffset;
 
         bool wPressed = false;
@@ -279,12 +261,14 @@ namespace gui
 
         Port *wireStart = NULL;
         bool drawingWire = false;
-
+        
         std::vector<Gate*> gates;
         std::vector<Wire*> wires;
 
-        QPointF mousePosition;
+        ProjectController projectController;
+        CircuitLayout circuitLayout;
+        std::unique_ptr<EditorController> editorController;
 
-        CircuitController controller;
+        // PlacementTool activeTool = PlacementTool::Select;
     };
-}
+ }
