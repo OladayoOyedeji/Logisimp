@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 
+namespace gui {
+class Canvas;
+}
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -18,7 +22,13 @@ public:
     ~MainWindow();
 
 
+private slots:
+    void on_SettingsButton_clicked();
+
+    void on_AndButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    gui::Canvas *canvas = nullptr;
 };
 #endif // MAINWINDOW_H

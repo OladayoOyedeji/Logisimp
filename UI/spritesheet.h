@@ -14,7 +14,7 @@ namespace gui
     private:
         QPixmap spriteSheet;
 
-        int spriteWidth = 64;
-        int spriteHeight = 64;
+        int spriteWidth = 32;
+        int spriteHeight = 32;
     };
 }

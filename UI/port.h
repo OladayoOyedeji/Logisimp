@@ -4,6 +4,7 @@
 // I should change the name of this header
 // to avoid confusion
 #include "Port.h"
+#include "Handles.h"
 
 namespace gui
 {
@@ -27,8 +28,10 @@ namespace gui
 
         bool contains(double, double) const;
 
-        void setLogicPort(::Port*);
-        ::Port* getLogicPort() const;
+        void setPortId(PortId);
+        PortId getPortId() const;
+
+        Gate* getParentGate() const;
     private:
         Gate *parentGate;
 
@@ -37,6 +40,6 @@ namespace gui
 
         PortType type;
 
-        ::Port* logicPort = nullptr;
+        PortId portId;
     };
 }

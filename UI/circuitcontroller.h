@@ -10,6 +10,7 @@
 #include "Project.h"
 #include "CircuitState.h"
 #include "Simulator.h"
+#include "gate.h"
 
 #include <memory>
 
@@ -26,7 +27,7 @@ class CircuitController
 
     void connectPorts(Port&, Port&);
 
-    void bindPorts(gui::Gate&, ::Component&)  
+    void bindPorts(gui::Gate&, ::Component&);  
   private:
     Project project;
     Circuit& circuit;
